@@ -5,3 +5,4 @@ backend/
 .env
 .env.*
 !.env.example
+.vps.env

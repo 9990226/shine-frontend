@@ -13,11 +13,15 @@ VPS_USER="${SHINE_VPS_USER:-root}"
 VPS_PATH="${SHINE_VPS_PATH:-/var/www/2c-ai/shine}"
 VPS_BACKEND="${SHINE_VPS_BACKEND:-/var/www/2c-ai/shine/backend}"
 LOCAL_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [[ -f "$LOCAL_DIR/.vps.env" ]]; then
+  # shellcheck disable=SC1091
+  source "$LOCAL_DIR/.vps.env"
+fi
 PW="${SHINE_VPS_PASSWORD:-}"
 
 if [[ -z "$PW" ]]; then
   echo "❌ Set SHINE_VPS_PASSWORD (VPS SSH root password), not SHINE_ENCRYPTION_KEY."
-  echo "   Example: export SHINE_VPS_PASSWORD='...' && bash DEPLOY_WITH_PW.sh"
+  echo "   Copy .vps.env.example → .vps.env or: export SHINE_VPS_PASSWORD='...' && bash DEPLOY_WITH_PW.sh"
   exit 1
 fi
 
