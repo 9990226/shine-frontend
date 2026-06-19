@@ -1,0 +1,79 @@
+{
+  "version": "5.1-convert",
+  "audience": "Registered users who have not clicked Start Scan",
+  "constraints": {
+    "maxSubjectWords": 10,
+    "maxBodySentences": 2
+  },
+  "emails": [
+    {
+      "id": "onboard-1-value",
+      "delayDays": 1,
+      "trigger": "registered_no_scan",
+      "zh-Hant": {
+        "subject": "你花在咖啡上的錢更多",
+        "body": "Scout $100 ÷ 60 小時 = 每釋放 1 小時只需 $1.67。今晚花 5 分鐘設定，SHINE 替你省下整月找工時間。",
+        "cta": "開始每月釋放 90 小時",
+        "ctaUrl": "/shine/#beta-access"
+      },
+      "zh-CN": {
+        "subject": "你花在咖啡上的钱更多",
+        "body": "Scout $100 ÷ 60 小时 = 每释放 1 小时只需 $1.67。今晚花 5 分钟设定，SHINE 替你省下整月找工作时间。",
+        "cta": "开始每月释放 90 小时",
+        "ctaUrl": "/shine/#beta-access"
+      },
+      "en": {
+        "subject": "You spend more on coffee",
+        "body": "Scout $100 ÷ 60 hrs = $1.67 per hour reclaimed. Five minutes tonight — SHINE saves you a month of job-hunt admin.",
+        "cta": "Start Saving 90 Hours a Month",
+        "ctaUrl": "/shine/#beta-access"
+      }
+    },
+    {
+      "id": "onboard-2-social",
+      "delayDays": 3,
+      "trigger": "registered_no_scan",
+      "zh-Hant": {
+        "subject": "Jane 三天內收到面試邀請",
+        "body": "在職社工 Jane 啟用 SHINE 後，把每晚 2 小時還給孩子 — 背景自動投遞，她只花 5 分鐘設定。",
+        "cta": "設定我的代理",
+        "ctaUrl": "/shine/#beta-access"
+      },
+      "zh-CN": {
+        "subject": "Jane 三天内收到面试邀请",
+        "body": "在职社工 Jane 启用 SHINE 后，把每晚 2 小时还给孩子 — 背景自动投递，她只花 5 分钟设定。",
+        "cta": "设定我的代理",
+        "ctaUrl": "/shine/#beta-access"
+      },
+      "en": {
+        "subject": "Jane got interviews in 3 days",
+        "body": "Employed social worker Jane reclaimed 2 hrs/night for family — SHINE applied in the background after a 5-minute setup.",
+        "cta": "Set Up My Agent Now",
+        "ctaUrl": "/shine/#beta-access"
+      }
+    },
+    {
+      "id": "onboard-3-urgency",
+      "delayDays": 5,
+      "trigger": "registered_no_scan",
+      "zh-Hant": {
+        "subject": "別讓理想職位悄悄溜走",
+        "body": "每日 09:00 自動掃描新職缺，同職缺絕不重複申請 — 機會在背景進場，你只需確認一次。",
+        "cta": "立即登入 — 搶佔先機",
+        "ctaUrl": "/shine/#beta-access"
+      },
+      "zh-CN": {
+        "subject": "别让理想职位悄悄溜走",
+        "body": "每日 09:00 自动扫描新职缺，同职缺绝不重复申请 — 机会在背景进场，你只需确认一次。",
+        "cta": "立即登入 — 抢占先机",
+        "ctaUrl": "/shine/#beta-access"
+      },
+      "en": {
+        "subject": "Don't let that role slip away",
+        "body": "Daily 09:00 auto-scan finds new listings — dedup ensures you never apply twice. Opportunities arrive; you approve once.",
+        "cta": "Log In — Claim Your Edge",
+        "ctaUrl": "/shine/#beta-access"
+      }
+    }
+  ]
+}

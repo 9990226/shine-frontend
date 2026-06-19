@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="SHINE icon">
+  <defs>
+    <radialGradient id="sbg" cx="42%" cy="32%" r="95%">
+      <stop offset="0%" stop-color="#0E2655"/>
+      <stop offset="100%" stop-color="#060D20"/>
+    </radialGradient>
+    <linearGradient id="sGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A6822A"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#F0D98C"/>
+    </linearGradient>
+    <linearGradient id="sIvory" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#BFD2F2"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="54" fill="url(#sbg)"/>
+  <!-- rising trajectory -->
+  <path d="M52 178 C 92 168, 118 138, 142 96" fill="none" stroke="url(#sIvory)" stroke-width="11" stroke-linecap="round" opacity=".9"/>
+  <circle cx="52" cy="178" r="7" fill="url(#sIvory)"/>
+  <!-- star -->
+  <path d="M156 44l11 26 28 4-21 19 6 28-24-14-24 14 6-28-21-19 28-4Z" fill="url(#sGold)"/>
+  <circle cx="98" cy="118" r="5" fill="#D4AF37" opacity=".9"/>
+  <circle cx="190" cy="150" r="4.5" fill="#D4AF37" opacity=".75"/>
+</svg>

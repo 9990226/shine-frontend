@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHINE 出眾 — 自動求職系統 | 2C-AI</title>
+  <meta name="description" content="SHINE (出眾)：一次設定求職信與來源連結，自動掃描職缺、找出申請電郵，用你自己的 Gmail 自然節奏寄出。">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/icon-shine.svg">
+  <link rel="apple-touch-icon" href="assets/icon-shine.svg">
+  <link rel="manifest" href="assets/manifest.json">
+  <meta name="theme-color" content="#0A0D18">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script>
+    window.SHINE_BOOT_VER = '20260616ui9';
+    window.getInputVal = window.getInputVal || function(id, fb) {
+      var el = document.getElementById(id);
+      return (el && el.value != null) ? String(el.value).trim() : (fb || '');
+    };
+    window.ensurePortalVisible = window.ensurePortalVisible || function() {
+      var portal = document.getElementById('portal');
+      var beta = document.getElementById('beta-access');
+      if (portal && portal.style.display === 'none') { portal.style.display = 'block'; if (beta) beta.style.display = 'none'; }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/shine.css?v=20260616ui9">
+</head>
+<body>
+
+<!-- ═══ LANDING ═══ -->
+<div id="site">
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#top">
+        <span class="spark"><i></i></span>
+        SHINE <em class="cjk">出眾</em>
+      </a>
+      <nav class="main-nav">
+        <a href="#how">運作方式</a>
+        <a href="#pricing">定價</a>
+        <a href="#beta-access">Beta</a>
+        <button onclick="document.getElementById('beta-access').scrollIntoView({behavior:'smooth'})" class="btn btn-gold btn-sm">開始使用</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow"><span class="pulse"></span>代理運作中 · 以人類節奏投遞</span>
+        <h1>你專心工作，<br><span class="em">它幫你投更好機會。</span></h1>
+        <p class="lead">設定關鍵字、來源連結與 Gmail。SHINE 自動掃描職位、提取申請電郵、<b>100% 原樣寄出你的求職信</b>，每封之間自然延遲。</p>
+        <div class="hero-cta">
+          <button onclick="document.getElementById('beta-access').scrollIntoView({behavior:'smooth'})" class="btn btn-gold">免費 Beta 試用</button>
+          <a href="#how" class="btn btn-ghost">了解運作方式</a>
+        </div>
+        <p class="hero-note">用你自己的 Gmail · App Password 僅本次使用 · 同職缺不重複申請</p>
+      </div>
+      <div class="console">
+        <div class="con-bar">
+          <span class="dot" style="background:#F0795F"></span>
+          <span class="dot" style="background:#FFCB57"></span>
+          <span class="dot" style="background:#5FD08A"></span>
+          <span class="con-title">shine-agent · live</span>
+          <span class="con-live"><span class="pulse"></span>RUNNING</span>
+        </div>
+        <div class="con-body" id="heroLog"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="sec-label">運作方式</div>
+      <h2>三步設定，之後全自動。</h2>
+      <p class="sec-intro">你只做一次設定。工具依方案掃描你指定的來源，找到公開電郵就投，其餘在預覽中讓你決定。</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>設定一次</h3>
+          <p>姓名、萬用求職信、CV 連結、關鍵字、來源 URL（1–3 個）、Gmail App Password。</p>
+          <div class="tag">~ 5 分鐘</div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>自動掃描</h3>
+          <p>從你提供的搜尋結果頁讀取內容，跟隨職缺連結提取申請電郵，跨來源去重。</p>
+          <div class="tag">手動或每日 09:00</div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>確認寄出</h3>
+          <p>預覽勾選職缺後，用你的 Gmail 自然節奏寄出——第一封即時，之後每 60 秒一封。</p>
+          <div class="tag">真人節奏 · 防觸發限制</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="pricing">
+    <div class="wrap">
+      <div class="sec-label">收費方案</div>
+      <h2>申請得越多，機會越多。</h2>
+      <p class="sec-intro">目前封閉 Beta 受邀用戶可免費試用。正式上線後按月收費。</p>
+      <div class="price-grid">
+        <div class="tier">
+          <div class="tname">Lv1</div>
+          <div class="sub">先試水溫，穩定投遞。</div>
+          <div class="price">$50<span> /月</span></div>
+          <ul>
+            <li><span class="check">●</span><span><span class="hl">60</span> 封 / 月</span></li>
+            <li><span class="check">●</span><span><span class="hl">1</span> 個來源 URL</span></li>
+            <li><span class="check">●</span><span>機構黑名單</span></li>
+            <li><span class="check">●</span><span>發送 Logs</span></li>
+          </ul>
+          <button onclick="selectTier('lv1')" class="btn btn-ghost btn-block">選擇 Lv1</button>
+        </div>
+        <div class="tier feat">
+          <div class="badge">熱門</div>
+          <div class="tname">Lv2</div>
+          <div class="sub">認真求職，更廣覆蓋。</div>
+          <div class="price">$99<span> /月</span></div>
+          <ul>
+            <li><span class="check">●</span><span><span class="hl">100</span> 封 / 月</span></li>
+            <li><span class="check">●</span><span><span class="hl">2</span> 個來源 URL</span></li>
+            <li><span class="check">●</span><span>完整黑名單</span></li>
+            <li><span class="check">●</span><span>優先處理</span></li>
+          </ul>
+          <button onclick="selectTier('lv2')" class="btn btn-gold btn-block">選擇 Lv2</button>
+        </div>
+        <div class="tier">
+          <div class="tname">Lv3</div>
+          <div class="sub">全力出擊，無上限。</div>
+          <div class="price">$168<span> /月</span></div>
+          <ul>
+            <li><span class="check">●</span><span><span class="hl">無限</span> 封 / 月</span></li>
+            <li><span class="check">●</span><span><span class="hl">3</span> 個來源 URL</span></li>
+            <li><span class="check">●</span><span>全部功能</span></li>
+            <li><span class="check">●</span><span>大量申請者</span></li>
+          </ul>
+          <button onclick="selectTier('lv3')" class="btn btn-ghost btn-block">選擇 Lv3</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="beta-access" class="sec" style="padding-top:0">
+    <div class="wrap" style="max-width:480px">
+      <div class="surface-card" style="text-align:center">
+        <h3>受邀 Beta 測試者</h3>
+        <p class="muted" style="font-size:14px;margin:8px 0 18px">如果你已收到邀請，以 Gmail 登入即可開始。</p>
+        <button onclick="document.getElementById('shineLogin').style.display='block';document.getElementById('beta-access').style.display='none'" class="btn btn-gold btn-block">進入我的工具</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap"><p>SHINE 出眾 by 2C-AI · 2c-ai.com/shine</p></div>
+  </footer>
+</div>
+
+<!-- ═══ LOGIN ═══ -->
+<section id="shineLogin" class="sec" style="display:none;min-height:60vh">
+  <div class="wrap" style="max-width:440px">
+    <div class="surface-card">
+      <h3>登入 SHINE</h3>
+      <p class="muted" style="font-size:14px;margin:8px 0 14px">Gmail 作為<strong>登入帳號</strong>與<strong>寄信信箱</strong>；登入密碼由 2C-AI 為付費客戶開通。</p>
+      <div class="notice-warn">
+        預設登入後<strong>不會</strong>自動掃描。若已開啟「登入後立即掃描」且設定完整，登入後才會自動開始。
+      </div>
+      <div class="field">
+        <label>Gmail 帳號</label>
+        <input id="loginGmail" type="email" placeholder="you@gmail.com" autocomplete="username">
+      </div>
+      <div class="field" id="loginAccessPasswordField">
+        <label>SHINE 登入密碼</label>
+        <input id="loginAccessPassword" type="password" placeholder="SHINE-XXXXXXXX 或你的開通密碼" autocomplete="current-password" required>
+        <div class="hint" style="margin-top:6px">付費開通後由 2C-AI 提供。管理員密碼可配任意 Gmail。</div>
+      </div>
+      <button onclick="loginWithGmail()" class="btn btn-gold btn-block" style="margin-top:8px">登入並進入設定</button>
+    </div>
+  </div>
+</section>
+<script>
+(function ensureShineLoginPasswordFieldNow() {
+  function inject() {
+    var card = document.getElementById('shineLogin');
+    if (!card || document.getElementById('loginAccessPassword')) return;
+    var h3 = card.querySelector('h3');
+    if (h3) h3.textContent = '登入 SHINE';
+    var btn = card.querySelector('button[onclick*="loginWithGmail"]');
+    var gmail = document.getElementById('loginGmail');
+    if (!btn || !gmail) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'field';
+    wrap.id = 'loginAccessPasswordField';
+    wrap.innerHTML = '<label>SHINE 登入密碼</label>'
+      + '<input id="loginAccessPassword" type="password" placeholder="SHINE-XXXXXXXX 或你的開通密碼" autocomplete="current-password" required>'
+      + '<div class="hint" style="margin-top:6px">付費開通後由 2C-AI 提供。管理員密碼可配任意 Gmail。</div>';
+    btn.parentNode.insertBefore(wrap, btn);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+})();
+</script>
+
+<!-- ═══ PORTAL / DASHBOARD ═══ -->
+<section id="portal" style="display:none">
+  <div class="dash-top">
+    <div class="wrap nav-in">
+      <div class="brand"><span class="spark"><i></i></span>SHINE <small>工具</small></div>
+      <div class="nav-links" style="gap:14px">
+        <span class="plan-chip" id="planChip">LV2 Beta</span>
+        <div class="usage"><span id="usageTxt">0 / 100</span><span class="ubar"><i id="usageBar"></i></span></div>
+        <button onclick="logoutShine()" class="btn btn-ghost btn-sm">登出</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-wrap">
+    <!-- LEFT: Settings -->
+    <div class="card">
+      <h2>代理設定</h2>
+      <p class="csub">填寫一次，工具自動掃描你指定的來源、找出申請方式、去重後讓你確認寄出。</p>
+
+      <div class="setup-checklist" id="setupChecklist"></div>
+
+      <div class="field">
+        <label class="fld-label">申請人姓名（NAME）</label>
+        <input id="applicantName" placeholder="AI自動求職">
+      </div>
+
+      <div class="field">
+        <label class="fld-label">萬用求職信（100% 原樣寄出） <span id="letterWordCount" class="hint" style="display:inline;font-weight:400"></span></label>
+        <textarea id="universalLetter" class="universal-letter" placeholder="敬啟者：&#10;&#10;本人現應徵相關職位..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="fld-label">關鍵字（逗號分隔，最多 3 個）</label>
+        <input id="keywords" placeholder="社工, ASWO, 註冊社工">
+      </div>
+
+      <div class="field">
+        <label class="fld-label">機構黑名單（逗號分隔，可留空）</label>
+        <input id="blacklist" placeholder="現職公司, 不想去的機構">
+      </div>
+
+      <div class="field">
+        <label class="fld-label">你的方案（決定可指定幾個來源）</label>
+        <select id="tierSelect" onchange="updateTierFromPortal(this.value)">
+          <option value="lv1">Lv1 — 1 個來源 · 60 封/月</option>
+          <option value="lv2" selected>Lv2 — 2 個來源 · 100 封/月</option>
+          <option value="lv3">Lv3 — 3 個來源 · 無限</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="fld-label">職位搜尋來源（每個框一個完整結果頁 URL）</label>
+        <div class="url-row"><span class="url-num">1</span><input id="searchUrl1" placeholder="https://... 第一個來源（必填）"></div>
+        <div class="url-row"><span class="url-num">2</span><input id="searchUrl2" placeholder="https://... 第二個（Lv2+）"></div>
+        <div class="url-row"><span class="url-num">3</span><input id="searchUrl3" placeholder="https://... 第三個（Lv3）"></div>
+        <div class="hint">建議使用已篩選好的職缺列表頁。動態/問卷/純表單頁可能找不到 email。</div>
+      </div>
+
+      <div class="field">
+        <label class="fld-label">CV 公開連結</label>
+        <input id="cvUrl" placeholder="https://drive.google.com/... 或 LinkedIn">
+      </div>
+
+      <div class="field">
+        <label class="fld-label">Gmail 授權</label>
+        <div class="gmail-box">
+          <div class="gh"><span>◆</span> 產生 App Password</div>
+          <ol>
+            <li>Google 帳戶 → 安全性 → 開啟兩步驟驗證</li>
+            <li>搜尋 <code>App passwords</code> → 建立，名稱填 <code>SHINE</code></li>
+            <li>複製 16 位密碼貼到下方</li>
+          </ol>
+          <div id="loggedInGmailBadge" class="gmail-badge" style="display:none">
+            已登入寄信帳號：<strong id="loggedInGmailText"></strong>
+          </div>
+          <input type="hidden" id="gmailUser" value="">
+          <div class="field" style="margin-bottom:0">
+            <label class="fld-label">App Password（每次使用時填寫，不儲存）</label>
+            <input id="appPassword" type="password" placeholder="xxxx xxxx xxxx xxxx">
+          </div>
+          <button type="button" onclick="testGmailConnection()" class="btn btn-ghost btn-sm" style="margin-top:10px">測試 Gmail 連線</button>
+          <span id="gmailTestResult" class="hint" style="margin-left:8px"></span>
+        </div>
+      </div>
+
+      <div class="field" style="padding:12px;border:1px solid var(--portal-line);border-radius:10px;background:#f9fafb">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:14px">
+          <input type="checkbox" id="scanOnLogin" style="width:18px;height:18px"> 登入後若設定完整，立即掃描
+        </label>
+        <p class="hint" style="margin-top:8px">每日 09:00 自動運行請使用主站 <code>index.html</code> 的「自動化設定」（伺服器端，無需保持分頁開啟）。</p>
+        <div id="autoScanStatus" class="hint" style="margin-top:8px;font-weight:600;color:#166534"></div>
+      </div>
+
+      <div class="save-bar">
+        <button onclick="saveSettings()" class="btn btn-gold">儲存我的設定</button>
+        <span class="ok-toast" id="saveToast">✓ 已儲存</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Live mission panel -->
+    <div>
+      <div class="log-card" id="logCard">
+        <div class="log-stats">
+          <div class="st"><div class="v y" id="stSent">0</div><div class="k">本月已發送</div></div>
+          <div class="st"><div class="v" id="stSkip">0</div><div class="k">本次跳過</div></div>
+          <div class="st"><div class="v g" id="stToday">就緒</div><div class="k">任務狀態</div></div>
+        </div>
+        <div class="con-bar">
+          <span class="dot" style="background:#F0795F"></span>
+          <span class="dot" style="background:#FFCB57"></span>
+          <span class="dot" style="background:#5FD08A"></span>
+          <span class="con-title">mission log · live</span>
+          <span class="con-live" id="logLive" style="color:var(--muted2)">IDLE</span>
+        </div>
+        <div class="con-body" id="dashLog">
+          <div class="ln" style="opacity:1"><span class="msg muted">填好設定後按「開始自動掃描」→</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>本月用量</h2>
+        <div id="quotaDisplay" style="font-size:1rem;font-weight:700;margin:8px 0"></div>
+        <div class="ubar" style="width:100%;height:8px"><i id="quotaBar"></i></div>
+        <div class="hint" style="margin-top:8px">成功寄出才計入用量。可在下方下載 LOG.txt。</div>
+        <div id="missionProcessWindow">
+          <div class="mph">🛰️ Mission Process</div>
+          <div id="liveTaskProgress">準備就緒。填妥設定後按「開始自動掃描與準備申請」。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL WIDTH: Action -->
+    <div class="card dash-full">
+      <h3>讓 SHINE 自動處理</h3>
+      <p class="csub">掃描你指定的來源 → 預覽確認 → 用你的 Gmail 自然節奏寄出。</p>
+      <button id="scanBtn" class="btn btn-gold btn-block" style="padding:14px;font-size:15px">開始自動掃描與準備申請</button>
+
+      <details style="margin-top:14px">
+        <summary style="cursor:pointer;font-weight:600;font-size:14px">進階：手動加入職缺</summary>
+        <p class="hint" style="margin:8px 0">每行一個：職位 | 公司 | 描述（含 email）</p>
+        <textarea id="manualJobs" style="min-height:70px;width:100%"></textarea>
+        <button onclick="addManualJobs()" class="btn btn-ghost btn-sm" style="margin-top:6px">加入這些職缺</button>
+      </details>
+
+      <div id="previewArea" class="preview-area" style="display:none">
+        <h4>預覽 — 勾選要寄送的職缺（取消勾選 = 排除）</h4>
+        <div id="previewList"></div>
+        <button onclick="confirmAndSendBatch()" class="btn btn-gold btn-block" style="margin-top:12px">確認發送已選職缺（自然節奏）</button>
+      </div>
+
+      <div id="liveConsole" class="console" style="margin-top:14px;display:none">
+        <div class="con-bar">
+          <span class="dot" style="background:#F0795F"></span>
+          <span class="dot" style="background:#FFCB57"></span>
+          <span class="dot" style="background:#5FD08A"></span>
+          <span class="con-title">處理中</span>
+        </div>
+        <div class="con-body" id="liveLog"></div>
+      </div>
+    </div>
+
+    <!-- FULL WIDTH: History -->
+    <div class="card dash-full">
+      <h3>發送紀錄</h3>
+      <div id="logs" style="max-height:200px;overflow:auto"></div>
+      <button onclick="downloadSentLog()" class="btn btn-ghost btn-sm" style="margin-top:10px">下載 LOG.txt</button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  function updateMissionStatus(msg, isError) {
+    if (typeof updateTaskProgress === 'function') updateTaskProgress(msg, isError);
+    else {
+      var el = document.getElementById('liveTaskProgress');
+      var win = document.getElementById('missionProcessWindow');
+      if (el) el.textContent = msg;
+      if (win) win.classList.toggle('is-error', !!isError);
+    }
+  }
+  var btn = document.getElementById('scanBtn');
+  if (btn) {
+    btn.onclick = function() {
+      btn.disabled = true;
+      btn.textContent = '處理中...';
+      updateMissionStatus('開始掃描與準備申請...');
+      if (typeof showLiveConsole === 'function') showLiveConsole(true);
+      if (typeof setMissionLive === 'function') setMissionLive('RUNNING');
+      window.ensurePortalVisible();
+      var errs = [];
+      if (!window.getInputVal('universalLetter')) errs.push('請填寫萬用求職信');
+      if (!window.getInputVal('searchUrl1') && !window.getInputVal('searchUrl2') && !window.getInputVal('searchUrl3')) errs.push('請填寫至少 1 個來源連結');
+      if (!window.getGmailUser || !window.getGmailUser()) errs.push('請先以 Gmail 登入');
+      if (!window.getInputVal('appPassword')) errs.push('請填寫 App Password');
+      function restore() { btn.disabled = false; btn.textContent = '開始自動掃描與準備申請'; }
+      if (errs.length) {
+        updateMissionStatus('請先完成：' + errs[0], true);
+        alert('掃描前請完成：\n\n' + errs.join('\n'));
+        restore();
+        return;
+      }
+      if (typeof startSafeApply === 'function') {
+        Promise.resolve(startSafeApply()).catch(function(e) {
+          updateMissionStatus('掃描問題: ' + (e.message || e), true);
+        }).finally(restore);
+      } else {
+        updateMissionStatus('系統載入中，請稍候', true);
+        setTimeout(restore, 2000);
+      }
+    };
+  }
+})();
+</script>
+<script src="shine-app.js?v=20260617loginfix1"></script>
+</body>
+</html>

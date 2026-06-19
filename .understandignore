@@ -1,0 +1,14 @@
+# SHINE — exclude from Understand-Anything scans
+.DS_Store
+**/.DS_Store
+node_modules/
+**/.git/
+backend/node_modules/
+backend/*.db
+backend/*.db-*
+backend/access-log.txt
+backend/access-passwords.txt
+assets/index.html
+assets/shine.js
+shine.js
+*.zip

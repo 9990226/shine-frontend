@@ -1,0 +1,7 @@
+.DS_Store
+*.tar.gz
+backend/
+.understand-anything/
+.env
+.env.*
+!.env.example
