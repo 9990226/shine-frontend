@@ -10,8 +10,9 @@
 // - One account = one sender via user's own Gmail App Password
 // - Minimal persisted data (localStorage)
 
-const SHINE_VERSION = 'v2.2.0';
+const SHINE_VERSION = 'v2.2.5-sender-lock';
 const HOURS_SAVED_PER_SEND = 1;
+const TRIAL_EMAIL_LIMIT = 10;
 const TIER_DISPLAY = {
   lv1: { name: 'Scout', price: '$100', urls: 1, quota: 60 },
   lv2: { name: 'Sprint', price: '$500', urls: 2, quota: 500 },
@@ -19,6 +20,7 @@ const TIER_DISPLAY = {
 };
 const SHINE_USER_ID_KEY = 'shine_user_id';
 let sessionSkipCount = 0;
+let serverHasAppPassword = false;
 const SEND_DELAY_MS = 60000; // 60s between emails (after 1st immediate send)
 const APP_PW_SESSION_KEY = 'shine_app_pw_session';
 const ACCESS_TOKEN_KEY = 'shine_access_token';
@@ -53,6 +55,12 @@ function getLiveMailCreds() {
     gmailUser: getGmailUser(),
     appPassword: normalizeAppPassword(getInputVal('appPassword'))
   };
+}
+
+function hasSendableMailCreds(creds) {
+  const gmailUser = creds && creds.gmailUser;
+  const appPassword = creds && creds.appPassword;
+  return !!(gmailUser && (appPassword || serverHasAppPassword));
 }
 
 function buildBetaCreds(gmailUser, appPassword) {
@@ -205,7 +213,9 @@ function lockTierUI() {
     tierSel.title = '等級由帳號決定，無法自行變更';
   }
   if (planDisplay) {
-    planDisplay.textContent = limits[state.tier] || limits.lv2;
+    planDisplay.textContent = state.isTrial && !state.trialUpgraded
+      ? `Scout 試用 · 1 個來源 · ${TRIAL_EMAIL_LIMIT} 封免費（Gmail 鎖定，付費後升級 60 封/月）`
+      : (limits[state.tier] || limits.lv2);
   }
 }
 
@@ -234,6 +244,7 @@ function ensureAccessOrPrompt() {
 let accessRequired = true;
 
 let accountUserId = '';
+let boundSenderEmail = null;
 let state = {
   tier: 'lv2',                    // lv1=60/1url, lv2=500/2url, lv3=unlimited/3url (SSOT level-based)
   applicantName: '',
@@ -245,6 +256,9 @@ let state = {
   scanOnLogin: false,
   dailyAutoEnabled: false,
   isAdmin: false,
+  isTrial: false,
+  trialSent: 0,
+  trialUpgraded: false,
   successfulThisMonth: 0,
   hoursSavedThisYear: 0,
   logs: []
@@ -294,9 +308,43 @@ function saveState() {
 }
 
 function getQuotaLimit() {
+  if (state.isTrial && !state.trialUpgraded) return TRIAL_EMAIL_LIMIT;
   if (state.tier === 'lv1') return 60;
   if (state.tier === 'lv2') return 500;
   return 999999; // unlimited
+}
+
+function getQuotaUsed() {
+  if (state.isTrial && !state.trialUpgraded) return state.trialSent || 0;
+  return state.successfulThisMonth;
+}
+
+async function syncTrialQuotaFromServer(gmailUser) {
+  const gmail = String(gmailUser || getGmailUser() || '').trim().toLowerCase();
+  if (!isAccessSessionValid()) return null;
+  const qs = gmail ? `?gmail=${encodeURIComponent(gmail)}` : '';
+  try {
+    const res = await fetch(`${getSendBackendUrl()}/api/trial-quota${qs}`, {
+      method: 'GET',
+      headers: getAccessHeaders(),
+      cache: 'no-store'
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) return null;
+    if (data.isTrialAccount || data.type === 'trial') {
+      state.isTrial = true;
+      state.trialSent = data.sent || 0;
+      state.trialUpgraded = !!data.upgraded;
+    } else {
+      state.trialUpgraded = true;
+      state.successfulThisMonth = data.sent || 0;
+    }
+    updateQuotaUI();
+    return data;
+  } catch (e) {
+    console.warn('[SHINE] quota sync failed', e);
+    return null;
+  }
 }
 
 function getMaxSearchUrls() {
@@ -306,6 +354,7 @@ function getMaxSearchUrls() {
 }
 
 let sentHistory = [];
+let serverDedupKeys = new Set();
 
 function loadSentHistory() {
   try {
@@ -318,6 +367,53 @@ function loadSentHistory() {
 function saveSentHistory() {
   if (!accountUserId) return;
   localStorage.setItem(sentHistoryKey(), JSON.stringify(sentHistory));
+}
+
+async function loadServerSentDedupKeys() {
+  if (!isAccessSessionValid()) {
+    serverDedupKeys = new Set();
+    return serverDedupKeys;
+  }
+  try {
+    const data = await automationFetch('/api/sent-dedup-keys');
+    serverDedupKeys = new Set((data && data.keys) || []);
+    return serverDedupKeys;
+  } catch (e) {
+    console.warn('[SHINE] server dedup keys load failed', e);
+    return serverDedupKeys;
+  }
+}
+
+async function syncLocalSentHistoryToServer() {
+  if (!sentHistory.length || !isAccessSessionValid()) return null;
+  try {
+    return await automationFetch('/api/sent-dedup-keys/sync', {
+      method: 'POST',
+      body: JSON.stringify({ entries: sentHistory })
+    });
+  } catch (e) {
+    console.warn('[SHINE] sent history server sync failed', e);
+    return null;
+  }
+}
+
+function crossSiteDedupKey(job) {
+  const company = String(job.company || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  let title = String(job.title || '').toLowerCase()
+    .replace(/\s*[-–|]\s*.*ctgoodjobs.*$/i, '')
+    .replace(/\s*[-–]\s*.+$/, '')
+    .replace(/\b(aswo|swa|sswa)\s*(i{1,3}|ii|iii|iv)?\b/gi, ' ')
+    .replace(/[()（）]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const email = String(job.apply_email || job.email || '').toLowerCase().trim();
+  return email ? `${company}|${title}|${email}` : `${company}|${title}`;
+}
+
+function isJobAlreadyApplied(job) {
+  const key = crossSiteDedupKey(job);
+  if (serverDedupKeys.has(key)) return true;
+  return sentHistory.some(s => crossSiteDedupKey(s) === key);
 }
 
 function parseJobDate(str) {
@@ -355,13 +451,20 @@ function downloadSentLog() {
 
 function updateQuotaUI() {
   const limit = getQuotaLimit();
-  const used = state.successfulThisMonth;
+  const used = getQuotaUsed();
   const remaining = Math.max(0, limit - used);
   const pct = limit === 999999 ? Math.min(used * 2, 100) : Math.min(100, (used / limit) * 100);
   const limitLabel = limit === 999999 ? '∞' : limit;
+  const trialNote = state.isTrial && !state.trialUpgraded
+    ? ' <span style="color:#b45309;font-size:12px">（試用 · Gmail 鎖定 10 封 · 付費後解除）</span>'
+    : '';
 
   const el = document.getElementById('quotaDisplay');
-  if (el) el.innerHTML = `<strong>${used}</strong> / ${limitLabel} 已用 · 剩餘 <span style="color:#16a34a">${limit === 999999 ? '無限' : remaining}</span> 封`;
+  if (el) {
+    el.innerHTML = state.isTrial && !state.trialUpgraded
+      ? `<strong>${used}</strong> / ${limitLabel} 試用已寄 · 剩餘 <span style="color:#16a34a">${remaining}</span> 封${trialNote}`
+      : `<strong>${used}</strong> / ${limitLabel} 已用 · 剩餘 <span style="color:#16a34a">${limit === 999999 ? '無限' : remaining}</span> 封`;
+  }
 
   const bar = document.getElementById('quotaBar');
   if (bar) bar.style.width = pct + '%';
@@ -373,7 +476,7 @@ function updateQuotaUI() {
   if (usageBar) usageBar.style.width = Math.max(4, pct) + '%';
 
   const stSent = document.getElementById('stSent');
-  if (stSent) stSent.textContent = String(used);
+  if (stSent) stSent.textContent = String(getQuotaUsed());
 
   updateTimeSavingsUI();
 }
@@ -451,8 +554,8 @@ function updateSetupChecklist() {
 async function testGmailConnection() {
   const { gmailUser, appPassword } = getLiveMailCreds();
   const resultEl = document.getElementById('gmailTestResult');
-  if (!gmailUser || !appPassword) {
-    if (resultEl) resultEl.textContent = '請先登入並填寫 App Password';
+  if (!hasSendableMailCreds({ gmailUser, appPassword })) {
+    if (resultEl) resultEl.textContent = '請填寫 Google App Password（16 位，不是 SHINE 登入密碼）';
     return;
   }
   if (resultEl) resultEl.textContent = '驗證中...';
@@ -463,17 +566,27 @@ async function testGmailConnection() {
     const res = await fetch(`${getSendBackendUrl()}/api/verify-smtp`, {
       method: 'POST',
       headers: getAccessHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ gmailUser, appPassword: normalizeAppPassword(appPassword) })
+      body: JSON.stringify({
+        gmailUser,
+        appPassword: appPassword || undefined
+      })
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.ok) {
       const err = [data.error, data.details].filter(Boolean).join(' — ') || '驗證失敗';
-      if (resultEl) resultEl.textContent = '✗ ' + err.slice(0, 80);
+      if (resultEl) resultEl.textContent = '✗ ' + err.slice(0, 120);
       setMissionLive('ERROR', 'var(--red)');
       appendLiveLog('Gmail 驗證失敗: ' + err, 'err');
       return;
     }
-    if (resultEl) resultEl.textContent = '✓ Gmail 連線成功';
+    if (appPassword) {
+      try {
+        await syncAutomationSettingsToServer(readFormSettings());
+        serverHasAppPassword = true;
+        updateGmailSettingsUI();
+      } catch (_) {}
+    }
+    if (resultEl) resultEl.textContent = '✓ Gmail 連線成功' + (data.credsSource === 'stored' ? '（伺服器已存密碼）' : '');
     setMissionLive('IDLE');
     appendLiveLog('Gmail App Password 驗證成功（SMTP port ' + (data.port || 465) + '）', 'ok');
   } catch (e) {
@@ -498,13 +611,45 @@ function isAdminAccount() {
   return accountUserId === 'admin' || !!state.isAdmin;
 }
 
+function isTestAccount() {
+  return accountUserId === 'testshine';
+}
+
+function isSenderUnlockedAccount() {
+  return isAdminAccount() || isTestAccount();
+}
+
 function isEmailAccountId(id) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(id || ''));
 }
 
+function isGmailSenderLocked() {
+  if (isSenderUnlockedAccount()) return false;
+  if (isEmailAccountId(accountUserId)) return true;
+  return !!boundSenderEmail;
+}
+
+function applySenderBinding(meta) {
+  if (!meta) return;
+  if (typeof meta.sender_locked === 'boolean') {
+    state.senderLocked = meta.sender_locked;
+  }
+  if (meta.bound_sender_email) {
+    boundSenderEmail = String(meta.bound_sender_email).trim().toLowerCase();
+  } else if (isEmailAccountId(accountUserId)) {
+    boundSenderEmail = accountUserId.toLowerCase().trim();
+  }
+}
+
 function getGmailUser() {
-  if (!isAdminAccount() && isEmailAccountId(accountUserId)) {
+  if (isSenderUnlockedAccount()) {
+    return getInputVal('gmailUser').toLowerCase().trim();
+  }
+  if (isEmailAccountId(accountUserId)) {
     return accountUserId.toLowerCase().trim();
+  }
+  if (boundSenderEmail) {
+    return boundSenderEmail.toLowerCase().trim();
   }
   return getInputVal('gmailUser').toLowerCase().trim();
 }
@@ -540,13 +685,18 @@ async function syncAutomationSettingsToServer(form) {
     source_urls: form.searchUrls || [],
     blacklist: form.blacklist || state.blacklist,
     applicant_name: form.applicantName || state.applicantName,
-    gmail_email: form.gmailUser || getGmailUser()
+    gmail_email: getGmailUser()
   };
   if (form.appPassword) payload.app_password = form.appPassword;
-  return automationFetch('/api/automation/settings', {
+  const data = await automationFetch('/api/automation/settings', {
     method: 'PUT',
     body: JSON.stringify(payload)
   });
+  if (data && data.gmail_email) {
+    boundSenderEmail = String(data.gmail_email).trim().toLowerCase();
+    updateGmailSettingsUI();
+  }
+  return data;
 }
 
 async function loadAutomationStatus() {
@@ -562,6 +712,9 @@ async function loadAutomationStatus() {
   section.style.display = 'block';
   try {
     const data = await automationFetch('/api/automation/status');
+    serverHasAppPassword = !!data.has_gmail_password;
+    applySenderBinding(data);
+    updateGmailSettingsUI();
     state.dailyAutoEnabled = !!data.daily_auto_enabled;
     const cb = document.getElementById('dailyAutoEnabled');
     if (cb) cb.checked = state.dailyAutoEnabled;
@@ -681,26 +834,41 @@ function updateGmailSettingsUI() {
   const gmailInput = document.getElementById('gmailUser');
   const email = getGmailUser();
   if (adminHint) {
-    adminHint.style.display = isAdminAccount() ? 'block' : 'none';
-  }
-  if (!isAdminAccount() && isEmailAccountId(accountUserId)) {
-    setInputVal('gmailUser', accountUserId);
-    if (gmailInput) {
-      gmailInput.readOnly = true;
-      gmailInput.title = 'Gmail 已鎖定為登入帳號，不可更改';
+    if (isAdminAccount()) {
+      adminHint.style.display = 'block';
+      adminHint.textContent = '管理員：登入 ID 為 admin，寄信可改用任意 @gmail.com。';
+    } else if (isTestAccount()) {
+      adminHint.style.display = 'block';
+      adminHint.textContent = '試用帳號 testshine：可改用任意 Gmail 測試寄信。';
+    } else {
+      adminHint.style.display = 'none';
     }
-  } else if (gmailInput) {
-    gmailInput.readOnly = false;
-    gmailInput.title = '';
+  }
+  if (gmailInput) {
+    if (isGmailSenderLocked()) {
+      setInputVal('gmailUser', email);
+      gmailInput.readOnly = true;
+      gmailInput.title = 'Gmail 已鎖定為你的 SHINE 帳號，不可代他人寄信';
+    } else {
+      gmailInput.readOnly = false;
+      gmailInput.title = isSenderUnlockedAccount() ? '' : '首次儲存後將鎖定為你的 Gmail，不可更改';
+    }
   }
   if (badge && text && email) {
     badge.style.display = 'block';
-    text.textContent = email;
-    setInputVal('gmailUser', email);
+    text.textContent = email + (isGmailSenderLocked() ? '（已鎖定）' : '');
+    if (isGmailSenderLocked()) setInputVal('gmailUser', email);
   } else if (badge) {
     badge.style.display = 'none';
     if (text) text.textContent = '';
-    if (!isEmailAccountId(accountUserId) || isAdminAccount()) setInputVal('gmailUser', '');
+    if (isSenderUnlockedAccount()) setInputVal('gmailUser', '');
+  }
+  const pwHint = document.getElementById('appPasswordHint');
+  if (pwHint) {
+    pwHint.textContent = serverHasAppPassword
+      ? '✓ 伺服器已存有 Gmail App Password（換電腦可留空，先按「測試 Gmail 連線」）'
+      : '⚠ 請貼 Google 產生的 16 位 App Password（不是 SHINE 登入密碼）。按「儲存設定」可同步至伺服器，下次換電腦免重填。';
+    pwHint.style.color = serverHasAppPassword ? 'var(--green)' : '#b45309';
   }
 }
 
@@ -760,9 +928,6 @@ function validateScanSettings(form) {
   if (!form.gmailUser) {
     errors.push('請在設定區填寫 Gmail 寄信帳號');
   }
-  if (!form.appPassword) {
-    errors.push('請填寫 Gmail App Password（16 位應用程式密碼）');
-  }
   return errors;
 }
 
@@ -812,6 +977,7 @@ async function saveSettings() {
   const toast = document.getElementById('saveToast');
   if (toast) { toast.classList.add('on'); setTimeout(() => toast.classList.remove('on'), 2600); }
   appendLiveLog('設定已儲存。求職信將 100% 原樣使用。', 'ok');
+  await syncTrialQuotaFromServer(getGmailUser());
   updateQuotaUI();
 }
 
@@ -1036,19 +1202,10 @@ async function startSafeApply() {
     window._pendingManual = [];
   }
 
+  await syncLocalSentHistoryToServer();
+  await loadServerSentDedupKeys();
+
   // === DEDUP across sources (SSOT): JUMP + CTgoodjobs same vacancy → apply once (company + core title + email) ===
-  function crossSiteDedupKey(job) {
-    const company = String(job.company || '').toLowerCase().replace(/\s+/g, ' ').trim();
-    let title = String(job.title || '').toLowerCase()
-      .replace(/\s*[-–|]\s*.*ctgoodjobs.*$/i, '')
-      .replace(/\s*[-–]\s*.+$/, '')
-      .replace(/\b(aswo|swa|sswa)\s*(i{1,3}|ii|iii|iv)?\b/gi, ' ')
-      .replace(/[()（）]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    const email = String(job.apply_email || '').toLowerCase().trim();
-    return email ? `${company}|${title}|${email}` : `${company}|${title}`;
-  }
   const seen = new Set();
   let deduped = [];
   for (const j of results) {
@@ -1061,12 +1218,9 @@ async function startSafeApply() {
   // Sort by date newest first (as requested for processing order, date near to far)
   deduped.sort((a, b) => parseJobDate(b.date) - parseJobDate(a.date));
 
-  // Cross-scan dedup against persistent sent history (LOG based)
-  // Skip if same title+company already sent before (even on re-scan of same URL)
-  deduped = deduped.filter(j => {
-    const key = crossSiteDedupKey(j);
-    return !sentHistory.some(s => crossSiteDedupKey(s) === key);
-  });
+  // Cross-scan dedup: browser LOG + server sent_applications (survives cache clear / new device)
+  deduped = deduped.filter(j => !isJobAlreadyApplied(j));
+  const serverSkipped = results.length - deduped.length;
 
   // Blacklist filter + require valid apply_email
   const bl = (state.blacklist || '').toLowerCase().split(',').map(x => x.trim()).filter(Boolean);
@@ -1089,17 +1243,19 @@ async function startSafeApply() {
   setMissionLive('SCANNING');
 
   if (currentBatch.length === 0) {
-    const histSkipped = results.length - deduped.length;
+    const histSkipped = serverSkipped;
     if (typeof updateTaskProgress === 'function') updateTaskProgress(`掃描完成：找到 ${deduped.length} 個職缺，但 0 個有明確 email 可寄送。詳情見預覽。`);
     let zeroHint = '這次從你提供的來源連結沒有找到有明確申請 email 的職缺。';
     if (lastScanBackendErrors.length) {
       zeroHint = '職缺網站連線失敗（與 Gmail 無關）：' + lastScanBackendErrors[0] + '。請等 1–2 分鐘後再掃描；修改關鍵字後無需連續快速重試。';
     } else if (lastScanMeta.some(m => (m.listJobsFound || 0) > 0 && m.listJobsAfterFilter === 0)) {
       zeroHint = `已連線職缺網站，但關鍵字「${state.keywords || ''}」篩選後 0 筆符合。請調整關鍵字（例如保留「社工」）後再掃描。`;
+    } else if (lastScanMeta.some(m => (m.listJobsAfterFilter || 0) > 0 && (m.detailPagesFetched || 0) > 0)) {
+      zeroHint = '已找到符合關鍵字的職缺，但該網站可能僅提供線上申請（PageUp 等平台）。SHINE 已嘗試從機構聯絡頁取得申請 email；若仍為 0，請用手動加入職缺或換用含 email 的來源。';
     } else if (!results.length) {
       zeroHint = '後端掃描回傳 0 個職缺（常見：雲端伺服器暫時無法連線職缺網站，與 Gmail 帳號/App Password 無關）。請稍後再按「開始自動掃描」。';
-    } else if (histSkipped > 0 && deduped.length === 0) {
-      zeroHint = `後端找到 ${results.length} 個職缺，但全部已在你的發送紀錄（LOG）中寄過，故本次 0 封可寄。可換新來源或清除瀏覽器本機 LOG 後再試。`;
+    } else if (serverSkipped > 0 && deduped.length === 0) {
+      zeroHint = `後端找到 ${results.length} 個職缺，但全部已在你的發送紀錄中寄過（本機 LOG 或伺服器紀錄），故本次 0 封可寄。`;
     }
     list.innerHTML = `
       <div style="color:#ef4444; padding:12px; border:1px solid #fecaca; background:#fef2f2; border-radius:8px;">
@@ -1163,7 +1319,7 @@ async function startSafeApply() {
   setMissionLive('PREVIEW');
   if (typeof updateTaskProgress === 'function') updateTaskProgress(`已處理好 ${currentBatch.length} 個職缺，請預覽確認`);
   appendLiveLog(`已處理好 ${currentBatch.length} 個職缺（去重完成），請預覽確認後寄出。`, 'head');
-  alert(`SHINE 已自動從你提供的來源連結找出 ${currentBatch.length} 個適合的職缺並定位申請方式。\n\n請檢查預覽（每封都是你原封不動的信），確認後按「確認發送」即可用你的 Gmail 以自然節奏寄出。無需你再逐一瀏覽網站或手動抄電郵。`);
+  alert(`SHINE 已自動從你提供的來源連結找出 ${currentBatch.length} 個適合的職缺並定位申請方式。\n\n請檢查預覽（每封都是你原封不動的信），確認後按「確認發送」即可用你的 Gmail 以最新 AI 擬態技術寄出。無需你再逐一瀏覽網站或手動抄電郵。`);
   } catch (err) {
     console.error('[SHINE] startSafeApply error:', err);
     const msg = err && err.message ? err.message : String(err);
@@ -1216,13 +1372,17 @@ async function postSendEmail(backendUrl, payload, retries = 3) {
       }
       if (!sendRes.ok) {
         const msg = [result.error, result.details].filter(Boolean).join(' — ');
-        throw new Error(msg || ('HTTP ' + sendRes.status));
+        const err = new Error(msg || ('HTTP ' + sendRes.status));
+        err.code = result.code || (sendRes.status === 409 ? 'ALREADY_APPLIED' : undefined) || (sendRes.status === 403 ? 'QUOTA_EXHAUSTED' : undefined);
+        err.status = sendRes.status;
+        throw err;
       }
       return result;
     } catch (e) {
       lastErr = e;
       const msg = e && e.message ? e.message : String(e);
       const isNetwork = /failed to fetch|network|load failed/i.test(msg);
+      if (e && (e.code === 'TRIAL_EXHAUSTED' || e.code === 'MONTHLY_QUOTA_EXHAUSTED' || e.status === 403)) throw e;
       if (attempt < retries && isNetwork) {
         appendLiveLog(`寄送連線失敗，${attempt}/${retries} 次重試中（喚醒伺服器）...`, 'wait');
         if (typeof updateTaskProgress === 'function') {
@@ -1254,7 +1414,7 @@ function updateSelectedJobCountUI() {
   const el = document.getElementById('selectedJobCount');
   if (el) el.textContent = `已選 ${n} / ${total} 封`;
   const btn = document.querySelector('#previewArea .btn-primary.full');
-  if (btn) btn.textContent = n > 0 ? `確認發送已選 ${n} 封（自然節奏）` : '請勾選至少 1 個職缺';
+  if (btn) btn.textContent = n > 0 ? `確認發送已選 ${n} 封（最新 AI 擬態技術）` : '請勾選至少 1 個職缺';
 }
 
 function shineSelectAllJobs(checked) {
@@ -1278,13 +1438,13 @@ async function confirmAndSendBatch() {
   const mailBackend = getSendBackendUrl();
   const { gmailUser, appPassword } = getLiveMailCreds();
   const cvUrl = state.cvUrl || window._betaCreds.cvUrl || '';
-  if (!gmailUser || !appPassword) {
-    alert('缺少 Gmail 設定。請在下方填寫 Gmail App Password（16 位），然後再按「確認發送」。');
+  if (!hasSendableMailCreds({ gmailUser, appPassword })) {
+    alert('缺少 Gmail 寄信設定。\n\n請在下方貼上 Google 產生的 16 位 App Password（不是 SHINE 登入密碼）。\n\n若你曾在其他電腦按過「儲存設定」並填過 App Password，此欄可留空後先按「測試 Gmail 連線」。');
     if (typeof updateTaskProgress === 'function') updateTaskProgress('缺少 Gmail App Password，無法寄送', true);
     return;
   }
-  if (appPassword.length < 16) {
-    alert('App Password 應為 16 位（可含空格，系統會自動移除）。請重新貼上 Google 產生的應用程式密碼。');
+  if (appPassword && appPassword.length < 16) {
+    alert('App Password 應為 16 位（可含空格，系統會自動移除）。請重新貼上 Google 產生的應用程式密碼（不是 SHINE 登入密碼）。');
     return;
   }
 
@@ -1301,14 +1461,24 @@ async function confirmAndSendBatch() {
     const verifyRes = await fetch(`${mailBackend}/api/verify-smtp`, {
       method: 'POST',
       headers: getAccessHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ gmailUser, appPassword: normalizeAppPassword(appPassword) })
+      body: JSON.stringify({
+        gmailUser,
+        appPassword: appPassword || undefined
+      })
     });
     const verifyData = await verifyRes.json().catch(() => ({}));
     if (!verifyRes.ok || !verifyData.ok) {
       const vErr = [verifyData.error, verifyData.details].filter(Boolean).join(' — ') || 'Gmail 驗證失敗';
-      alert('Gmail App Password 驗證失敗：\n\n' + vErr + '\n\n請確認：\n1. 已開啟兩步驟驗證\n2. 使用「郵件」類型的應用程式密碼（16 位）\n3. 帳號與登入 Gmail 一致');
+      alert('Gmail App Password 驗證失敗：\n\n' + vErr + '\n\n請確認：\n1. 貼的是 Google App Password（16 位），不是 SHINE 登入密碼\n2. 已開啟兩步驟驗證\n3. 寄信帳號為 ' + (gmailUser || '你填寫的 Gmail'));
       if (typeof updateTaskProgress === 'function') updateTaskProgress('Gmail 驗證失敗: ' + vErr, true);
       return;
+    }
+    if (appPassword) {
+      try {
+        await syncAutomationSettingsToServer(readFormSettings());
+        serverHasAppPassword = true;
+        updateGmailSettingsUI();
+      } catch (_) {}
     }
     appendLiveLog('Gmail App Password 驗證成功，開始批次寄送...', 'ok');
   } catch (ve) {
@@ -1317,6 +1487,7 @@ async function confirmAndSendBatch() {
     return;
   }
   const container = document.getElementById('previewArea');
+  await syncTrialQuotaFromServer(gmailUser);
   const limit = getQuotaLimit();
   let sent = 0;
 
@@ -1329,8 +1500,10 @@ async function confirmAndSendBatch() {
   if (typeof updateTaskProgress === 'function') updateTaskProgress(`準備寄送 ${jobsToSend.length} 封（已排除 ${sessionSkipCount} 封）`);
 
   for (const job of jobsToSend) {
-    if (state.successfulThisMonth >= limit) {
-      alert('已達到本月額度上限。');
+    if (getQuotaUsed() >= limit) {
+      alert(state.isTrial && !state.trialUpgraded
+        ? `試用額度已用完（${TRIAL_EMAIL_LIMIT} 封）。此 Gmail 已鎖定，請升級付費 Scout 方案後繼續。`
+        : '已達到本月額度上限。');
       break;
     }
 
@@ -1355,21 +1528,27 @@ async function confirmAndSendBatch() {
     // SSOT: body = universal letter 100% 原樣 + CV line (user can embed CV in letter too)
     const exactBody = state.universalLetter + (cvUrl ? `\n\nCV 連結：${cvUrl}` : '');
     const subject = `Application to ${job.title}`;
-    const cleanPass = normalizeAppPassword(appPassword);
-
     try {
       if (typeof updateTaskProgress === 'function') updateTaskProgress(`正在用 Gmail 寄出第 ${idx} 封至 ${job.apply_email} ...`);
       appendLiveLog(`正在用你的 Gmail 寄出至 ${job.apply_email} ...`);
-      const result = await postSendEmail(mailBackend, {
+      const sendPayload = {
         to: job.apply_email,
         subject,
         body: exactBody,
         gmailUser,
-        appPassword: cleanPass
-      });
+        jobTitle: job.title,
+        jobCompany: job.company
+      };
+      if (appPassword) sendPayload.appPassword = normalizeAppPassword(appPassword);
+      const result = await postSendEmail(mailBackend, sendPayload);
 
       if (result.success) {
-        state.successfulThisMonth++;
+        const q = result.quota || result.trialQuota;
+        if (state.isTrial && !state.trialUpgraded) {
+          state.trialSent = (q && q.sent != null) ? q.sent : (state.trialSent + 1);
+        } else {
+          state.successfulThisMonth = (q && q.sent != null) ? q.sent : (state.successfulThisMonth + 1);
+        }
         state.hoursSavedThisYear += HOURS_SAVED_PER_SEND;
         celebrateTimeSaved();
         state.logs.unshift({
@@ -1392,6 +1571,7 @@ async function confirmAndSendBatch() {
           sourceUrl: (window._lastSourceUrls && window._lastSourceUrls[0]) || ''
         });
         saveSentHistory();
+        serverDedupKeys.add(crossSiteDedupKey(job));
 
         if (typeof updateTaskProgress === 'function') updateTaskProgress(`成功寄出第 ${idx} 封 → ${job.apply_email}（${delaySec}s）`);
         appendLiveLog(`已成功寄出 → ${job.apply_email}（耗時 ${delaySec}s）`, 'ok');
@@ -1404,6 +1584,22 @@ async function confirmAndSendBatch() {
       }
     } catch (e) {
       let hint = e && e.message ? e.message : String(e);
+      if (e && e.code === 'ALREADY_APPLIED') {
+        if (typeof updateTaskProgress === 'function') updateTaskProgress(`已寄過，跳過：${job.title}`, true);
+        appendLiveLog(`已寄過，跳過：${job.apply_email}`, 'skip');
+        sessionSkipCount++;
+        const sk = document.getElementById('stSkip');
+        if (sk) sk.textContent = String(sessionSkipCount);
+        continue;
+      }
+      if (e && (e.code === 'TRIAL_EXHAUSTED' || e.code === 'MONTHLY_QUOTA_EXHAUSTED')) {
+        if (e.code === 'TRIAL_EXHAUSTED') state.trialSent = TRIAL_EMAIL_LIMIT;
+        updateQuotaUI();
+        if (typeof updateTaskProgress === 'function') updateTaskProgress(hint, true);
+        appendLiveLog(`額度已用完: ${hint}`, 'err');
+        alert(hint);
+        break;
+      }
       if (/failed to fetch|network|load failed|aborted/i.test(hint)) {
         hint += '（寄信服務連線失敗；請確認網路並檢查 App Password）';
       } else if (/invalid login|authentication|credentials|535|534/i.test(hint)) {
@@ -1488,6 +1684,10 @@ async function loginWithShine() {
 
   accountUserId = session.userId || userId;
   state.isAdmin = !!(session.is_admin || accountUserId === 'admin');
+  state.isTrial = !!session.isTrial;
+  applySenderBinding(session);
+  state.trialSent = 0;
+  state.trialUpgraded = false;
   localStorage.setItem(SHINE_USER_ID_KEY, accountUserId);
   localStorage.removeItem('shine_active_account');
 
@@ -1495,6 +1695,8 @@ async function loginWithShine() {
   applyAccountTier(session.tier || state.tier);
   loadSettingsIntoForm();
   loadSentHistory();
+  await syncLocalSentHistoryToServer();
+  await loadServerSentDedupKeys();
   updateQuotaUI();
   updateWordCountUI();
   updateGmailSettingsUI();
@@ -1509,9 +1711,14 @@ async function loginWithShine() {
   if (site) site.style.display = 'none';
 
   updatePlanChip();
+  lockTierUI();
   setupAutoScanScheduler();
   updateAutoScanStatusUI();
   updateGmailSettingsUI();
+  await syncTrialQuotaFromServer(getGmailUser());
+  try {
+    await automationFetch('/api/automation/sync-login', { method: 'POST', body: '{}' });
+  } catch (_) {}
   await loadAutomationStatus();
 
   const settingsCard = document.querySelector('#portal .card');
@@ -1637,10 +1844,24 @@ function restoreSessionFromToken() {
       applyAccountTier(data.tier);
       updatePlanChip();
     }
+    if (data.isTrial) {
+      state.isTrial = true;
+      state.trialUpgraded = false;
+      lockTierUI();
+      updatePlanChip();
+    }
+    applySenderBinding(data);
+    updateGmailSettingsUI();
+    if (data.authenticated === false) {
+      clearAccessSession();
+      return;
+    }
+    syncTrialQuotaFromServer(getGmailUser());
   }).catch(() => {});
 
   loadSettingsIntoForm();
   loadSentHistory();
+  syncLocalSentHistoryToServer().then(() => loadServerSentDedupKeys()).catch(() => {});
   applyAccountTier(getStoredAccessTier() || 'lv2');
 
   const portal = document.getElementById('portal');
@@ -1656,6 +1877,32 @@ function restoreSessionFromToken() {
   updateGmailSettingsUI();
   loadAutomationStatus().catch(() => {});
   return true;
+}
+
+function bindScanButton() {
+  const scanBtn = document.getElementById('scanBtn');
+  if (!scanBtn || scanBtn._shineBound) return;
+  scanBtn._shineBound = true;
+  scanBtn.addEventListener('click', async () => {
+    if (scanInFlight) return;
+    if (!ensureAccessOrPrompt()) return;
+    const prevText = scanBtn.textContent;
+    scanBtn.disabled = true;
+    scanBtn.textContent = '掃描中…';
+    const mwin = document.getElementById('missionProcessWindow');
+    if (mwin) mwin.style.display = 'block';
+    if (typeof showLiveConsole === 'function') showLiveConsole(true);
+    try {
+      await startSafeApply();
+    } catch (e) {
+      const msg = e && e.message ? e.message : String(e);
+      if (typeof updateTaskProgress === 'function') updateTaskProgress('掃描失敗: ' + msg, true);
+      appendLiveLog('掃描失敗: ' + msg, 'err');
+    } finally {
+      scanBtn.disabled = false;
+      scanBtn.textContent = prevText;
+    }
+  });
 }
 
 // Init
@@ -1692,6 +1939,7 @@ function init() {
 
   updatePlanChip();
   bindAutomationUI();
+  bindScanButton();
 
   // Demo: show some previous logs
   const logsEl = document.getElementById('logs');

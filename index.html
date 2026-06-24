@@ -11,7 +11,7 @@
 <link rel="manifest" href="assets/manifest.json">
 <meta name="theme-color" content="#0A0D18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<script>window.SHINE_BOOT_VER='v5.1-convert';
+<script>window.SHINE_BOOT_VER='v5.3-elegant';
 window.getInputVal=window.getInputVal||function(id,fb){var el=document.getElementById(id);return(el&&el.value!=null)?String(el.value).trim():(fb||'');};
 window.ensurePortalVisible=window.ensurePortalVisible||function(){
   var portal=document.getElementById('portal');
@@ -25,7 +25,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" async></script>
-<link rel="stylesheet" href="shine.css?v=5.1-convert">
+<link rel="stylesheet" href="shine.css?v=5.3-elegant">
 </head>
 <body>
 <div id="loader"><div class="loader-ring"></div><div class="loader-txt" data-i18n="loader">SHINE 出眾 · 載入中</div></div>
@@ -58,24 +58,36 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
   <div class="hero-pin-wrap" id="heroPinWrap">
     <div class="wrap hero-grid" id="heroGrid">
       <div class="hero-copy reveal-left" id="heroCopy">
-        <span class="eyebrow"><span class="pulse"></span><span data-i18n="hero-eyebrow">晚餐還在回工作訊息？夠了。</span></span>
-        <h1 class="hero-headline"><span class="hero-line" data-i18n="hero-title-1">你不必在下班後，</span><br><span class="hero-line em" data-i18n="hero-title-2">還靠自己找下一份工作。</span></h1>
-        <p class="vision"><span data-i18n="hero-vision">SHINE 用你的 Gmail、100% 原樣求職信，在背景全自動投遞 — 每月釋放 <strong>90+ 小時</strong>，把時間還給家人。</span></p>
+        <span class="eyebrow"><span class="pulse"></span><span data-i18n="hero-eyebrow">把時間還給家人，把機會帶給自己</span></span>
+        <h1 class="hero-headline"><span class="hero-line" data-i18n="hero-title-1">你專心現職與生活，</span><br><span class="hero-line em" data-i18n="hero-title-2">SHINE 全自動替你投遞機會。</span></h1>
+        <p class="vision"><span data-i18n="hero-vision">SHINE 用你的 Gmail、100% 原樣求職信，在背景全自動投遞 — 每月為你釋放 <strong>90+ 小時</strong>，機會自然進場。</span></p>
         <div class="pillars" id="heroPillars">
-          <span class="pillar" data-i18n="pillar-1">已經有工作？最強跳槽武器</span>
-          <span class="pillar" data-i18n="pillar-2">100% 原樣求職信</span>
-          <span class="pillar" data-i18n="pillar-3">真人節奏寄送</span>
+          <span class="pillar" data-i18n="pillar-1">已經有工作？</span>
+          <span class="pillar" data-i18n="pillar-2">這就是在職人士最強跳槽武器</span>
+          <span class="pillar" data-i18n="pillar-3">100% 原樣求職信 · 獨家人工智能投遞</span>
         </div>
-        <p class="lead"><span data-i18n="hero-lead">三步設定，之後全自動。你專心現職與生活，機會自己進場。</span></p>
+        <p class="lead"><span data-i18n="hero-lead">三步設定，之後全自動。你繼續享受現職與生活，優質機會自動出現。</span></p>
         <div class="hero-cta" id="heroCta">
           <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="hero-cta-1">開始每月釋放 90 小時</button>
           <a href="#pricing" class="btn btn-ghost" data-i18n="hero-cta-2">查看方案</a>
+        </div>
+        <div class="viral-share-bar reveal" id="viralShareBar">
+          <div class="viral-social-proof">
+            <span class="viral-proof-pulse" aria-hidden="true"></span>
+            <span data-i18n="viral-proof-prefix">已幫助</span>
+            <strong id="viralCounter">167</strong>
+            <span data-i18n="viral-proof-suffix">人成功找到更好機會 🔥</span>
+          </div>
+          <div class="viral-share-actions">
+            <button type="button" class="btn btn-ghost btn-sm" id="btnCopyShare" data-i18n="viral-copy">一鍵複製分享給朋友</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="btnNativeShare" data-i18n="viral-share">分享</button>
+          </div>
         </div>
         <p class="hero-note"><span data-i18n="hero-note">你自己的 Gmail · 同職缺不重複申請 · 每封節省約 1 小時</span></p>
         <div class="hero-proof" id="heroProof">
           <div class="proof-cell"><span class="proof-n" data-count="2400">2,400+</span><span class="proof-l" data-i18n="proof-sent">示範寄送</span></div>
           <div class="proof-cell"><span class="proof-n" data-count="90">90+</span><span class="proof-l" data-i18n="proof-hours">小時釋放/月</span></div>
-          <div class="proof-cell"><span class="proof-n">60s</span><span class="proof-l" data-i18n="proof-rhythm">真人節奏</span></div>
+          <div class="proof-cell"><span class="proof-n">AI</span><span class="proof-l" data-i18n="proof-rhythm">獨家智能投遞</span></div>
         </div>
       </div>
       <div class="hero-stage reveal-right" id="heroStage">
@@ -86,13 +98,17 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
             <span class="con-live" id="heroConLive"><span class="pulse"></span><span data-i18n="console-running">RUNNING</span></span>
           </div>
           <div class="scan-line" id="heroScanLine"></div><div class="con-body" id="heroLog"></div>
+          <div class="hero-sim-wrap">
+            <button type="button" class="btn btn-ghost btn-sm btn-sim-apply" id="btnSimulateApply" data-i18n="viral-sim">模擬投遞一封 → 看完整動畫</button>
+            <div class="sim-countdown" id="simCountdown" aria-hidden="true"><span class="sim-pulse"></span><span id="simCountdownVal">60</span>s</div>
+          </div>
           <div class="console-phase" id="heroPhaseBar" aria-hidden="true">
             <span class="phase-dot is-on"></span><span class="phase-dot"></span><span class="phase-dot"></span><span class="phase-dot"></span><span class="phase-dot"></span>
           </div>
         </div>
       </div>
     </div>
-    <p class="hero-scrub-hint" id="heroScrubHint" aria-hidden="true"><span class="hero-scrub-arrow">↓</span> <span data-i18n="hero-scrub-hint">滾動探索 SHINE 自動運行</span></p>
+    <p class="hero-scrub-hint" id="heroScrubHint" aria-hidden="true"><span class="hero-scrub-arrow">↓</span> <span data-i18n="hero-scrub-hint">滾動探索 SHINE 如何優雅運作</span></p>
   </div>
 </section>
 
@@ -100,11 +116,11 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
   <div class="trust-track">
     <span data-i18n="trust-1">全自動投遞</span><span class="trust-sep">◆</span>
     <span data-i18n="trust-2">100% 原樣求職信</span><span class="trust-sep">◆</span>
-    <span data-i18n="trust-3">真人 60 秒節奏</span><span class="trust-sep">◆</span>
+    <span data-i18n="trust-3">獨家人工智能投遞</span><span class="trust-sep">◆</span>
     <span data-i18n="trust-4">同職缺不重複</span><span class="trust-sep">◆</span>
     <span data-i18n="trust-1">全自動投遞</span><span class="trust-sep">◆</span>
     <span data-i18n="trust-2">100% 原樣求職信</span><span class="trust-sep">◆</span>
-    <span data-i18n="trust-3">真人 60 秒節奏</span><span class="trust-sep">◆</span>
+    <span data-i18n="trust-3">獨家人工智能投遞</span><span class="trust-sep">◆</span>
     <span data-i18n="trust-4">同職缺不重複</span>
   </div>
 </div>
@@ -113,26 +129,26 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-label" data-i18n="sec-how-label">運作方式</div>
-      <h2 data-i18n="sec-how-title">忙碌主管的一天 — 你只需要三分鐘。</h2>
-      <p class="sec-intro" data-i18n="sec-how-intro">不是功能清單，是一段你終於不用再做的日常。</p>
+      <h2 data-i18n="sec-how-title">忙碌主管的一天，只需要三分鐘設定，之後徹底解放。</h2>
+      <p class="sec-intro" data-i18n="sec-how-intro">這不是功能清單，而是一段你從此不用再親力親為的優雅日常。</p>
     </div>
     <div class="steps-track" id="stepsTrack">
       <div class="steps-rail" aria-hidden="true"><div class="steps-fill" id="stepsFill"></div></div>
     <div class="steps">
       <div class="step reveal glass-card" data-tilt>
-        <div class="num">1</div><h3 data-i18n="step1-title">設好陷阱（5 分鐘）</h3>
-        <p data-i18n="step1-desc">花五分鐘設定關鍵字、來源連結與求職信。如同佈好棋局 — 之後你不用再看求職網站。</p>
-        <div class="tag" data-i18n="step1-tag">一次設定 · 依方案 1–3 個來源</div>
+        <div class="num">1</div><h3 data-i18n="step1-title">設好棋局（5 分鐘）</h3>
+        <p data-i18n="step1-desc">花五分鐘設定關鍵字、來源連結與求職信。一次完成，之後你再也不用打開求職網站。</p>
+        <div class="tag" data-i18n="step1-tag">一次設定 · 依方案支援 1–3 個來源</div>
       </div>
       <div class="step reveal glass-card" data-tilt>
         <div class="num">2</div><h3 data-i18n="step2-title">自動偵察</h3>
-        <p data-i18n="step2-desc">你開會、帶娃、專心現職時，SHINE 依方案掃描指定來源、自動翻頁、跟隨職缺提取電郵 — 只留下值得申請的機會。</p>
+        <p data-i18n="step2-desc">你在開會、陪伴家人、專心現職時，SHINE 自動掃描指定來源、翻頁、提取電郵，只為你留下真正值得申請的機會。</p>
         <div class="tag" data-i18n="step2-tag">最近 3 個月 · 自動分頁</div>
       </div>
       <div class="step reveal glass-card" data-tilt>
         <div class="num">3</div><h3 data-i18n="step3-title">一鍵將軍</h3>
-        <p data-i18n="step3-desc">預覽勾選後一鍵確認。SHINE 用你的 Gmail 寄出 — 第一封即時，之後每 60 秒一封；同職缺絕不重複申請。</p>
-        <div class="tag" data-i18n="step3-tag">真人節奏 · 去重保護</div>
+        <p data-i18n="step3-desc">預覽勾選後一鍵確認。SHINE 用你的 Gmail 寄出——第一封即時送達，之後每 60 秒一封，同職缺絕不重複。</p>
+        <div class="tag" data-i18n="step3-tag">獨家 AI 投遞 · 去重保護</div>
       </div>
     </div>
     </div>
@@ -148,13 +164,13 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
     <h2 class="reveal" data-i18n="sec-time-title">把時間還給家人，把機會留給自己。</h2>
     <p class="sec-intro reveal" data-i18n="sec-time-intro">每寄出一封，SHINE 替你省下瀏覽、找電郵、手動撰寫寄送的時間。</p>
     <div class="time-hero reveal-scale glass-card">
-      <p class="time-hero-desc" data-i18n="time-hero-desc">全自動、無痛運作 — 你不用在下班後還對著求職網站。SHINE 在背景替你佔盡資源，快人一步。</p>
+      <p class="time-hero-desc" data-i18n="time-hero-desc">全自動、無痛運作——你繼續享受生活，SHINE 在背景優雅替你佔領市場，快人一步。</p>
       <div class="hour-pool-wrap" id="hourPoolWrap" aria-hidden="true">
         <div class="hour-pool" id="hourPool">
           <div class="hour-fill" id="hourFill"></div>
           <div class="hour-glow"></div>
         </div>
-        <span class="hour-pool-label" data-i18n="hour-pool-label">時間正在回流給你</span>
+        <span class="hour-pool-label" data-i18n="hour-pool-label">時間正在優雅回流給你</span>
       </div>
       <div class="time-grid">
         <div class="time-stat"><div class="n" id="timeSavedPerEmail">1</div><div class="u" data-i18n="time-stat-1u">小時／每封</div><div class="d" data-i18n="time-stat-1d">每寄出一封 = 節省 1 小時</div></div>
@@ -169,8 +185,8 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-label" data-i18n="sec-price-label">收費方案</div>
-      <h2 data-i18n="sec-price-title">為你的職涯階段而設，不是功能堆疊。</h2>
-      <p class="sec-intro" data-i18n="sec-price-intro">港幣 / 月。下方數字是能力上限 — 上方文字是你買回的人生。</p>
+      <h2 data-i18n="sec-price-title">為你的職涯階段量身打造，不是功能堆疊。</h2>
+      <p class="sec-intro" data-i18n="sec-price-intro">港幣 / 月。上方文字是你買回的人生，下方數字是能力上限。</p>
     </div>
     <div class="roi-banner reveal" data-i18n="roi-banner">一餐飯 $100 起 · 每月釋放 60–500+ 小時</div>
     <div class="price-grid">
@@ -178,7 +194,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         <div class="flip-inner">
           <div class="flip-front tier">
             <div class="tname" data-i18n="tier1-name">Scout · 偵察</div>
-            <p class="tier-value" data-i18n="tier1-value">$100 不是費用，是對抗「原地踏步」最便宜的保險。</p>
+            <p class="tier-value" data-i18n="tier1-value">$100 不是費用，是對抗原地踏步最優雅的選擇。</p>
             <div class="sub" data-i18n="tier1-sub">試水溫 · 低風險入場</div>
             <div class="price">$100<span data-i18n="per-month"> /月</span></div>
             <ul>
@@ -189,10 +205,10 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
             </ul>
             <button onclick="selectTier('lv1')" class="btn btn-ghost btn-block" style="margin-top:auto" data-i18n="tier1-btn">選擇 Scout</button>
           </div>
-          <div class="flip-back"><div class="tname" data-i18n="tier1-back">每月釋放 60+ 小時</div><p class="tier-back-desc" data-i18n="tier1-back-desc">一餐飯的投入，換穩定自動投遞 — 不必再犧牲晚餐時間找工。</p></div>
+          <div class="flip-back"><div class="tname" data-i18n="tier1-back">每月釋放 60+ 小時</div><p class="tier-back-desc" data-i18n="tier1-back-desc">一餐飯的投入，換來穩定自動投遞——你可以安心把晚餐時間留給家人與自己。</p></div>
         </div>
       </div>
-      <div class="flip-wrap tier feat-wrap reveal">
+      <div class="flip-wrap tier feat-wrap viral-hot reveal">
         <span class="badge" data-i18n="popular">最受歡迎</span>
         <div class="flip-inner">
           <div class="flip-front tier feat">
@@ -208,14 +224,14 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
             </ul>
             <button onclick="selectTier('lv2')" class="btn btn-gold btn-block" style="margin-top:auto" data-i18n="tier2-btn">選擇 Sprint</button>
           </div>
-          <div class="flip-back"><div class="tname" data-i18n="tier2-back">最強跳槽武器</div><p class="tier-back-desc" data-i18n="tier2-back-desc">在職人士秘密武器 — 背景自動投遞，把下班還給家人。</p></div>
+          <div class="flip-back"><div class="tname" data-i18n="tier2-back">最強跳槽武器</div><p class="tier-back-desc" data-i18n="tier2-back-desc">在職人士的優雅秘密武器——白天全力現職，SHINE 在背景自動拓展機會，把下班真正還給家人。</p></div>
         </div>
       </div>
       <div class="flip-wrap reveal">
         <div class="flip-inner">
           <div class="flip-front tier">
             <div class="tname" data-i18n="tier3-name">Superman · 超人</div>
-            <p class="tier-value" data-i18n="tier3-value">全力出擊。不放過市場上任何機會。</p>
+            <p class="tier-value" data-i18n="tier3-value">全力出擊。不放過市場上任何優質機會。</p>
             <div class="sub" data-i18n="tier3-sub">無限野心 · 不妥協</div>
             <div class="price">$768<span data-i18n="per-month"> /月</span></div>
             <ul>
@@ -226,7 +242,68 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
             </ul>
             <button onclick="selectTier('lv3')" class="btn btn-ghost btn-block" style="margin-top:auto" data-i18n="tier3-btn">選擇 Superman</button>
           </div>
-          <div class="flip-back"><div class="tname" data-i18n="tier3-back">無限釋放時間</div><p class="tier-back-desc" data-i18n="tier3-back-desc">給不接受將就的專業人士 — 最大覆蓋，快人一步。</p></div>
+          <div class="flip-back"><div class="tname" data-i18n="tier3-back">無限釋放時間</div><p class="tier-back-desc" data-i18n="tier3-back-desc">獻給不接受將就的專業人士——最大覆蓋，最快人一步。</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="price-compare reveal">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="compare-feature">功能</th>
+            <th>Scout</th>
+            <th class="col-hot">Sprint ★</th>
+            <th>Superman</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td data-i18n="compare-row1">每月寄送</td><td>60</td><td class="col-hot">500</td><td data-i18n="unlimited">無限</td></tr>
+          <tr><td data-i18n="compare-row2">來源 URL</td><td>1</td><td class="col-hot">2</td><td>3</td></tr>
+          <tr><td data-i18n="compare-row3">黑名單</td><td>●</td><td class="col-hot">●</td><td>●</td></tr>
+          <tr><td data-i18n="compare-row4">優先處理</td><td>—</td><td class="col-hot">●</td><td>●</td></tr>
+          <tr><td data-i18n="compare-row5">釋放時間/月</td><td>60h+</td><td class="col-hot">100h+</td><td>500h+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="stories-wrap reveal" id="stories">
+      <div class="stories-head">
+        <div class="sec-label" data-i18n="stories-label">成功案例</div>
+        <h3 data-i18n="stories-title">真實用戶，匿名分享</h3>
+      </div>
+      <div class="stories-carousel">
+        <div id="storiesTrack">
+          <div class="story-slide is-active">
+            <div class="story-metric">90+<span data-i18n="story-unit-hours"> 小時</span></div>
+            <p class="story-quote" data-i18n="story-1">「終於不用下班後還對著求職網站——時間真正還給了家人」</p>
+            <p class="story-meta" data-i18n="story-meta-1">— 匿名用戶 · 在職跳槽</p>
+            <div class="story-shot">✓ 自動掃描 3 個來源<br>✓ 100% 原樣求職信</div>
+            <div class="story-actions">
+              <button type="button" class="btn btn-gold btn-sm" data-wa-quote="「終於不用下班後還對著求職網站——時間真正還給了家人」— 匿名用戶" data-i18n="story-wa">分享到 WhatsApp</button>
+            </div>
+          </div>
+          <div class="story-slide">
+            <div class="story-metric">HR<span data-i18n="story-unit-call"> Call</span></div>
+            <p class="story-quote" data-i18n="story-2">「一設定完就收到 HR call，勁！」</p>
+            <p class="story-meta" data-i18n="story-meta-2">— 陳社工 · Sprint 方案</p>
+            <div class="story-shot">✓ 設定當日即收到回覆<br>✓ 100% 原樣求職信 · 獨家 AI 投遞</div>
+            <div class="story-actions">
+              <button type="button" class="btn btn-gold btn-sm" data-wa-quote="「一設定完就收到 HR call，勁！」— 陳社工" data-i18n="story-wa">分享到 WhatsApp</button>
+            </div>
+          </div>
+          <div class="story-slide">
+            <div class="story-metric">HR<span data-i18n="story-unit-call"> Call</span></div>
+            <p class="story-quote" data-i18n="story-3">「一設定完就收到 HR call，勁！」</p>
+            <p class="story-meta" data-i18n="story-meta-3">— 黃姑娘 RN · Sprint 方案</p>
+            <div class="story-shot">✓ 護理職缺自動掃描<br>✓ 同職缺不重複申請</div>
+            <div class="story-actions">
+              <button type="button" class="btn btn-gold btn-sm" data-wa-quote="「一設定完就收到 HR call，勁！」— 黃姑娘 RN" data-i18n="story-wa">分享到 WhatsApp</button>
+            </div>
+          </div>
+        </div>
+        <div class="stories-dots" id="storiesDots" aria-label="案例輪播">
+          <button type="button" class="is-active" aria-label="1"></button>
+          <button type="button" aria-label="2"></button>
+          <button type="button" aria-label="3"></button>
         </div>
       </div>
     </div>
@@ -238,7 +315,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
     <div class="weapon-copy reveal-left">
       <div class="sec-label" data-i18n="weapon-label">秘密武器</div>
       <h2 data-i18n="weapon-title">在職人士的最強跳槽武器</h2>
-      <p class="sec-intro" data-i18n="weapon-desc">白天專心現職，SHINE 在背景替你佔盡市場職缺。不用加班找工，機會自動進場。</p>
+      <p class="sec-intro" data-i18n="weapon-desc">白天你專心現職與生活，SHINE 在背景替你捕捉全市場優質職缺。不用加班找工，機會自然優雅進場。</p>
       <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="weapon-cta">立即武裝 SHINE</button>
     </div>
     <div class="weapon-visual reveal-right" aria-hidden="true">
@@ -254,7 +331,13 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
     <div class="final-cta-card reveal-scale">
       <h2 data-i18n="cta-final-title">機會不會等你。SHINE 會。</h2>
       <p data-i18n="cta-final-desc">三步設定，今日開始。你的 Gmail，你的求職信，全自動。</p>
-      <button onclick="openLogin()" class="btn btn-gold btn-lg btn-magnetic" data-i18n="cta-final-btn">立即登入 — 搶佔先機</button>
+      <div class="viral-trial-cta">
+        <button onclick="openTrialLogin()" class="btn btn-gold btn-lg btn-magnetic viral-trial-btn">
+          <span data-i18n="cta-trial">立即免費試用</span>
+          <span id="viralTimer">23:59:59</span>
+        </button>
+      </div>
+      <button onclick="openLogin()" class="btn btn-ghost btn-lg" style="margin-top:14px" data-i18n="cta-final-btn">立即登入 — 搶佔先機</button>
     </div>
   </div>
 </section>
@@ -287,7 +370,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         </ul>
       </div>
       <div class="field"><label data-i18n="login-user-label">SHINE 帳號 ID</label>
-        <input id="loginUserId" type="text" placeholder="例如 admin 或 kawing.swj@gmail.com" autocomplete="username" required></div>
+        <input id="loginUserId" type="text" placeholder="例如 testshine、admin 或 your@gmail.com" autocomplete="username" required></div>
       <div class="field" id="loginAccessPasswordField"><label data-i18n="login-pw-label">密碼</label>
         <input id="loginAccessPassword" type="password" placeholder="你的開通密碼" autocomplete="current-password" required>
         <div class="hint" style="margin-top:6px" data-i18n="login-pw-hint">帳號由 2C-AI 手動開通。</div></div>
@@ -359,8 +442,9 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
             <input id="gmailUser" type="email" placeholder="you@gmail.com">
             <p id="gmailAdminHint" class="hint" style="display:none;margin-top:6px" data-i18n="dash-admin-hint">管理員：登入 ID 為 admin，寄信可改用任意 @gmail.com。</p></div>
           <div id="loggedInGmailBadge" class="gmail-badge" style="display:none"><span data-i18n="dash-gmail-badge">寄信帳號：</span><strong id="loggedInGmailText"></strong></div>
-          <div class="field" style="margin-bottom:0"><label class="fld-label" data-i18n="dash-ap-label">App Password（手動掃描用 session；儲存設定時會加密同步至伺服器供每日自動運行）</label>
-            <input id="appPassword" type="password" placeholder="xxxx xxxx xxxx xxxx"></div>
+          <div class="field" style="margin-bottom:0"><label class="fld-label" data-i18n="dash-ap-label">Gmail App Password（Google 16 位密碼，不是 SHINE 登入密碼）</label>
+            <input id="appPassword" type="password" placeholder="xxxx xxxx xxxx xxxx" autocomplete="off">
+            <p id="appPasswordHint" class="hint" style="margin-top:6px;font-weight:600"></p></div>
           <button type="button" onclick="testGmailConnection()" class="btn btn-ghost btn-sm" style="margin-top:10px" data-i18n="dash-test">測試 Gmail 連線</button>
           <span id="gmailTestResult" class="hint" style="margin-left:8px"></span>
         </div></div>
@@ -426,7 +510,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 
     <div class="card dash-full">
       <h3 data-i18n="dash-auto-title">讓 SHINE 自動處理</h3>
-      <p class="csub" data-i18n="dash-auto-sub">掃描你指定的來源 → 預覽確認 → 用你的 Gmail 自然節奏寄出。</p>
+      <p class="csub" data-i18n="dash-auto-sub">掃描你指定的來源 → 預覽確認 → 用你的 Gmail 最新 AI 擬態技術寄出。</p>
       <button id="scanBtn" class="btn btn-gold btn-block" style="padding:14px;font-size:15px" data-i18n="dash-scan-btn">開始自動掃描與準備申請</button>
       <details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600;font-size:14px" data-i18n="dash-advanced">進階：手動加入職缺</summary>
         <p class="hint" style="margin:8px 0" data-i18n="dash-advanced-hint">每行一個：職位 | 公司 | 描述（含 email）</p>
@@ -434,7 +518,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         <button onclick="addManualJobs()" class="btn btn-ghost btn-sm" style="margin-top:6px" data-i18n="dash-add-manual">加入這些職缺</button></details>
       <div id="previewArea" class="preview-area" style="display:none">
         <h4 data-i18n="dash-preview-title">預覽 — 勾選要寄送的職缺</h4><div id="previewList"></div>
-        <button onclick="confirmAndSendBatch()" class="btn btn-gold btn-block" style="margin-top:12px" data-i18n="dash-confirm-send">確認發送已選職缺（自然節奏）</button></div>
+        <button onclick="confirmAndSendBatch()" class="btn btn-gold btn-block" style="margin-top:12px" data-i18n="dash-confirm-send">確認發送已選職缺（最新 AI 擬態技術）</button></div>
       <div id="liveConsole" class="console" style="margin-top:14px;display:none">
         <div class="con-bar"><span class="dot" style="background:#F0795F"></span><span class="dot" style="background:#FFCB57"></span><span class="dot" style="background:#5FD08A"></span><span class="con-title" data-i18n="dash-processing">處理中</span></div>
         <div class="con-body" id="liveLog"></div></div>
@@ -447,44 +531,53 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 </section>
 
 <script>
+var SHINE_TRIAL_LOGIN_ID='testshine';
+function presetLoginUserId(id){var el=document.getElementById('loginUserId');if(el)el.value=String(id||'').trim();}
 function openLogin(){if(window.SHINE_MOTION&&window.SHINE_MOTION.openLogin){window.SHINE_MOTION.openLogin();return;}var s=document.getElementById('site'),l=document.getElementById('shineLogin');if(s)s.style.display='none';if(l)l.style.display='flex';window.scrollTo({top:0,behavior:'smooth'});}
+function openTrialLogin(){if(window.SHINE_MOTION&&window.SHINE_MOTION.openTrialLogin){window.SHINE_MOTION.openTrialLogin();return;}presetLoginUserId(SHINE_TRIAL_LOGIN_ID);openLogin();}
 function closeLogin(){if(window.SHINE_MOTION&&window.SHINE_MOTION.closeLogin){window.SHINE_MOTION.closeLogin();return;}var s=document.getElementById('site'),l=document.getElementById('shineLogin');if(l)l.style.display='none';if(s)s.style.display='block';}
 
 /* ========== TRILINGUAL i18n ========== */
 const i18n = {
   'zh-Hant': {
     'loader':'SHINE 出眾 · 載入中','nav-how':'運作方式','nav-time':'時間價值','nav-pricing':'定價','nav-login':'登入','nav-cta':'客戶登入',
-    'hero-eyebrow':'晚餐還在回工作訊息？夠了。',
-    'hero-title-1':'你不必在下班後，','hero-title-2':'還靠自己找下一份工作。',
-    'hero-vision':'SHINE 用你的 Gmail、100% 原樣求職信，在背景全自動投遞 — 每月釋放 <strong>90+ 小時</strong>，把時間還給家人。',
-    'pillar-1':'在職也能低調跳槽','pillar-2':'你的 Gmail · 你的信','pillar-3':'60 秒真人節奏',
-    'hero-lead':'三步設定，之後全自動。你專心現職與生活，機會自己進場。','hero-cta-1':'開始每月釋放 90 小時','hero-cta-2':'查看方案',
+    'hero-eyebrow':'把時間還給家人，把機會帶給自己',
+    'hero-title-1':'你專心現職與生活，','hero-title-2':'SHINE 全自動替你投遞機會。',
+    'hero-vision':'SHINE 用你的 Gmail、100% 原樣求職信，在背景全自動投遞 — 每月為你釋放 <strong>90+ 小時</strong>，機會自然進場。',
+    'pillar-1':'已經有工作？','pillar-2':'這就是在職人士最強跳槽武器','pillar-3':'100% 原樣求職信 · 獨家人工智能投遞',
+    'hero-lead':'三步設定，之後全自動。你繼續享受現職與生活，優質機會自動出現。','hero-cta-1':'開始每月釋放 90 小時','hero-cta-2':'查看方案',
     'hero-note':'你自己的 Gmail · 同職缺不重複申請 · 每封節省約 1 小時',
-    'hero-scrub-hint':'滾動探索 SHINE 自動運行',
-    'proof-sent':'示範寄送','proof-hours':'小時釋放/月','proof-rhythm':'真人節奏',
-    'trust-1':'全自動投遞','trust-2':'100% 原樣求職信','trust-3':'真人 60 秒節奏','trust-4':'同職缺不重複',
-    'hour-pool-label':'時間正在回流給你',
+    'hero-scrub-hint':'滾動探索 SHINE 如何優雅運作',
+    'proof-sent':'示範寄送','proof-hours':'小時釋放/月','proof-rhythm':'獨家智能投遞',
+    'trust-1':'全自動投遞','trust-2':'100% 原樣求職信','trust-3':'獨家人工智能投遞','trust-4':'同職缺不重複',
+    'hour-pool-label':'時間正在優雅回流給你',
     'roi-banner':'一餐飯 $100 起 · 每月釋放 60–500+ 小時',
     'weapon-label':'秘密武器','weapon-title':'在職人士的最強跳槽武器',
-    'weapon-desc':'白天專心現職，SHINE 在背景替你佔盡市場職缺。不用加班找工，機會自動進場。','weapon-cta':'立即武裝 SHINE',
+    'weapon-desc':'白天你專心現職與生活，SHINE 在背景替你捕捉全市場優質職缺。不用加班找工，機會自然優雅進場。','weapon-cta':'立即武裝 SHINE',
     'cta-final-title':'機會不會等你。SHINE 會。','cta-final-desc':'三步設定，今日開始。你的 Gmail，你的求職信，全自動。','cta-final-btn':'立即登入 — 搶佔先機',
+    'cta-trial':'立即免費試用',
+    'viral-proof-prefix':'已幫助','viral-proof-suffix':'人成功找到更好機會 🔥','viral-copy':'一鍵複製分享給朋友','viral-share':'分享','viral-sim':'模擬投遞一封 → 看完整動畫',
+    'compare-feature':'功能','compare-row1':'每月寄送','compare-row2':'來源 URL','compare-row3':'黑名單','compare-row4':'優先處理','compare-row5':'釋放時間/月',
+    'stories-label':'成功案例','stories-title':'真實用戶，匿名分享','story-1':'「終於不用下班後還對著求職網站——時間真正還給了家人」','story-2':'「一設定完就收到 HR call，勁！」','story-3':'「一設定完就收到 HR call，勁！」',
+    'story-meta-1':'— 匿名用戶 · 在職跳槽','story-meta-2':'— 陳社工 · Sprint 方案','story-meta-3':'— 黃姑娘 RN · Sprint 方案',
+    'story-unit-interview':' 個面試','story-unit-hours':' 小時','story-unit-weeks':' 週','story-unit-call':' Call','story-wa':'分享到 WhatsApp',
     'sticky-cta':'開始釋放 90 小時',
     'console-running':'RUNNING',
-    'sec-how-label':'運作方式','sec-how-title':'忙碌主管的一天 — 你只需要三分鐘。','sec-how-intro':'不是功能清單，是一段你終於不用再做的日常。',
-    'step1-title':'設好陷阱（5 分鐘）','step1-desc':'花五分鐘設定關鍵字、來源連結與求職信。如同佈好棋局 — 之後你不用再看求職網站。','step1-tag':'一次設定 · 依方案 1–3 個來源',
-    'step2-title':'自動偵察','step2-desc':'你開會、帶娃、專心現職時，SHINE 依方案掃描指定來源、自動翻頁、跟隨職缺提取電郵 — 只留下值得申請的機會。','step2-tag':'最近 3 個月 · 自動分頁',
-    'step3-title':'一鍵將軍','step3-desc':'預覽勾選後一鍵確認。SHINE 用你的 Gmail 寄出 — 第一封即時，之後每 60 秒一封；同職缺絕不重複申請。','step3-tag':'真人節奏 · 去重保護',
+    'sec-how-label':'運作方式','sec-how-title':'忙碌主管的一天，只需要三分鐘設定，之後徹底解放。','sec-how-intro':'這不是功能清單，而是一段你從此不用再親力親為的優雅日常。',
+    'step1-title':'設好棋局（5 分鐘）','step1-desc':'花五分鐘設定關鍵字、來源連結與求職信。一次完成，之後你再也不用打開求職網站。','step1-tag':'一次設定 · 依方案支援 1–3 個來源',
+    'step2-title':'自動偵察','step2-desc':'你在開會、陪伴家人、專心現職時，SHINE 自動掃描指定來源、翻頁、提取電郵，只為你留下真正值得申請的機會。','step2-tag':'最近 3 個月 · 自動分頁',
+    'step3-title':'一鍵將軍','step3-desc':'預覽勾選後一鍵確認。SHINE 用你的 Gmail 寄出——第一封即時送達，之後每 60 秒一封，同職缺絕不重複。','step3-tag':'獨家 AI 投遞 · 去重保護',
     'how-cta':'設定我的代理',
     'trust-promise-title':'Gmail 信任承諾','trust-promise-1':'僅用於代你寄出求職信（純 outbound，不讀取收件匣）','trust-promise-2':'若啟用每日 09:00 自動運行，App Password 加密儲存於伺服器','trust-promise-3':'你可隨時在 Google 設定撤銷 App Password，即時停止所有寄送',
     'sec-time-label':'時間價值','sec-time-title':'把時間還給家人，把機會留給自己。','sec-time-intro':'每寄出一封，SHINE 替你省下瀏覽、找電郵、手動撰寫寄送的時間。',
-    'time-hero-desc':'全自動、無痛運作 — 你不用在下班後還對著求職網站。SHINE 在背景替你佔盡資源，快人一步。',
+    'time-hero-desc':'全自動、無痛運作——你繼續享受生活，SHINE 在背景優雅替你佔領市場，快人一步。',
     'time-stat-1u':'小時／每封','time-stat-1d':'每寄出一封 = 節省 1 小時',
     'time-stat-2u':'小時／本月','time-stat-2d':'本月已釋放（示範）',
     'time-stat-3u':'小時／今年','time-stat-3d':'今年累計釋放（示範）',
-    'sec-price-label':'收費方案','sec-price-title':'為你的職涯階段而設，不是功能堆疊。','sec-price-intro':'港幣 / 月。下方數字是能力上限 — 上方文字是你買回的人生。',
-    'tier1-name':'Scout · 偵察','tier1-value':'$100 不是費用，是對抗「原地踏步」最便宜的保險。','tier1-sub':'試水溫 · 低風險入場','tier1-q1':'封 / 月','tier1-q2':'個來源 URL','tier1-q3':'機構黑名單','tier1-q4':'發送 Logs','tier1-btn':'選擇 Scout','tier1-back':'每月釋放 60+ 小時','tier1-back-desc':'一餐飯的投入，換穩定自動投遞 — 不必再犧牲晚餐時間找工。',
-    'tier2-name':'Sprint · 出擊','tier2-value':'$500 少於兩日薪，買回 100+ 小時人生。','tier2-sub':'認真跳槽 · 時間解放','tier2-q1':'封 / 月','tier2-q2':'個來源 URL','tier2-q3':'完整黑名單','tier2-q4':'優先處理','tier2-btn':'選擇 Sprint','tier2-back':'最強跳槽武器','tier2-back-desc':'在職人士秘密武器 — 背景自動投遞，把下班還給家人。',
-    'tier3-name':'Superman · 超人','tier3-value':'全力出擊。不放過市場上任何機會。','tier3-sub':'無限野心 · 不妥協','unlimited':'無限','tier3-q1':'封 / 月','tier3-q2':'個來源 URL','tier3-q3':'全部功能','tier3-q4':'大量申請者','tier3-btn':'選擇 Superman','tier3-back':'無限釋放時間','tier3-back-desc':'給不接受將就的專業人士 — 最大覆蓋，快人一步。',
+    'sec-price-label':'收費方案','sec-price-title':'為你的職涯階段量身打造，不是功能堆疊。','sec-price-intro':'港幣 / 月。上方文字是你買回的人生，下方數字是能力上限。',
+    'tier1-name':'Scout · 偵察','tier1-value':'$100 不是費用，是對抗原地踏步最優雅的選擇。','tier1-sub':'試水溫 · 低風險入場','tier1-q1':'封 / 月','tier1-q2':'個來源 URL','tier1-q3':'機構黑名單','tier1-q4':'發送 Logs','tier1-btn':'選擇 Scout','tier1-back':'每月釋放 60+ 小時','tier1-back-desc':'一餐飯的投入，換來穩定自動投遞——你可以安心把晚餐時間留給家人與自己。',
+    'tier2-name':'Sprint · 出擊','tier2-value':'$500 少於兩日薪，買回 100+ 小時人生。','tier2-sub':'認真跳槽 · 時間解放','tier2-q1':'封 / 月','tier2-q2':'個來源 URL','tier2-q3':'完整黑名單','tier2-q4':'優先處理','tier2-btn':'選擇 Sprint','tier2-back':'最強跳槽武器','tier2-back-desc':'在職人士的優雅秘密武器——白天全力現職，SHINE 在背景自動拓展機會，把下班真正還給家人。',
+    'tier3-name':'Superman · 超人','tier3-value':'全力出擊。不放過市場上任何優質機會。','tier3-sub':'無限野心 · 不妥協','unlimited':'無限','tier3-q1':'封 / 月','tier3-q2':'個來源 URL','tier3-q3':'全部功能','tier3-q4':'大量申請者','tier3-btn':'選擇 Superman','tier3-back':'無限釋放時間','tier3-back-desc':'獻給不接受將就的專業人士——最大覆蓋，最快人一步。',
     'popular':'最受歡迎','per-month':' /月',
     'login-title':'客戶登入','login-hint':'使用 2C-AI 提供的<strong>帳號 ID</strong>與<strong>密碼</strong>登入。等級決定可掃描來源數與每月寄送上限。','login-btn':'登入 SHINE',
     'login-card-title':'登入 SHINE','login-card-hint':'輸入<strong>帳號 ID</strong>與<strong>密碼</strong>。Gmail 在設定區另行填寫（僅用於寄信）。','login-card-notice':'預設登入後<strong>不會</strong>自動掃描。若已開啟「登入後立即掃描」且設定完整，登入後才會自動開始。',
@@ -511,47 +604,53 @@ const i18n = {
     'dash-st-sent':'本月已發送','dash-st-skip':'本次跳過','dash-st-status':'任務狀態','dash-st-hours':'小時釋放',
     'dash-log-placeholder':'填好設定後按「開始自動掃描」→',
     'dash-quota':'本月用量','dash-mission-ready':'準備就緒。填妥設定後按「開始自動掃描與準備申請」。',
-    'dash-auto-title':'讓 SHINE 自動處理','dash-auto-sub':'掃描你指定的來源 → 預覽確認 → 用你的 Gmail 自然節奏寄出。',
+    'dash-auto-title':'讓 SHINE 自動處理','dash-auto-sub':'掃描你指定的來源 → 預覽確認 → 用你的 Gmail 最新 AI 擬態技術寄出。',
     'dash-scan-btn':'開始自動掃描與準備申請',
     'dash-advanced':'進階：手動加入職缺','dash-advanced-hint':'每行一個：職位 | 公司 | 描述（含 email）','dash-add-manual':'加入這些職缺',
     'dash-preview-title':'預覽 — 勾選要寄送的職缺',
-    'dash-confirm-send':'確認發送已選職缺（自然節奏）',
+    'dash-confirm-send':'確認發送已選職缺（最新 AI 擬態技術）',
     'dash-processing':'處理中',
     'dash-logs-title':'發送紀錄','dash-download-log':'下載 LOG.txt'
   },
   'zh-CN': {
     'loader':'SHINE 出众 · 加载中','nav-how':'运作方式','nav-time':'时间价值','nav-pricing':'定价','nav-login':'登入','nav-cta':'客户登入',
-    'hero-eyebrow':'晚餐还在回工作消息？够了。',
-    'hero-title-1':'你不必在下班后，','hero-title-2':'还靠自己找下一份工作。',
-    'hero-vision':'SHINE 用你的 Gmail、100% 原样求职信，在背景全自动投递 — 每月释放 <strong>90+ 小时</strong>，把时间还给家人。',
-    'pillar-1':'在职也能低调跳槽','pillar-2':'你的 Gmail · 你的信','pillar-3':'60 秒真人节奏',
-    'hero-lead':'三步设定，之后全自动。你专心现职与生活，机会自己进场。','hero-cta-1':'开始每月释放 90 小时','hero-cta-2':'查看方案',
+    'hero-eyebrow':'把时间还给家人，把机会带给自己',
+    'hero-title-1':'你专心现职与生活，','hero-title-2':'SHINE 全自动替你投递机会。',
+    'hero-vision':'SHINE 用你的 Gmail、100% 原样求职信，在背景全自动投递 — 每月为你释放 <strong>90+ 小时</strong>，机会自然进场。',
+    'pillar-1':'已经有工作？','pillar-2':'这就是在职人士最强跳槽武器','pillar-3':'100% 原样求职信 · 独家人工智能投递',
+    'hero-lead':'三步设定，之后全自动。你继续享受现职与生活，优质机会自动出现。','hero-cta-1':'开始每月释放 90 小时','hero-cta-2':'查看方案',
     'hero-note':'你自己的 Gmail · 同职位不重复申请 · 每封节省约 1 小时',
-    'hero-scrub-hint':'滚动探索 SHINE 自动运行',
-    'proof-sent':'示范寄送','proof-hours':'小时释放/月','proof-rhythm':'真人节奏',
-    'trust-1':'全自动投递','trust-2':'100% 原样求职信','trust-3':'真人 60 秒节奏','trust-4':'同职位不重复',
-    'hour-pool-label':'时间正在回流给你',
+    'hero-scrub-hint':'滚动探索 SHINE 如何优雅运作',
+    'proof-sent':'示范寄送','proof-hours':'小时释放/月','proof-rhythm':'独家智能投递',
+    'trust-1':'全自动投递','trust-2':'100% 原样求职信','trust-3':'独家人工智能投递','trust-4':'同职位不重复',
+    'hour-pool-label':'时间正在优雅回流给你',
     'roi-banner':'一顿饭 $100 起 · 每月释放 60–500+ 小时',
     'weapon-label':'秘密武器','weapon-title':'在职人士的最强跳槽武器',
-    'weapon-desc':'白天专心现职，SHINE 在背景替你占尽市场职缺。不用加班找工作，机会自动进场。','weapon-cta':'立即武装 SHINE',
+    'weapon-desc':'白天你专心现职与生活，SHINE 在背景替你捕捉全市场优质职缺。不用加班找工作，机会自然优雅进场。','weapon-cta':'立即武装 SHINE',
     'cta-final-title':'机会不会等你。SHINE 会。','cta-final-desc':'三步设定，今日开始。你的 Gmail，你的求职信，全自动。','cta-final-btn':'立即登入 — 抢占先机',
+    'cta-trial':'立即免费试用',
+    'viral-proof-prefix':'已帮助','viral-proof-suffix':'人成功找到更好机会 🔥','viral-copy':'一键复制分享给朋友','viral-share':'分享','viral-sim':'模拟投递一封 → 看完整动画',
+    'compare-feature':'功能','compare-row1':'每月寄送','compare-row2':'来源 URL','compare-row3':'黑名单','compare-row4':'优先处理','compare-row5':'释放时间/月',
+    'stories-label':'成功案例','stories-title':'真实用户，匿名分享','story-1':'「终于不用下班后还对着求职网站——时间真正还给了家人」','story-2':'「一设定完就收到 HR call，劲！」','story-3':'「一设定完就收到 HR call，劲！」',
+    'story-meta-1':'— 匿名用户 · 在职跳槽','story-meta-2':'— 陈社工 · Sprint 方案','story-meta-3':'— 黄姑娘 RN · Sprint 方案',
+    'story-unit-interview':' 个面试','story-unit-hours':' 小时','story-unit-weeks':' 周','story-unit-call':' Call','story-wa':'分享到 WhatsApp',
     'sticky-cta':'开始释放 90 小时',
     'console-running':'运行中',
-    'sec-how-label':'运作方式','sec-how-title':'忙碌主管的一天 — 你只需要三分钟。','sec-how-intro':'不是功能清单，是一段你终于不用再做的日常。',
-    'step1-title':'设好陷阱（5 分钟）','step1-desc':'花五分钟设定关键字、来源连结与求职信。如同布好棋局 — 之后你不用再看求职网站。','step1-tag':'一次设定 · 依方案 1–3 个来源',
-    'step2-title':'自动侦察','step2-desc':'你开会、带娃、专心现职时，SHINE 依方案扫描指定来源、自动翻页、跟随职缺提取电邮 — 只留下值得申请的机会。','step2-tag':'最近 3 个月 · 自动分页',
-    'step3-title':'一键将军','step3-desc':'预览勾选后一键确认。SHINE 用你的 Gmail 寄出 — 第一封即时，之后每 60 秒一封；同职缺绝不重复申请。','step3-tag':'真人节奏 · 去重保护',
+    'sec-how-label':'运作方式','sec-how-title':'忙碌主管的一天，只需要三分钟设定，之后彻底解放。','sec-how-intro':'这不是功能清单，而是一段你从此不用再亲力亲为的优雅日常。',
+    'step1-title':'设好棋局（5 分钟）','step1-desc':'花五分钟设定关键字、来源连结与求职信。一次完成，之后你再也不用打开求职网站。','step1-tag':'一次设定 · 依方案支援 1–3 个来源',
+    'step2-title':'自动侦察','step2-desc':'你在开会、陪伴家人、专心现职时，SHINE 自动扫描指定来源、翻页、提取电邮，只为你留下真正值得申请的机会。','step2-tag':'最近 3 个月 · 自动分页',
+    'step3-title':'一键将军','step3-desc':'预览勾选后一键确认。SHINE 用你的 Gmail 寄出——第一封即时送达，之后每 60 秒一封，同职缺绝不重复。','step3-tag':'独家 AI 投递 · 去重保护',
     'how-cta':'设定我的代理',
     'trust-promise-title':'Gmail 信任承诺','trust-promise-1':'仅用于代你寄出求职信（纯 outbound，不读取收件匣）','trust-promise-2':'若启用每日 09:00 自动运行，App Password 加密储存于服务器','trust-promise-3':'你可随时在 Google 设定撤销 App Password，即时停止所有寄送',
     'sec-time-label':'时间价值','sec-time-title':'把时间还给家人，把机会留给自己。','sec-time-intro':'每寄出一封，SHINE 替你省下浏览、找电邮、手动撰写寄送的时间。',
-    'time-hero-desc':'全自动、无痛运作 — 你不用在下班后还对着求职网站。SHINE 在背景替你占尽资源，快人一步。',
+    'time-hero-desc':'全自动、无痛运作——你继续享受生活，SHINE 在背景优雅替你占领市场，快人一步。',
     'time-stat-1u':'小时／每封','time-stat-1d':'每寄出一封 = 节省 1 小时',
     'time-stat-2u':'小时／本月','time-stat-2d':'本月已释放（示范）',
     'time-stat-3u':'小时／今年','time-stat-3d':'今年累计释放（示范）',
-    'sec-price-label':'收费方案','sec-price-title':'为你的职涯阶段而设，不是功能堆叠。','sec-price-intro':'港币 / 月。下方数字是能力上限 — 上方文字是你买回的人生。',
-    'tier1-name':'Scout · 侦察','tier1-value':'$100 不是费用，是对抗「原地踏步」最便宜的保险。','tier1-sub':'试水温 · 低风险入场','tier1-q1':'封 / 月','tier1-q2':'个来源 URL','tier1-q3':'机构黑名单','tier1-q4':'发送 Logs','tier1-btn':'选择 Scout','tier1-back':'每月释放 60+ 小时','tier1-back-desc':'一顿饭的投入，换稳定自动投递 — 不必再牺牲晚餐时间找工作。',
-    'tier2-name':'Sprint · 出击','tier2-value':'$500 少于两日薪，买回 100+ 小时人生。','tier2-sub':'认真跳槽 · 时间解放','tier2-q1':'封 / 月','tier2-q2':'个来源 URL','tier2-q3':'完整黑名单','tier2-q4':'优先处理','tier2-btn':'选择 Sprint','tier2-back':'最强跳槽武器','tier2-back-desc':'在职人士秘密武器 — 背景自动投递，把下班还给家人。',
-    'tier3-name':'Superman · 超人','tier3-value':'全力出击。不放过市场上任何机会。','tier3-sub':'无限野心 · 不妥协','unlimited':'无限','tier3-q1':'封 / 月','tier3-q2':'个来源 URL','tier3-q3':'全部功能','tier3-q4':'大量申请者','tier3-btn':'选择 Superman','tier3-back':'无限释放时间','tier3-back-desc':'给不接受将就的专业人士 — 最大覆盖，快人一步。',
+    'sec-price-label':'收费方案','sec-price-title':'为你的职涯阶段量身打造，不是功能堆叠。','sec-price-intro':'港币 / 月。上方文字是你买回的人生，下方数字是能力上限。',
+    'tier1-name':'Scout · 侦察','tier1-value':'$100 不是费用，是对抗原地踏步最优雅的选择。','tier1-sub':'试水温 · 低风险入场','tier1-q1':'封 / 月','tier1-q2':'个来源 URL','tier1-q3':'机构黑名单','tier1-q4':'发送 Logs','tier1-btn':'选择 Scout','tier1-back':'每月释放 60+ 小时','tier1-back-desc':'一顿饭的投入，换来稳定自动投递——你可以安心把晚餐时间留给家人与自己。',
+    'tier2-name':'Sprint · 出击','tier2-value':'$500 少于两日薪，买回 100+ 小时人生。','tier2-sub':'认真跳槽 · 时间解放','tier2-q1':'封 / 月','tier2-q2':'个来源 URL','tier2-q3':'完整黑名单','tier2-q4':'优先处理','tier2-btn':'选择 Sprint','tier2-back':'最强跳槽武器','tier2-back-desc':'在职人士的优雅秘密武器——白天全力现职，SHINE 在背景自动拓展机会，把下班真正还给家人。',
+    'tier3-name':'Superman · 超人','tier3-value':'全力出击。不放过市场上任何优质机会。','tier3-sub':'无限野心 · 不妥协','unlimited':'无限','tier3-q1':'封 / 月','tier3-q2':'个来源 URL','tier3-q3':'全部功能','tier3-q4':'大量申请者','tier3-btn':'选择 Superman','tier3-back':'无限释放时间','tier3-back-desc':'献给不接受将就的专业人士——最大覆盖，最快人一步。',
     'popular':'最受欢迎','per-month':' /月',
     'login-title':'客户登入','login-hint':'使用 2C-AI 提供的<strong>账号 ID</strong>与<strong>密码</strong>登入。等级决定可扫描来源数与每月寄送上限。','login-btn':'登入 SHINE',
     'login-card-title':'登入 SHINE','login-card-hint':'输入<strong>账号 ID</strong>与<strong>密码</strong>。Gmail 在设定区另行填写（仅用于寄信）。','login-card-notice':'预设登入后<strong>不会</strong>自动扫描。若已开启「登入后立即扫描」且设定完整，登入后才会自动开始。',
@@ -578,50 +677,56 @@ const i18n = {
     'dash-st-sent':'本月已发送','dash-st-skip':'本次跳过','dash-st-status':'任务状态','dash-st-hours':'小时释放',
     'dash-log-placeholder':'填好设定后按「开始自动扫描」→',
     'dash-quota':'本月用量','dash-mission-ready':'准备就绪。填妥设定后按「开始自动扫描与准备申请」。',
-    'dash-auto-title':'让 SHINE 自动处理','dash-auto-sub':'扫描你指定的来源 → 预览确认 → 用你的 Gmail 自然节奏寄出。',
+    'dash-auto-title':'让 SHINE 自动处理','dash-auto-sub':'扫描你指定的来源 → 预览确认 → 用你的 Gmail 最新 AI 拟态技术寄出。',
     'dash-scan-btn':'开始自动扫描与准备申请',
     'dash-advanced':'进阶：手动加入职位','dash-advanced-hint':'每行一个：职位 | 公司 | 描述（含 email）','dash-add-manual':'加入这些职位',
     'dash-preview-title':'预览 — 勾选要寄送的职位',
-    'dash-confirm-send':'确认发送已选职位（自然节奏）',
+    'dash-confirm-send':'确认发送已选职位（最新 AI 拟态技术）',
     'dash-processing':'处理中',
     'dash-logs-title':'发送纪录','dash-download-log':'下载 LOG.txt'
   },
   'en': {
     'loader':'SHINE · Loading','nav-how':'How It Works','nav-time':'Time Value','nav-pricing':'Pricing','nav-login':'Login','nav-cta':'Client Login',
-    'hero-eyebrow':'Work calls at dinner? Stop.',
-    'hero-title-1':'You shouldn\'t spend evenings','hero-title-2':'hunting your next job alone.',
-    'hero-vision':'SHINE auto-applies in the background — your Gmail, <strong>100% your cover letter</strong>, <strong>90+ hours</strong> back every month for family.',
-    'pillar-1':'Job-hop while employed','pillar-2':'Your Gmail · Your letter','pillar-3':'60s human pace',
-    'hero-lead':'Three steps. Then fully automated. Focus on your role and life — opportunities come to you.','hero-cta-1':'Start Saving 90 Hours a Month','hero-cta-2':'View Plans',
+    'hero-eyebrow':'Give time back to family. Bring opportunity to you.',
+    'hero-title-1':'Focus on your job and life —','hero-title-2':'SHINE auto-applies for you.',
+    'hero-vision':'SHINE auto-applies in the background — your Gmail, <strong>100% your cover letter</strong>, <strong>90+ hours</strong> freed every month. Opportunities flow in naturally.',
+    'pillar-1':'Already employed?','pillar-2':'The ultimate job-hop weapon for working pros','pillar-3':'100% your letter · Exclusive AI delivery',
+    'hero-lead':'Three steps. Then fully automated. Enjoy your role and life — quality opportunities appear on their own.','hero-cta-1':'Start Saving 90 Hours a Month','hero-cta-2':'View Plans',
     'hero-note':'Your Gmail · No duplicate applications · ~1 hour saved per email',
-    'hero-scrub-hint':'Scroll to watch SHINE run',
-    'proof-sent':'demo sends','proof-hours':'hrs freed/month','proof-rhythm':'human pace',
-    'trust-1':'Fully automated','trust-2':'100% your cover letter','trust-3':'60s human rhythm','trust-4':'No duplicate apps',
-    'hour-pool-label':'Time flowing back to you',
+    'hero-scrub-hint':'Scroll to see how SHINE works elegantly',
+    'proof-sent':'demo sends','proof-hours':'hrs freed/month','proof-rhythm':'Exclusive AI',
+    'trust-1':'Fully automated','trust-2':'100% your cover letter','trust-3':'Exclusive AI delivery','trust-4':'No duplicate apps',
+    'hour-pool-label':'Time elegantly flowing back to you',
     'roi-banner':'From $100 HKD · Release 60–500+ hrs/month',
     'weapon-label':'Secret Weapon','weapon-title':'The ultimate job-hunt weapon for employed pros',
-    'weapon-desc':'Focus on your day job. SHINE applies in the background — dominating listings while you live your life.','weapon-cta':'Arm SHINE Now',
+    'weapon-desc':'Focus on your job and life by day. SHINE captures quality openings across the market in the background — no overtime job hunting, opportunities arrive gracefully.','weapon-cta':'Arm SHINE Now',
     'cta-final-title':'Opportunity won\'t wait. SHINE will.','cta-final-desc':'Three steps. Start today. Your Gmail. Your letter. Fully automated.','cta-final-btn':'Log In — Claim Your Edge',
+    'cta-trial':'Start Free Trial',
+    'viral-proof-prefix':'Helped','viral-proof-suffix':'people find better opportunities 🔥','viral-copy':'Copy share link','viral-share':'Share','viral-sim':'Simulate one apply → full animation',
+    'compare-feature':'Feature','compare-row1':'Emails/month','compare-row2':'Source URLs','compare-row3':'Blacklist','compare-row4':'Priority','compare-row5':'Hours freed/mo',
+    'stories-label':'Success Stories','stories-title':'Real users, anonymous','story-1':'"No more job boards after work — time truly back for family"','story-2':'"Got an HR call right after setup — amazing!"','story-3':'"Got an HR call right after setup — amazing!"',
+    'story-meta-1':'— Anonymous · Job-hop while employed','story-meta-2':'— Chan SW · Sprint plan','story-meta-3':'— Wong RN · Sprint plan',
+    'story-unit-interview':' interviews','story-unit-hours':' hrs','story-unit-weeks':' weeks','story-unit-call':' Call','story-wa':'Share on WhatsApp',
     'sticky-cta':'Save 90 Hrs/Month',
     'console-running':'RUNNING',
-    'sec-how-label':'How It Works','sec-how-title':'A busy manager\'s day — you need three minutes.',
-    'sec-how-intro':'Not a feature list. A routine you finally stop doing.',
-    'step1-title':'Set the Trap (5 min)','step1-desc':'Five minutes on keywords, sources, and your letter. Lay the board — then never touch a job board again.','step1-tag':'Once · 1–3 sources by plan',
-    'step2-title':'Auto-Scout','step2-desc':'While you lead meetings or pick up kids, SHINE scans your sources by tier, paginates, follows listings, extracts emails — only real opportunities remain.','step2-tag':'Last 3 months · Auto pagination',
-    'step3-title':'Final Checkmate','step3-desc':'Preview, select, one click. SHINE sends via your Gmail — first instant, then every 60s; never duplicate applications.','step3-tag':'Human pace · Dedup on',
+    'sec-how-label':'How It Works','sec-how-title':'A busy manager\'s day — three minutes to set up, then fully freed.',
+    'sec-how-intro':'Not a feature list. An elegant routine you never have to do yourself again.',
+    'step1-title':'Set the Board (5 min)','step1-desc':'Five minutes on keywords, sources, and your letter. Done once — you never open a job board again.','step1-tag':'One-time setup · 1–3 sources by plan',
+    'step2-title':'Auto-Scout','step2-desc':'While you\'re in meetings, with family, or focused at work, SHINE scans sources, paginates, and extracts emails — keeping only opportunities worth applying for.','step2-tag':'Last 3 months · Auto pagination',
+    'step3-title':'Final Checkmate','step3-desc':'Preview, select, one click. SHINE sends via your Gmail — first email instantly, then one every 60 seconds. Never duplicate applications.','step3-tag':'Exclusive AI · Dedup on',
     'how-cta':'Set Up My Agent Now',
     'trust-promise-title':'Gmail Trust Promise','trust-promise-1':'Outbound only — we send your applications, never read your inbox','trust-promise-2':'If daily 09:00 auto-run is on, App Password is encrypted on our server','trust-promise-3':'Revoke the App Password in Google anytime — sending stops instantly',
     'sec-time-label':'Time Value','sec-time-title':'Give time back to family. Keep opportunity for yourself.',
     'sec-time-intro':'Each email sent saves you time browsing, finding emails, and manually composing and sending.',
-    'time-hero-desc':'Fully automatic, frictionless — no more job sites after work. SHINE works in the background, taking advantage of market resources ahead of everyone else.',
+    'time-hero-desc':'Fully automatic, frictionless — you keep enjoying life while SHINE elegantly captures the market in the background, staying ahead.',
     'time-stat-1u':'hours / email','time-stat-1d':'Each sent = 1 hour saved',
     'time-stat-2u':'hours / this month','time-stat-2d':'Released this month (demo)',
     'time-stat-3u':'hours / this year','time-stat-3d':'Cumulative this year (demo)',
-    'sec-price-label':'Pricing','sec-price-title':'Built for your career stage — not a feature checklist.',
-    'sec-price-intro':'HKD / month. Numbers below are limits — copy above is life reclaimed.',
-    'tier1-name':'Scout','tier1-value':'$100 isn\'t a fee — it\'s the cheapest insurance against staying stuck.','tier1-sub':'Test waters · Low risk','tier1-q1':'emails / month','tier1-q2':'source URL','tier1-q3':'Blacklist filter','tier1-q4':'Send logs','tier1-btn':'Choose Scout','tier1-back':'60+ hrs/month freed','tier1-back-desc':'One meal\'s cost for steady auto-apply — no more job sites after dinner.',
-    'tier2-name':'Sprint','tier2-value':'$500 is less than two days\' salary — buys 100+ hours back.','tier2-sub':'Serious move · Time liberation','tier2-q1':'emails / month','tier2-q2':'source URLs','tier2-q3':'Full blacklist','tier2-q4':'Priority processing','tier2-btn':'Choose Sprint','tier2-back':'Ultimate career weapon','tier2-back-desc':'Secret weapon for employed pros — auto-apply in background, evenings for family.',
-    'tier3-name':'Superman','tier3-value':'Full throttle. Every market opportunity, unlocked.','tier3-sub':'Unlimited ambition','tier3-q1':'emails / month','tier3-q2':'source URLs','tier3-q3':'All features','tier3-q4':'Mass applicants','tier3-btn':'Choose Superman','tier3-back':'Unlimited time released','tier3-back-desc':'For professionals who don\'t settle — maximum coverage, first mover advantage.',
+    'sec-price-label':'Pricing','sec-price-title':'Tailored to your career stage — not a feature checklist.',
+    'sec-price-intro':'HKD / month. Copy above is life reclaimed; numbers below are capacity limits.',
+    'tier1-name':'Scout','tier1-value':'$100 isn\'t a fee — it\'s the most elegant choice against standing still.','tier1-sub':'Test waters · Low risk','tier1-q1':'emails / month','tier1-q2':'source URL','tier1-q3':'Blacklist filter','tier1-q4':'Send logs','tier1-btn':'Choose Scout','tier1-back':'60+ hrs/month freed','tier1-back-desc':'One meal\'s cost for steady auto-apply — keep dinner time for family and yourself.',
+    'tier2-name':'Sprint','tier2-value':'$500 is less than two days\' salary — buys 100+ hours back.','tier2-sub':'Serious move · Time liberation','tier2-q1':'emails / month','tier2-q2':'source URLs','tier2-q3':'Full blacklist','tier2-q4':'Priority processing','tier2-btn':'Choose Sprint','tier2-back':'Ultimate career weapon','tier2-back-desc':'Elegant secret weapon for employed pros — full focus by day, SHINE expands opportunities in the background, evenings truly yours.',
+    'tier3-name':'Superman','tier3-value':'Full throttle. Every quality market opportunity, unlocked.','tier3-sub':'Unlimited ambition','tier3-q1':'emails / month','tier3-q2':'source URLs','tier3-q3':'All features','tier3-q4':'Mass applicants','tier3-btn':'Choose Superman','tier3-back':'Unlimited time released','tier3-back-desc':'For professionals who don\'t settle — maximum coverage, fastest mover advantage.',
     'popular':'Most Popular','per-month':' /month',
     'login-title':'Client Login','login-hint':'Use the <strong>Account ID</strong> and <strong>Password</strong> provided by 2C-AI to log in. Tier determines source count and monthly sending limit.','login-btn':'Log In to SHINE',
     'login-card-title':'Log In to SHINE','login-card-hint':'Enter <strong>Account ID</strong> and <strong>Password</strong>. Gmail is filled separately in the settings area (for sending only).','login-card-notice':'By default, logging in <strong>won\'t</strong> auto-scan. Auto-scan only triggers if \'Scan on Login\' is enabled and settings are complete.',
@@ -648,11 +753,11 @@ const i18n = {
     'dash-st-sent':'Sent This Month','dash-st-skip':'Skipped This Session','dash-st-status':'Task Status','dash-st-hours':'Hours Freed',
     'dash-log-placeholder':'After filling settings, click \'Start Auto Scan\' →',
     'dash-quota':'This Month Usage','dash-mission-ready':'Ready. Click \'Start Auto Scan & Apply\' after filling settings.',
-    'dash-auto-title':'Let SHINE Handle It Automatically','dash-auto-sub':'Scan your sources → Preview & Confirm → Send via Gmail at natural pace.',
+    'dash-auto-title':'Let SHINE Handle It Automatically','dash-auto-sub':'Scan your sources → Preview & Confirm → Send via Gmail with latest AI mimicry tech.',
     'dash-scan-btn':'Start Auto Scan & Prepare Applications',
     'dash-advanced':'Advanced: Manual Job Entry','dash-advanced-hint':'One per line: Title | Company | Description (with email)','dash-add-manual':'Add These Jobs',
     'dash-preview-title':'Preview — Select Jobs to Send',
-    'dash-confirm-send':'Confirm Send Selected (Natural Pace)',
+    'dash-confirm-send':'Confirm Send Selected (Latest AI Mimicry)',
     'dash-processing':'Processing',
     'dash-logs-title':'Send History','dash-download-log':'Download LOG.txt'
   }
@@ -775,7 +880,8 @@ function initDashboardOrb() {
 <div class="sticky-cta" id="stickyCta" aria-hidden="true">
   <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="sticky-cta">開始自動投遞</button>
 </div>
-<script src="shine-motion.js?v=5.1-convert"></script>
-<script src="assets/shine-app.js?v=v2.2.0-auto"></script>
+<script src="shine-motion.js?v=5.3-elegant"></script>
+<script src="shine-viral.js?v=5.3-elegant"></script>
+<script src="assets/shine-app.js?v=v2.2.6-pageup-hkhs"></script>
 </body>
 </html>
