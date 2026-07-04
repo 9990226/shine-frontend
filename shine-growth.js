@@ -67,19 +67,43 @@
     setInterval(function () { fetchActivity().then(render); }, 45000);
   }
 
+  function demoSourceLabel(source) {
+    if (source === 'cache') return '來源：真實掃描快取';
+    if (source === 'sample') return '來源：示範樣本';
+    return '';
+  }
+
+  function renderDemoResults(j, out, tag) {
+    var html = (j.jobs || []).map(function (job, i) {
+      var meta = [];
+      if (job.apply_email) meta.push('email: ' + job.apply_email);
+      if (job.confidence != null) meta.push('好工 ' + Math.round(job.confidence * 100) + '%');
+      var snippet = job.snippet ? '<br><span class="hint">' + job.snippet + '</span>' : '';
+      return '<div class="demo-job"><strong>' + (i + 1) + '. ' + job.title + '</strong> @ ' + job.company +
+        snippet + (meta.length ? '<br><span class="hint">' + meta.join(' · ') + '</span>' : '') + '</div>';
+    }).join('');
+    if (!html) html = '<p class="hint">暫無符合的示範職缺</p>';
+    out.innerHTML = html + '<p class="hint" style="margin-top:10px">' + (j.note || '') + '</p>';
+    if (tag) tag.textContent = demoSourceLabel(j.source);
+  }
+
   function initDemoSandbox() {
     var btn = document.getElementById('btnDemoPreview');
     var input = document.getElementById('demoKeyword');
     var out = document.getElementById('demoResults');
+    var tag = document.getElementById('demoSrcTag');
     if (!btn || !input || !out) return;
-    btn.addEventListener('click', function () {
+
+    function runPreview() {
       var kw = (input.value || '').trim();
       if (kw.length < 2) {
-        out.innerHTML = '<p class="hint">請輸入至少 2 個字（例：社工、PT）</p>';
+        out.innerHTML = '<p class="hint">請輸入至少 2 個字（例：社工、SWA、PT）</p>';
+        if (tag) tag.textContent = '';
         return;
       }
       btn.disabled = true;
       out.innerHTML = '<p class="hint">掃描中…</p>';
+      if (tag) tag.textContent = '';
       track('demo_preview_click', { keyword: kw });
       fetch(API + '/api/demo/preview', {
         method: 'POST',
@@ -89,17 +113,18 @@
         btn.disabled = false;
         if (!j.ok) {
           out.innerHTML = '<p class="hint">' + (j.error || '預覽失敗') + '</p>';
+          if (tag) tag.textContent = '';
           return;
         }
-        out.innerHTML = j.jobs.map(function (job, i) {
-          return '<div class="demo-job"><strong>' + (i + 1) + '. ' + job.title + '</strong> @ ' + job.company +
-            '<br><span class="hint">email: ' + job.apply_email + ' · 好工 ' + Math.round((job.confidence || 0) * 100) + '%</span></div>';
-        }).join('') + '<p class="hint" style="margin-top:10px">' + (j.note || '') + '</p>';
+        renderDemoResults(j, out, tag);
       }).catch(function () {
         btn.disabled = false;
         out.innerHTML = '<p class="hint">連線失敗，請稍後再試</p>';
+        if (tag) tag.textContent = '';
       });
-    });
+    }
+
+    btn.addEventListener('click', runPreview);
   }
 
   function initFaq() {

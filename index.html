@@ -3,15 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHINE 出眾 — Fully Automated Job Hunting · Release Your Time | 2C-AI</title>
-<meta name="description" content="SHINE 出眾：不用自己找工，全自動替你投。一餐飯的投入，換取 90 小時＋自由。最強跳槽武器。">
+<title>SHINE 出眾 — 全自動求職 · 社工搵工 · Ming Pao JUMP 自動投遞 | 2C-AI</title>
+<meta name="description" content="SHINE 出眾：全自動求職投遞。社工搵工、Ming Pao JUMP 自動掃描，100% 原樣求職信，每月釋放 90+ 小時。免費試用即時開通。">
+<meta name="keywords" content="社工 搵工,自動求職,Ming Pao JUMP,SHINE,2C-AI,全自動投遞">
+<link rel="canonical" href="https://2c-ai.com/shine/">
+<link rel="alternate" hreflang="zh-Hant" href="https://2c-ai.com/shine/">
+<link rel="alternate" hreflang="zh-CN" href="https://2c-ai.com/shine/?lang=zh-CN">
+<link rel="alternate" hreflang="en" href="https://2c-ai.com/shine/?lang=en">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://2c-ai.com/shine/">
+<meta property="og:title" content="SHINE 出眾 — 全自動求職投遞">
+<meta property="og:description" content="不用自己找工，SHINE 全自動替你投。免費試用即時開通，100% 原樣求職信。">
+<meta property="og:image" content="https://2c-ai.com/shine/assets/logo-mark.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="icon" type="image/svg+xml" href="assets/icon-shine.svg">
 <link rel="apple-touch-icon" href="assets/icon-shine.svg">
 <link rel="manifest" href="assets/manifest.json">
 <meta name="theme-color" content="#0A0D18">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<script>window.SHINE_BOOT_VER='v5.3-elegant';
+<script>window.SHINE_BOOT_VER='v2.7-growth';
 window.getInputVal=window.getInputVal||function(id,fb){var el=document.getElementById(id);return(el&&el.value!=null)?String(el.value).trim():(fb||'');};
 window.ensurePortalVisible=window.ensurePortalVisible||function(){
   var portal=document.getElementById('portal');
@@ -25,7 +36,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" async></script>
-<link rel="stylesheet" href="shine.css?v=5.3-elegant">
+<link rel="stylesheet" href="shine.css?v=2.7-growth">
 </head>
 <body>
 <div id="loader"><div class="loader-ring"></div><div class="loader-txt" data-i18n="loader">SHINE 出眾 · 載入中</div></div>
@@ -71,12 +82,14 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
           <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="hero-cta-1">開始每月釋放 90 小時</button>
           <a href="#pricing" class="btn btn-ghost" data-i18n="hero-cta-2">查看方案</a>
         </div>
+        <div class="activity-ticker reveal" id="activityTicker" aria-live="polite"></div>
         <div class="viral-share-bar reveal" id="viralShareBar">
           <div class="viral-social-proof">
             <span class="viral-proof-pulse" aria-hidden="true"></span>
             <span data-i18n="viral-proof-prefix">已幫助</span>
             <strong id="viralCounter">167</strong>
             <span data-i18n="viral-proof-suffix">人成功找到更好機會 🔥</span>
+            <span class="hint" style="display:inline;margin-left:6px">· <span data-i18n="live-sent-week">本週</span> <strong id="liveSentWeek">—</strong> <span data-i18n="live-sent-unit">封已寄出</span></span>
           </div>
           <div class="viral-share-actions">
             <button type="button" class="btn btn-ghost btn-sm" id="btnCopyShare" data-i18n="viral-copy">一鍵複製分享給朋友</button>
@@ -124,6 +137,41 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
     <span data-i18n="trust-4">同職缺不重複</span>
   </div>
 </div>
+
+
+<!-- FEAR · TWO FUTURES -->
+<section class="sec sec-fear" id="fear">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-label" data-i18n="fear-label">為什麼是 SHINE</div>
+      <h2 data-i18n="fear-title">我們賣的不是軟件，是「怕」的消失。</h2>
+      <p class="sec-intro" data-i18n="fear-intro">怕搵唔到工、怕簡歷石沉大海、怕同期升職而你原地踏步——SHINE 把這些恐懼，變成每日在背景自動出擊。</p>
+    </div>
+    <div class="futures reveal">
+      <div class="futures-head" data-i18n="fear-futures-head">同一個你，兩條 90 日時間線</div>
+      <div class="futures-grid">
+        <div class="future-col future-col--bad">
+          <div class="future-tag" data-i18n="fear-bad-tag">冇 SHINE</div>
+          <div class="beat" data-i18n="fear-b1">Day 1 — 收藏了 12 個職位，太累，未投</div>
+          <div class="beat" data-i18n="fear-b2">Day 14 — 手動投出 6 封，全部無回音</div>
+          <div class="beat" data-i18n="fear-b3">Day 30 — 開始懷疑：係咪我唔夠好？</div>
+          <div class="beat" data-i18n="fear-b4">Day 60 — 同學 po 新工照，你讚好，心一沉</div>
+          <div class="beat" data-i18n="fear-b5">Day 90 — 仍在深夜刷招聘網</div>
+        </div>
+        <div class="futures-rail" aria-hidden="true"><i id="futuresFill"></i></div>
+        <div class="future-col future-col--good">
+          <div class="future-tag future-tag--gold" data-i18n="fear-good-tag">有 SHINE</div>
+          <div class="beat" data-i18n="fear-g1">Day 1 — 15 分鐘完成設定，之後唔使再開求職網</div>
+          <div class="beat" data-i18n="fear-g2">Day 2 — 首批申請已自動寄出（100% 原樣求職信）</div>
+          <div class="beat" data-i18n="fear-g3">Day 7 — 第一個 HR 來電</div>
+          <div class="beat" data-i18n="fear-g4">Day 30 — 面試排期中，你只需揀時間</div>
+          <div class="beat" data-i18n="fear-g5">Day 45 — Offer 在手，主動權在你</div>
+        </div>
+      </div>
+      <p class="futures-hint" data-i18n="fear-scroll-hint">↓ 滾動，看差距擴大</p>
+    </div>
+  </div>
+</section>
 
 <section class="sec sec-how" id="how">
   <div class="wrap">
@@ -181,6 +229,80 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
   </div>
 </section>
 
+
+<!-- CASE STUDY · MSW STUDENT K -->
+<section class="sec sec-case" id="case">
+  <div class="wrap">
+    <div class="case-dossier reveal-scale">
+      <div class="case-tab"><span class="case-seal" aria-hidden="true">✓</span><span data-i18n="case-eyebrow">真實個案 · 2026 年 7 月</span></div>
+      <h2 class="case-title" data-i18n="case-title">MSW 社工學生 K：由投不出手，到兩個 Offer 任揀。</h2>
+      <div class="case-nums">
+        <div class="case-num-b"><div class="case-num" data-case-count="10">0</div><div class="case-plus">+</div><div class="case-k" data-i18n="case-n1">HR 來電</div></div>
+        <div class="case-num-b"><div class="case-num" data-case-count="2">0</div><div class="case-plus"></div><div class="case-k" data-i18n="case-n2">Offer 在手</div></div>
+        <div class="case-num-b"><div class="case-num case-num--date">20·7</div><div class="case-plus"></div><div class="case-k" data-i18n="case-n3">正式上班</div></div>
+      </div>
+      <div class="case-timeline" id="caseTimeline">
+        <div class="case-line" aria-hidden="true"><i id="caseLineFill"></i></div>
+        <div class="case-step"><span class="case-dot"></span><span data-i18n="case-t1">購入 SHINE，當日完成設定</span></div>
+        <div class="case-step"><span class="case-dot"></span><span class="case-phone" aria-hidden="true">📞</span><span data-i18n="case-t2">陸續接獲 10+ 個 HR 來電</span></div>
+        <div class="case-step"><span class="case-dot"></span><span data-i18n="case-t3">2 個 Offer 同時在手</span></div>
+        <div class="case-step"><span class="case-dot case-dot--gold"></span><span data-i18n="case-t4">7 月 20 日，正式上班</span></div>
+      </div>
+      <blockquote class="case-quote" data-i18n="case-quote">「電話多到要較靜音。原來唔係我唔夠好，係以前根本冇人見到我。」</blockquote>
+      <div class="case-meta"><span data-i18n="case-meta">— K · MSW 應屆 · SHINE 真實客戶</span><span class="case-foot" data-i18n="case-foot">個別成效因市場與履歷而異</span></div>
+      <div class="case-cta">
+        <button onclick="openRegister()" class="btn btn-gold btn-magnetic" data-i18n="case-cta">下一個接電話的，是你</button>
+        <button type="button" class="btn btn-ghost btn-sm" data-wa-quote="真實個案：MSW 社工學生用 SHINE 後接獲 10+ HR 來電、2 個 Offer 在手，7 月 20 日上班。2c-ai.com/shine" data-i18n="story-wa">分享到 WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-demo" id="demo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-label" data-i18n="demo-label">即場體驗</div>
+      <h2 data-i18n="demo-title">輸入關鍵字，即場預覽 3 個職缺</h2>
+      <p class="sec-intro" data-i18n="demo-intro">無需登入——感受 SHINE 如何從職位列表找出申請電郵。（示範預覽；登入後掃描真實來源。）</p>
+    </div>
+    <div class="demo-box glass-card reveal">
+      <div class="demo-row">
+        <input id="demoKeyword" type="text" placeholder="社工、PT、OT、護士…" data-i18n-placeholder="demo-ph">
+        <button type="button" class="btn btn-gold" id="btnDemoPreview" data-i18n="demo-btn">即場預覽</button>
+      </div>
+      <div id="demoResults" class="demo-results"></div>
+      <div class="demo-foot"><span id="demoSrcTag" class="hint"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-faq" id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-label" data-i18n="faq-label">常見問題</div>
+      <h2 data-i18n="faq-title">你可能想問的</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" data-i18n="faq-q1">App Password 安全嗎？你們會讀我的信箱嗎？</button>
+        <div class="faq-a" data-i18n="faq-a1">不會。SHINE 只用 App Password 代你<strong>寄出</strong>求職信（純 outbound），不讀取收件匣。你可隨時在 Google 撤銷 App Password，寄送即時停止。啟用每日自動運行時，密碼加密儲存於伺服器。</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" data-i18n="faq-q2">免費試用要等多久？</button>
+        <div class="faq-a" data-i18n="faq-a2">v2.7 起試用<strong>即時自動開通</strong>——提交後本頁立即顯示帳號與密碼，無需等數小時審批。</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" data-i18n="faq-q3">退款或保證政策？</button>
+        <div class="faq-a" data-i18n="faq-a3">付費方案為月度訂閱。若 SHINE 因技術原因連續 7 日無法寄送且非用戶 Gmail 設定問題，可聯絡 info@2c-ai.com 申請按比例退款或延長訂閱。試用額度 10 封，無信用卡。</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false" data-i18n="faq-q4">推薦朋友有獎賞嗎？</button>
+        <div class="faq-a" data-i18n="faq-a4">有。開通後你會獲專屬推薦碼；朋友用碼申請，雙方各 +10 封額度獎賞（伺服器記帳）。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec sec-pricing" id="pricing">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -189,6 +311,10 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
       <p class="sec-intro" data-i18n="sec-price-intro">港幣 / 月。上方文字是你買回的人生，下方數字是能力上限。</p>
     </div>
     <div class="roi-banner reveal" data-i18n="roi-banner">一餐飯 $100 起 · 每月釋放 60–500+ 小時</div>
+    <div class="trial-strip reveal">
+      <span data-i18n="pricing-trial-strip">未決定？先免費試用——10 封真實投遞，即時自動開通，免信用卡。</span>
+      <button onclick="openRegister()" class="btn btn-ghost btn-sm" data-i18n="pricing-trial-btn">申請試用</button>
+    </div>
     <div class="price-grid">
       <div class="flip-wrap reveal">
         <div class="flip-inner">
@@ -203,7 +329,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
               <li><span class="check">●</span><span data-i18n="tier1-q3">機構黑名單</span></li>
               <li><span class="check">●</span><span data-i18n="tier1-q4">發送 Logs</span></li>
             </ul>
-            <button onclick="selectTier('lv1')" class="btn btn-ghost btn-block" style="margin-top:auto" data-i18n="tier1-btn">選擇 Scout</button>
+            <button onclick="openRegister('lv1')" class="btn btn-ghost btn-block" style="margin-top:auto" data-i18n="tier1-btn">選擇 Scout</button>
           </div>
           <div class="flip-back"><div class="tname" data-i18n="tier1-back">每月釋放 60+ 小時</div><p class="tier-back-desc" data-i18n="tier1-back-desc">一餐飯的投入，換來穩定自動投遞——你可以安心把晚餐時間留給家人與自己。</p></div>
         </div>
@@ -222,7 +348,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
               <li><span class="check">●</span><span data-i18n="tier2-q3">完整黑名單</span></li>
               <li><span class="check">●</span><span data-i18n="tier2-q4">優先處理</span></li>
             </ul>
-            <button onclick="selectTier('lv2')" class="btn btn-gold btn-block" style="margin-top:auto" data-i18n="tier2-btn">選擇 Sprint</button>
+            <button onclick="openRegister('lv2')" class="btn btn-gold btn-block" style="margin-top:auto" data-i18n="tier2-btn">選擇 Sprint</button>
           </div>
           <div class="flip-back"><div class="tname" data-i18n="tier2-back">最強跳槽武器</div><p class="tier-back-desc" data-i18n="tier2-back-desc">在職人士的優雅秘密武器——白天全力現職，SHINE 在背景自動拓展機會，把下班真正還給家人。</p></div>
         </div>
@@ -240,7 +366,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
               <li><span class="check">●</span><span data-i18n="tier3-q3">全部功能</span></li>
               <li><span class="check">●</span><span data-i18n="tier3-q4">大量申請者</span></li>
             </ul>
-            <button onclick="selectTier('lv3')" class="btn btn-ghost btn-block" style="margin-top:auto" data-i18n="tier3-btn">選擇 Superman</button>
+            <button onclick="openRegister('lv3')" class="btn btn-ghost btn-block" style="margin-top:auto" data-i18n="tier3-btn">選擇 Superman</button>
           </div>
           <div class="flip-back"><div class="tname" data-i18n="tier3-back">無限釋放時間</div><p class="tier-back-desc" data-i18n="tier3-back-desc">獻給不接受將就的專業人士——最大覆蓋，最快人一步。</p></div>
         </div>
@@ -291,9 +417,9 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
             </div>
           </div>
           <div class="story-slide">
-            <div class="story-metric">HR<span data-i18n="story-unit-call"> Call</span></div>
-            <p class="story-quote" data-i18n="story-3">「一設定完就收到 HR call，勁！」</p>
-            <p class="story-meta" data-i18n="story-meta-3">— 黃姑娘 RN · Sprint 方案</p>
+            <div class="story-metric">2<span data-i18n="story-unit-offer"> Offers</span></div>
+            <p class="story-quote" data-i18n="story-3">「10+ 個 HR 來電，2 個 Offer 揀——7 月 20 日返新工。」</p>
+            <p class="story-meta" data-i18n="story-meta-3">— K · MSW 學生 · 真實個案</p>
             <div class="story-shot">✓ 護理職缺自動掃描<br>✓ 同職缺不重複申請</div>
             <div class="story-actions">
               <button type="button" class="btn btn-gold btn-sm" data-wa-quote="「一設定完就收到 HR call，勁！」— 黃姑娘 RN" data-i18n="story-wa">分享到 WhatsApp</button>
@@ -332,7 +458,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
       <h2 data-i18n="cta-final-title">機會不會等你。SHINE 會。</h2>
       <p data-i18n="cta-final-desc">三步設定，今日開始。你的 Gmail，你的求職信，全自動。</p>
       <div class="viral-trial-cta">
-        <button onclick="openTrialLogin()" class="btn btn-gold btn-lg btn-magnetic viral-trial-btn">
+        <button onclick="openRegister()" class="btn btn-gold btn-lg btn-magnetic viral-trial-btn">
           <span data-i18n="cta-trial">立即免費試用</span>
           <span id="viralTimer">23:59:59</span>
         </button>
@@ -344,10 +470,19 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 
 <section id="beta-access" class="sec">
   <div class="wrap beta-wrap">
-    <div class="surface-card reveal-scale beta-card">
-      <h3>SHINE v2 <span data-i18n="login-title">客戶登入</span></h3>
-      <p class="hint beta-hint" data-i18n="login-hint">使用 2C-AI 提供的<strong>帳號 ID</strong>與<strong>密碼</strong>登入。等級決定可掃描來源數與每月寄送上限。</p>
-      <button onclick="openLogin()" class="btn btn-gold btn-block" data-i18n="login-btn">登入 SHINE</button>
+    <div class="beta-grid">
+      <div class="surface-card reveal-scale beta-card beta-card--reg">
+        <span class="reg-chip" data-i18n="reg-trial-chip">免費試用 · 10 封真實投遞 · 免信用卡</span>
+        <h3 data-i18n="beta-reg-title">立即開始</h3>
+        <p class="hint beta-hint" data-i18n="beta-reg-hint">填寫資料（含電話）。試用<strong>即時自動開通</strong>——本頁立即顯示通行證，無需等審批。</p>
+        <button onclick="openRegister()" class="btn btn-gold btn-block" data-i18n="beta-reg-btn">申請免費試用</button>
+        <button id="regResumeBtn" onclick="resumeRegistration()" class="btn btn-ghost btn-block reg-resume-btn" style="display:none" data-i18n="beta-status-btn">查看申請狀態</button>
+      </div>
+      <div class="surface-card reveal-scale beta-card">
+        <h3>SHINE v2 <span data-i18n="login-title">客戶登入</span></h3>
+        <p class="hint beta-hint" data-i18n="login-hint">使用 2C-AI 提供的<strong>帳號 ID</strong>與<strong>密碼</strong>登入。等級決定可掃描來源數與每月寄送上限。</p>
+        <button onclick="openLogin()" class="btn btn-ghost btn-block" data-i18n="login-btn">登入 SHINE</button>
+      </div>
     </div>
   </div>
 </section>
@@ -376,6 +511,105 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         <div class="hint" style="margin-top:6px" data-i18n="login-pw-hint">帳號由 2C-AI 手動開通。</div></div>
       <button onclick="loginWithShine()" class="btn btn-gold btn-block" style="margin-top:8px" data-i18n="login-submit">登入並進入設定</button>
       <button onclick="closeLogin()" class="btn btn-ghost btn-block" style="margin-top:8px" data-i18n="login-back">返回首頁</button>
+      <p class="reg-switch"><a href="javascript:void(0)" onclick="openRegister()" data-i18n="login-to-reg">還沒有帳號？申請免費試用 →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER (v2.3) -->
+<section id="shineRegister" class="sec" aria-hidden="true" style="display:none">
+  <div class="wrap">
+    <div class="surface-card reg-card">
+
+      <!-- 狀態一：申請表 -->
+      <div id="regViewForm">
+        <h3 id="regFormTitle" data-i18n="reg-card-title">申請 SHINE 免費試用</h3>
+        <p class="hint" style="margin:8px 0 6px" data-i18n="reg-card-hint">30 秒完成。審批後<strong>本頁自動顯示</strong>帳號與密碼。</p>
+        <div class="field">
+          <label data-i18n="reg-plan-label">方案</label>
+          <div class="plan-pills" id="regPlanPills" role="radiogroup">
+            <label class="plan-pill"><input type="radio" name="regPlan" value="trial" checked onchange="onRegPlanChange()"><span><b data-i18n="plan-trial">免費試用</b><small data-i18n="plan-trial-sub">10 封 · $0</small></span></label>
+            <label class="plan-pill"><input type="radio" name="regPlan" value="lv1" onchange="onRegPlanChange()"><span><b>Scout</b><small>60 封 · $100/月</small></span></label>
+            <label class="plan-pill plan-pill--hot"><input type="radio" name="regPlan" value="lv2" onchange="onRegPlanChange()"><span><b>Sprint</b><small>500 封 · $500/月</small></span></label>
+            <label class="plan-pill"><input type="radio" name="regPlan" value="lv3" onchange="onRegPlanChange()"><span><b>Superman</b><small data-i18n="plan-lv3-sub">無限 · $768/月</small></span></label>
+          </div>
+        </div>
+        <div class="reg-quota-note" id="regQuotaNote" data-i18n="reg-trial-chip">免費試用 · 10 封真實投遞 · 免信用卡</div>
+        <div class="field"><label for="regName" data-i18n="reg-name-label">姓名</label>
+          <input id="regName" type="text" maxlength="40" placeholder="陳大文" autocomplete="name"></div>
+        <div class="field"><label for="regGmail" data-i18n="reg-gmail-label">Gmail（登入後亦作寄信信箱）</label>
+          <input id="regGmail" type="email" placeholder="you@gmail.com" autocomplete="email" inputmode="email"></div>
+        <div class="field">
+          <label data-i18n="reg-prof-label">職系</label>
+          <div class="prof-pills" id="regProfPills" role="radiogroup">
+            <label class="prof-pill"><input type="radio" name="regProf" value="社工"><span data-i18n="prof-sw">社工</span></label>
+            <label class="prof-pill"><input type="radio" name="regProf" value="PT"><span>PT</span></label>
+            <label class="prof-pill"><input type="radio" name="regProf" value="OT"><span>OT</span></label>
+            <label class="prof-pill"><input type="radio" name="regProf" value="護士"><span data-i18n="prof-nurse">護士</span></label>
+            <label class="prof-pill"><input type="radio" name="regProf" value="文職"><span data-i18n="prof-clerk">文職</span></label>
+            <label class="prof-pill"><input type="radio" name="regProf" value="其他"><span data-i18n="prof-other">其他</span></label>
+          </div>
+        </div>
+        <div class="field"><label for="regPhone"><span data-i18n="reg-phone-label">電話</span> <span class="hint" style="display:inline" data-i18n="reg-phone-hint">（2C-AI 專員回電用）</span></label>
+          <input id="regPhone" type="tel" placeholder="+852 9xxx xxxx" autocomplete="tel" inputmode="tel" required></div>
+        <div class="field"><label for="regReferral"><span data-i18n="reg-ref-label">推薦碼</span> <span class="hint" style="display:inline" data-i18n="reg-ref-opt">（可選 · 雙方 +10 額度）</span></label>
+          <input id="regReferral" type="text" placeholder="RXXXXXXX" autocomplete="off" maxlength="12"></div>
+        <div class="reg-err" id="regFormErr" role="alert" aria-live="polite"></div>
+        <button id="regSubmitBtn" onclick="submitRegistration()" class="btn btn-gold btn-block" style="margin-top:4px" data-i18n="reg-submit">送出申請</button>
+        <button onclick="closeRegister()" class="btn btn-ghost btn-block" style="margin-top:8px" data-i18n="reg-back">返回首頁</button>
+        <p class="reg-switch"><a href="javascript:void(0)" onclick="closeRegister();openLogin()" data-i18n="reg-to-login">已有帳號？登入 →</a></p>
+      </div>
+
+      <!-- 狀態二：等待審批（試用）／付款開通（直購） -->
+      <div id="regViewPending" style="display:none">
+        <div id="regPendingTrial">
+          <div class="reg-orb reg-orb--pending" aria-hidden="true"><i></i></div>
+          <h3 style="text-align:center" data-i18n="reg-pending-title">已收到你的申請</h3>
+          <p class="hint reg-center" data-i18n="reg-pending-desc">@Shine2caiAIbot 已通知審批，通常數小時內完成。<strong>本頁會自動更新</strong>——關掉頁面也沒關係，回來按「查看申請狀態」即可。</p>
+        </div>
+        <div id="regPendingPaid" style="display:none">
+          <div class="reg-orb reg-orb--pending" aria-hidden="true"><i></i></div>
+          <h3 style="text-align:center" id="regPaidTitle" data-i18n="reg-paid-title">付款開通</h3>
+          <ol class="pay-steps">
+            <li id="payStep1"><span data-i18n="reg-step1">開啟@Shine2caiAIbot（自動配對）</span>
+              <div class="pay-step-body">
+                <a id="regBotLink" class="btn btn-gold btn-block" target="_blank" rel="noopener" data-i18n="reg-open-bot">開啟 Telegram @Shine2caiAIbot</a>
+                <div class="paycode-line"><span data-i18n="reg-paycode-label">配對碼</span><code id="payCodeVal"></code><button class="btn btn-ghost btn-sm pass-copy" onclick="copyCred('payCodeVal',this)" data-i18n="reg-copy">複製</button></div>
+                <div class="hint" style="text-align:left" id="regBotManual" data-i18n="reg-bot-manual">如按鈕無反應：在 Telegram 搜尋@Shine2caiAIbot，發送上方配對碼。</div>
+              </div>
+            </li>
+            <li id="payStep2" data-i18n="reg-step2">Bot 即時發你付款資料（FPS / PayMe）</li>
+            <li id="payStep3" data-i18n="reg-step3">付款後在 bot 上傳截圖</li>
+            <li id="payStep4" data-i18n="reg-step4">確認收款即開通——bot 私訊你帳密，本頁同步變通行證</li>
+          </ol>
+        </div>
+        <div class="reg-pending-meta"><span data-i18n="reg-pending-gmail">申請 Gmail</span>：<code id="regPendingGmail"></code></div>
+        <div class="reg-poll-line" id="regPollLine" aria-live="polite"></div>
+        <button onclick="closeRegister()" class="btn btn-ghost btn-block" style="margin-top:14px" data-i18n="reg-back">返回首頁</button>
+      </div>
+
+      <!-- 狀態三：已開通（通行證） -->
+      <div id="regViewApproved" style="display:none">
+        <div class="reg-orb reg-orb--ok" aria-hidden="true"><svg viewBox="0 0 40 40"><path class="reg-check" d="M11 21l6 6 12-13" fill="none"/></svg></div>
+        <h3 style="text-align:center" data-i18n="reg-approved-title">你的 SHINE 通行證</h3>
+        <p class="hint reg-center" id="regApprovedDesc" data-i18n="reg-approved-desc">帳戶已開通。密碼只顯示於此頁，建議立即複製保存。</p>
+        <div class="pass-ticket">
+          <div class="pass-row"><span class="pass-lbl" data-i18n="reg-cred-id">帳號 ID</span><code id="passId"></code><button class="btn btn-ghost btn-sm pass-copy" onclick="copyCred('passId',this)" data-i18n="reg-copy">複製</button></div>
+          <div class="pass-perf" aria-hidden="true"></div>
+          <div class="pass-row"><span class="pass-lbl" data-i18n="reg-cred-pw">密碼</span><code id="passPw"></code><button class="btn btn-ghost btn-sm pass-copy" onclick="copyCred('passPw',this)" data-i18n="reg-copy">複製</button></div>
+        </div>
+        <button onclick="loginWithPass()" class="btn btn-gold btn-block" style="margin-top:14px" data-i18n="reg-login-now">以此帳號登入</button>
+        <button onclick="closeRegister()" class="btn btn-ghost btn-block" style="margin-top:8px" data-i18n="reg-back">返回首頁</button>
+      </div>
+
+      <!-- 狀態四：婉拒 -->
+      <div id="regViewRejected" style="display:none">
+        <div class="reg-orb reg-orb--rej" aria-hidden="true"><i></i></div>
+        <h3 style="text-align:center" data-i18n="reg-rejected-title">這次未能開通</h3>
+        <p class="hint reg-center" data-i18n="reg-rejected-desc">如認為有誤或想了解方案，聯絡 <a href="mailto:info@2c-ai.com">info@2c-ai.com</a>，我們會盡快回覆。</p>
+        <button onclick="closeRegister()" class="btn btn-ghost btn-block" style="margin-top:14px" data-i18n="reg-back">返回首頁</button>
+      </div>
+
     </div>
   </div>
 </section>
@@ -393,6 +627,11 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
     </div>
   </div>
   <div class="dash-wrap">
+    <nav class="dash-nav reveal" aria-label="Dashboard sections">
+      <a href="#dashCardSettings" data-i18n="dnav-settings">⚙ 設定</a>
+      <a href="#dashCardMission" data-i18n="dnav-mission">🛰 任務</a>
+      <a href="#dashCardLogs" data-i18n="dnav-logs">🧾 紀錄</a>
+    </nav>
     <div id="timePanel" class="reveal">
       <div id="timeCelebrate"></div>
       <div class="time-dash-grid">
@@ -404,13 +643,28 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
       <div class="time-prog"><div class="lbl2" data-i18n="dash-progress">本月時間釋放進度</div><div class="ubar"><i id="timeSavedBar"></i></div></div>
     </div>
 
-    <div class="card">
+    <div class="card reveal" id="dashOutcomes">
+      <h2 data-i18n="dash-outcome-title">回報你的成果</h2>
+      <p class="csub" data-i18n="dash-outcome-sub">SHINE 不讀你的信箱——請你主動回報，幫助更多求職者看見真實成效。</p>
+      <div class="outcome-btns">
+        <button type="button" class="btn btn-gold btn-sm" onclick="reportOutcome('hr_call')" data-i18n="dash-outcome-hr">📞 收到 HR 來電</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="reportOutcome('offer')" data-i18n="dash-outcome-offer">🎉 收到 Offer</button>
+      </div>
+      <div id="outcomeToast" class="outcome-toast" role="status"></div>
+    </div>
+
+    <div class="card" id="dashCardSettings">
       <h2 data-i18n="dash-agent-title">代理設定</h2>
       <p class="csub" data-i18n="dash-agent-sub">填寫一次，工具自動掃描你指定的來源、找出申請方式、去重後讓你確認寄出。</p>
       <div class="setup-checklist" id="setupChecklist"></div>
+      <div class="set-group">
+      <div class="set-group-h"><span class="set-group-n">1</span><span data-i18n="set-g1">身份與求職信</span></div>
       <div class="field"><label class="fld-label" data-i18n="dash-name-label">申請人姓名（NAME）</label><input id="applicantName" placeholder="AI自動求職"></div>
       <div class="field"><label class="fld-label" data-i18n="dash-letter-label">萬用求職信（100% 原樣寄出） <span id="letterWordCount" class="hint" style="display:inline;font-weight:400"></span></label>
         <textarea id="universalLetter" class="universal-letter" placeholder="敬啟者：&#10;&#10;本人現應徵相關職位..."></textarea></div>
+      </div>
+      <div class="set-group">
+      <div class="set-group-h"><span class="set-group-n">2</span><span data-i18n="set-g2">狩獵範圍與來源</span></div>
       <div class="field"><label class="fld-label" data-i18n="dash-kw-label">關鍵字（逗號分隔，最多 3 個）</label><input id="keywords" placeholder="社工, ASWO, 註冊社工"></div>
       <div class="field"><label class="fld-label" data-i18n="dash-bl-label">機構黑名單（逗號分隔，可留空）</label><input id="blacklist" placeholder="現職公司, 不想去的機構"></div>
       <div class="field"><label class="fld-label" data-i18n="dash-tier-label">你的方案（由帳號決定）</label>
@@ -422,6 +676,9 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         <div class="url-row"><span class="url-num">3</span><input id="searchUrl3" placeholder="https://... 第三個（Superman）"></div>
         <div class="hint" data-i18n="dash-url-hint">建議使用已篩選好的職缺列表頁。</div></div>
       <div class="field"><label class="fld-label" data-i18n="dash-cv-label">CV 公開連結</label><input id="cvUrl" placeholder="https://drive.google.com/... 或 LinkedIn"></div>
+      </div>
+      <div class="set-group">
+      <div class="set-group-h"><span class="set-group-n">3</span><span data-i18n="set-g3">Gmail 寄信與自動化</span></div>
       <div class="field"><label class="fld-label" data-i18n="dash-gmail-label">Gmail 授權</label>
         <div class="gmail-box">
           <div class="trust-promise trust-promise--dash">
@@ -451,6 +708,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
       <div class="field" style="padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)">
         <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:14px"><input type="checkbox" id="scanOnLogin" style="width:18px;height:18px"> <span data-i18n="dash-scan-on-login">登入後若設定完整，立即掃描</span></label>
         <div id="autoScanStatus" class="hint" style="margin-top:8px;font-weight:600;color:var(--green)"></div></div>
+      </div>
       <div class="save-bar">
         <button onclick="saveSettings()" class="btn btn-ghost" data-i18n="dash-save">儲存設定</button>
         <button onclick="saveAndRun()" class="btn btn-gold" data-i18n="dash-save-run">儲存並立即掃描</button>
@@ -508,7 +766,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
       </div>
     </div>
 
-    <div class="card dash-full">
+    <div class="card dash-full" id="dashCardMission">
       <h3 data-i18n="dash-auto-title">讓 SHINE 自動處理</h3>
       <p class="csub" data-i18n="dash-auto-sub">掃描你指定的來源 → 預覽確認 → 用你的 Gmail 最新 AI 擬態技術寄出。</p>
       <button id="scanBtn" class="btn btn-gold btn-block" style="padding:14px;font-size:15px" data-i18n="dash-scan-btn">開始自動掃描與準備申請</button>
@@ -523,7 +781,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         <div class="con-bar"><span class="dot" style="background:#F0795F"></span><span class="dot" style="background:#FFCB57"></span><span class="dot" style="background:#5FD08A"></span><span class="con-title" data-i18n="dash-processing">處理中</span></div>
         <div class="con-body" id="liveLog"></div></div>
     </div>
-    <div class="card dash-full">
+    <div class="card dash-full" id="dashCardLogs">
       <h3 data-i18n="dash-logs-title">發送紀錄</h3><div id="logs" style="max-height:200px;overflow:auto"></div>
       <button onclick="downloadSentLog()" class="btn btn-ghost btn-sm" style="margin-top:10px" data-i18n="dash-download-log">下載 LOG.txt</button>
     </div>
@@ -541,7 +799,7 @@ function closeLogin(){if(window.SHINE_MOTION&&window.SHINE_MOTION.closeLogin){wi
 const i18n = {
   'zh-Hant': {
     'loader':'SHINE 出眾 · 載入中','nav-how':'運作方式','nav-time':'時間價值','nav-pricing':'定價','nav-login':'登入','nav-cta':'客戶登入',
-    'hero-eyebrow':'把時間還給家人，把機會帶給自己',
+    'hero-eyebrow':'怕失業、怕原地踏步？把恐懼外判給 SHINE。',
     'hero-title-1':'你專心現職與生活，','hero-title-2':'SHINE 全自動替你投遞機會。',
     'hero-vision':'SHINE 用你的 Gmail、100% 原樣求職信，在背景全自動投遞 — 每月為你釋放 <strong>90+ 小時</strong>，機會自然進場。',
     'pillar-1':'已經有工作？','pillar-2':'這就是在職人士最強跳槽武器','pillar-3':'100% 原樣求職信 · 獨家人工智能投遞',
@@ -556,10 +814,54 @@ const i18n = {
     'weapon-desc':'白天你專心現職與生活，SHINE 在背景替你捕捉全市場優質職缺。不用加班找工，機會自然優雅進場。','weapon-cta':'立即武裝 SHINE',
     'cta-final-title':'機會不會等你。SHINE 會。','cta-final-desc':'三步設定，今日開始。你的 Gmail，你的求職信，全自動。','cta-final-btn':'立即登入 — 搶佔先機',
     'cta-trial':'立即免費試用',
+    /* v2.3 registration */
+    'beta-reg-title':'立即開始','beta-reg-hint':'填寫資料（含電話，方便專員回電），@Shine2caiAIbot 通知審批，<strong>頁面自動出現你的通行證</strong>——全程無需等 email。','beta-reg-btn':'申請免費試用','beta-status-btn':'查看申請狀態',
+    'reg-trial-chip':'免費試用 · 10 封真實投遞 · 免信用卡',
+    'reg-card-title':'申請 SHINE 免費試用','reg-card-hint':'30 秒完成。審批後<strong>本頁自動顯示</strong>帳號與密碼。',
+    'reg-name-label':'姓名','reg-gmail-label':'Gmail（登入後亦作寄信信箱）','reg-prof-label':'職系','reg-phone-label':'電話','reg-phone-hint':'（2C-AI 專員回電用）',
+    'prof-sw':'社工','prof-nurse':'護士','prof-clerk':'文職','prof-other':'其他',
+    'reg-submit':'送出申請','reg-sending':'送出中…','reg-back':'返回首頁','reg-to-login':'已有帳號？登入 →','login-to-reg':'還沒有帳號？申請免費試用 →',
+    'reg-pending-title':'已收到你的申請','reg-pending-desc':'@Shine2caiAIbot 已通知審批，通常數小時內完成。<strong>本頁會自動更新</strong>——關掉頁面也沒關係，回來按「查看申請狀態」即可。','reg-pending-gmail':'申請 Gmail',
+    'reg-poll-checking':'審批狀態同步中…','reg-poll-waiting':'等待審批中——本頁每 12 秒自動檢查','reg-poll-wake':'正在喚醒伺服器（免費層冷啟動），自動重試中…',
+    'reg-approved-title':'你的 SHINE 通行證','reg-approved-desc':'試用帳戶已開通（10 封投遞額度）。密碼只顯示於此頁，建議立即複製保存。','reg-approved-desc-lv2':'Sprint 正式帳戶已開通（500 封/月）。密碼只顯示於此頁，建議立即複製保存。',
+    'reg-cred-id':'帳號 ID','reg-cred-pw':'密碼','reg-copy':'複製','reg-copied':'已複製 ✓','reg-login-now':'以此帳號登入',
+    'reg-rejected-title':'這次未能開通','reg-rejected-desc':'如認為有誤或想了解方案，聯絡 <a href="mailto:info@2c-ai.com">info@2c-ai.com</a>，我們會盡快回覆。',
+    'reg-err-name':'請填寫姓名','reg-err-gmail':'需要 @gmail.com 信箱（SHINE 用它替你寄信）','reg-err-prof':'請選擇職系','reg-err-phone':'請填寫電話（2C-AI 專員會以此回電）','reg-err-phone-fmt':'電話格式不正確','reg-err-dup':'此 Gmail 已開通帳戶——請直接登入，或聯絡 info@2c-ai.com','reg-err-rate':'嘗試次數過多，請一小時後再試','reg-err-net':'連線失敗——伺服器可能正在喚醒，10 秒後再按一次即可','reg-err-server':'資料未通過驗證，請檢查後重試',
+    'pricing-trial-strip':'未決定？先免費試用——10 封真實投遞，即時自動開通，免信用卡。','pricing-trial-btn':'申請試用',
+    'live-sent-week':'本週','live-sent-unit':'封已寄出',
+    'demo-label':'即場體驗','demo-title':'輸入關鍵字，即場預覽 3 個職缺','demo-intro':'無需登入——感受 SHINE 如何從職位列表找出申請電郵。','demo-ph':'社工、PT、OT、護士…','demo-btn':'即場預覽',
+    'faq-label':'常見問題','faq-title':'你可能想問的',
+    'faq-q1':'App Password 安全嗎？你們會讀我的信箱嗎？','faq-a1':'不會。SHINE 只用 App Password 代你寄出求職信（純 outbound），不讀取收件匣。你可隨時在 Google 撤銷 App Password，寄送即時停止。',
+    'faq-q2':'免費試用要等多久？','faq-a2':'v2.7 起試用即時自動開通——提交後本頁立即顯示帳號與密碼。',
+    'faq-q3':'退款或保證政策？','faq-a3':'付費方案為月度訂閱。技術原因連續 7 日無法寄送可聯絡 info@2c-ai.com 申請退款或延長。',
+    'faq-q4':'推薦朋友有獎賞嗎？','faq-a4':'有。開通後獲專屬推薦碼；朋友用碼申請，雙方各 +10 封額度。',
+    'reg-ref-label':'推薦碼','reg-ref-opt':'（可選 · 雙方 +10 額度）',
+    'dash-outcome-title':'回報你的成果','dash-outcome-sub':'SHINE 不讀你的信箱——請你主動回報，幫助更多求職者看見真實成效。','dash-outcome-hr':'📞 收到 HR 來電','dash-outcome-offer':'🎉 收到 Offer',
+    'beta-reg-hint':'填寫資料（含電話）。試用<strong>即時自動開通</strong>——本頁立即顯示通行證，無需等審批。',
+    /* v2.4 direct purchase */
+    'reg-plan-label':'方案','plan-trial':'免費試用','plan-trial-sub':'10 封 · $0','plan-lv3-sub':'無限 · $768/月',
+    'reg-card-title-paid':'直購 SHINE','reg-paid-chip':'提交後由@Shine2caiAIbot 收款，確認即開通',
+    'reg-paid-title':'付款開通','reg-err-plan':'請選擇方案',
+    'reg-step1':'開啟@Shine2caiAIbot（自動配對）','reg-step2':'Bot 即時發你付款資料（FPS / PayMe）','reg-step3':'付款後在 bot 上傳截圖','reg-step4':'確認收款即開通——bot 私訊你帳密，本頁同步變通行證',
+    'reg-open-bot':'開啟 Telegram @Shine2caiAIbot','reg-paycode-label':'配對碼','reg-bot-manual':'如按鈕無反應：在 Telegram 搜尋@Shine2caiAIbot，發送上方配對碼。',
+    'reg-poll-awaitpay':'等待付款截圖——完成第 1–3 步後本頁自動前進','reg-poll-review':'已收到截圖，確認中——通常好快',
+    'reg-approved-desc-lv1':'Scout 正式帳戶已開通（60 封/月）。密碼只顯示於此頁，建議立即複製保存。','reg-approved-desc-lv3':'Superman 正式帳戶已開通（無限發送）。密碼只顯示於此頁，建議立即複製保存。',
     'viral-proof-prefix':'已幫助','viral-proof-suffix':'人成功找到更好機會 🔥','viral-copy':'一鍵複製分享給朋友','viral-share':'分享','viral-sim':'模擬投遞一封 → 看完整動畫',
     'compare-feature':'功能','compare-row1':'每月寄送','compare-row2':'來源 URL','compare-row3':'黑名單','compare-row4':'優先處理','compare-row5':'釋放時間/月',
-    'stories-label':'成功案例','stories-title':'真實用戶，匿名分享','story-1':'「終於不用下班後還對著求職網站——時間真正還給了家人」','story-2':'「一設定完就收到 HR call，勁！」','story-3':'「一設定完就收到 HR call，勁！」',
-    'story-meta-1':'— 匿名用戶 · 在職跳槽','story-meta-2':'— 陳社工 · Sprint 方案','story-meta-3':'— 黃姑娘 RN · Sprint 方案',
+    'stories-label':'成功案例','stories-title':'真實用戶，匿名分享','story-1':'「終於不用下班後還對著求職網站——時間真正還給了家人」','story-2':'「一設定完就收到 HR call，勁！」','story-3':'「10+ 個 HR 來電，2 個 Offer 揀——7 月 20 日返新工。」',
+    'story-meta-1':'— 匿名用戶 · 在職跳槽','story-meta-2':'— 陳社工 · Sprint 方案','story-meta-3':'— K · MSW 學生 · 真實個案',
+    /* v2.6 fear + case + settings groups */
+    'story-unit-offer':' Offers',
+    'fear-label':'為什麼是 SHINE','fear-title':'我們賣的不是軟件，是「怕」的消失。','fear-intro':'怕搵唔到工、怕簡歷石沉大海、怕同期升職而你原地踏步——SHINE 把這些恐懼，變成每日在背景自動出擊。',
+    'fear-futures-head':'同一個你，兩條 90 日時間線','fear-bad-tag':'冇 SHINE','fear-good-tag':'有 SHINE','fear-scroll-hint':'↓ 滾動，看差距擴大',
+    'fear-b1':'Day 1 — 收藏了 12 個職位，太累，未投','fear-b2':'Day 14 — 手動投出 6 封，全部無回音','fear-b3':'Day 30 — 開始懷疑：係咪我唔夠好？','fear-b4':'Day 60 — 同學 po 新工照，你讚好，心一沉','fear-b5':'Day 90 — 仍在深夜刷招聘網',
+    'fear-g1':'Day 1 — 15 分鐘完成設定，之後唔使再開求職網','fear-g2':'Day 2 — 首批申請已自動寄出（100% 原樣求職信）','fear-g3':'Day 7 — 第一個 HR 來電','fear-g4':'Day 30 — 面試排期中，你只需揀時間','fear-g5':'Day 45 — Offer 在手，主動權在你',
+    'case-eyebrow':'真實個案 · 2026 年 7 月','case-title':'MSW 社工學生 K：由投不出手，到兩個 Offer 任揀。',
+    'case-n1':'HR 來電','case-n2':'Offer 在手','case-n3':'正式上班',
+    'case-t1':'購入 SHINE，當日完成設定','case-t2':'陸續接獲 10+ 個 HR 來電','case-t3':'2 個 Offer 同時在手','case-t4':'7 月 20 日，正式上班',
+    'case-quote':'「電話多到要較靜音。原來唔係我唔夠好，係以前根本冇人見到我。」','case-meta':'— K · MSW 應屆 · SHINE 真實客戶','case-foot':'個別成效因市場與履歷而異','case-cta':'下一個接電話的，是你',
+    'set-g1':'身份與求職信','set-g2':'狩獵範圍與來源','set-g3':'Gmail 寄信與自動化',
+    'dnav-settings':'⚙ 設定','dnav-mission':'🛰 任務','dnav-logs':'🧾 紀錄',
     'story-unit-interview':' 個面試','story-unit-hours':' 小時','story-unit-weeks':' 週','story-unit-call':' Call','story-wa':'分享到 WhatsApp',
     'sticky-cta':'開始釋放 90 小時',
     'console-running':'RUNNING',
@@ -581,7 +883,7 @@ const i18n = {
     'popular':'最受歡迎','per-month':' /月',
     'login-title':'客戶登入','login-hint':'使用 2C-AI 提供的<strong>帳號 ID</strong>與<strong>密碼</strong>登入。等級決定可掃描來源數與每月寄送上限。','login-btn':'登入 SHINE',
     'login-card-title':'登入 SHINE','login-card-hint':'輸入<strong>帳號 ID</strong>與<strong>密碼</strong>。Gmail 在設定區另行填寫（僅用於寄信）。','login-card-notice':'預設登入後<strong>不會</strong>自動掃描。若已開啟「登入後立即掃描」且設定完整，登入後才會自動開始。',
-    'login-user-label':'SHINE 帳號 ID','login-pw-label':'密碼','login-pw-hint':'帳號由 2C-AI 手動開通。','login-submit':'登入並進入設定','login-back':'返回首頁',
+    'login-user-label':'SHINE 帳號 ID','login-pw-label':'密碼','login-pw-hint':'忘記密碼？聯絡 info@2c-ai.com。','login-submit':'登入並進入設定','login-back':'返回首頁',
     'logout':'登出',
     'dash-time-month':'本月已釋放（小時）','dash-time-year':'今年累計釋放（小時）','dash-time-converted':'本月寄送換算','dash-per-email':'每寄 1 封 = 節省 1 小時','dash-progress':'本月時間釋放進度',
     'dash-agent-title':'代理設定','dash-agent-sub':'填寫一次，工具自動掃描你指定的來源、找出申請方式、去重後讓你確認寄出。',
@@ -614,7 +916,7 @@ const i18n = {
   },
   'zh-CN': {
     'loader':'SHINE 出众 · 加载中','nav-how':'运作方式','nav-time':'时间价值','nav-pricing':'定价','nav-login':'登入','nav-cta':'客户登入',
-    'hero-eyebrow':'把时间还给家人，把机会带给自己',
+    'hero-eyebrow':'怕失业、怕原地踏步？把恐惧外判给 SHINE。',
     'hero-title-1':'你专心现职与生活，','hero-title-2':'SHINE 全自动替你投递机会。',
     'hero-vision':'SHINE 用你的 Gmail、100% 原样求职信，在背景全自动投递 — 每月为你释放 <strong>90+ 小时</strong>，机会自然进场。',
     'pillar-1':'已经有工作？','pillar-2':'这就是在职人士最强跳槽武器','pillar-3':'100% 原样求职信 · 独家人工智能投递',
@@ -629,10 +931,44 @@ const i18n = {
     'weapon-desc':'白天你专心现职与生活，SHINE 在背景替你捕捉全市场优质职缺。不用加班找工作，机会自然优雅进场。','weapon-cta':'立即武装 SHINE',
     'cta-final-title':'机会不会等你。SHINE 会。','cta-final-desc':'三步设定，今日开始。你的 Gmail，你的求职信，全自动。','cta-final-btn':'立即登入 — 抢占先机',
     'cta-trial':'立即免费试用',
+    /* v2.3 registration */
+    'beta-reg-title':'立即开始','beta-reg-hint':'填写资料（含电话，方便专员回电），小聪bot 通知审批，<strong>页面自动出现你的通行证</strong>——全程无需等 email。','beta-reg-btn':'申请免费试用','beta-status-btn':'查看申请状态',
+    'reg-trial-chip':'免费试用 · 10 封真实投递 · 免信用卡',
+    'reg-card-title':'申请 SHINE 免费试用','reg-card-hint':'30 秒完成。审批后<strong>本页自动显示</strong>账号与密码。',
+    'reg-name-label':'姓名','reg-gmail-label':'Gmail（登入后亦作寄信邮箱）','reg-prof-label':'职系','reg-phone-label':'电话','reg-phone-hint':'（2C-AI 专员回电用）',
+    'prof-sw':'社工','prof-nurse':'护士','prof-clerk':'文职','prof-other':'其他',
+    'reg-submit':'提交申请','reg-sending':'提交中…','reg-back':'返回首页','reg-to-login':'已有账号？登入 →','login-to-reg':'还没有账号？申请免费试用 →',
+    'reg-pending-title':'已收到你的申请','reg-pending-desc':'小聪bot 已通知审批，通常数小时内完成。<strong>本页会自动更新</strong>——关掉页面也没关系，回来按「查看申请状态」即可。','reg-pending-gmail':'申请 Gmail',
+    'reg-poll-checking':'审批状态同步中…','reg-poll-waiting':'等待审批中——本页每 12 秒自动检查','reg-poll-wake':'正在唤醒服务器（免费层冷启动），自动重试中…',
+    'reg-approved-title':'你的 SHINE 通行证','reg-approved-desc':'试用账户已开通（10 封投递额度）。密码只显示于此页，建议立即复制保存。','reg-approved-desc-lv2':'Sprint 正式账户已开通（500 封/月）。密码只显示于此页，建议立即复制保存。',
+    'reg-cred-id':'账号 ID','reg-cred-pw':'密码','reg-copy':'复制','reg-copied':'已复制 ✓','reg-login-now':'以此账号登入',
+    'reg-rejected-title':'这次未能开通','reg-rejected-desc':'如认为有误或想了解方案，联系 <a href="mailto:info@2c-ai.com">info@2c-ai.com</a>，我们会尽快回复。',
+    'reg-err-name':'请填写姓名','reg-err-gmail':'需要 @gmail.com 邮箱（SHINE 用它替你寄信）','reg-err-prof':'请选择职系','reg-err-phone':'请填写电话（2C-AI 专员会以此回电）','reg-err-phone-fmt':'电话格式不正确','reg-err-dup':'此 Gmail 已开通账户——请直接登入，或联系 info@2c-ai.com','reg-err-rate':'尝试次数过多，请一小时后再试','reg-err-net':'连线失败——服务器可能正在唤醒，10 秒后再按一次即可','reg-err-server':'资料未通过验证，请检查后重试',
+    'pricing-trial-strip':'未决定？先免费试用——10 封真实投递，自动审批开通，免信用卡。','pricing-trial-btn':'申请试用',
+    /* v2.4 direct purchase */
+    'reg-plan-label':'方案','plan-trial':'免费试用','plan-trial-sub':'10 封 · $0','plan-lv3-sub':'无限 · $768/月',
+    'reg-card-title-paid':'直购 SHINE','reg-paid-chip':'提交后由小聪bot 收款，确认即开通',
+    'reg-paid-title':'付款开通','reg-err-plan':'请选择方案',
+    'reg-step1':'打开小聪bot（自动配对）','reg-step2':'Bot 即时发你付款资料（FPS / PayMe）','reg-step3':'付款后在 bot 上传截图','reg-step4':'确认收款即开通——bot 私信你账密，本页同步变通行证',
+    'reg-open-bot':'打开 Telegram 小聪bot','reg-paycode-label':'配对码','reg-bot-manual':'如按钮无反应：在 Telegram 搜索小聪bot，发送上方配对码。',
+    'reg-poll-awaitpay':'等待付款截图——完成第 1–3 步后本页自动前进','reg-poll-review':'已收到截图，确认中——通常很快',
+    'reg-approved-desc-lv1':'Scout 正式账户已开通（60 封/月）。密码只显示于此页，建议立即复制保存。','reg-approved-desc-lv3':'Superman 正式账户已开通（无限发送）。密码只显示于此页，建议立即复制保存。',
     'viral-proof-prefix':'已帮助','viral-proof-suffix':'人成功找到更好机会 🔥','viral-copy':'一键复制分享给朋友','viral-share':'分享','viral-sim':'模拟投递一封 → 看完整动画',
     'compare-feature':'功能','compare-row1':'每月寄送','compare-row2':'来源 URL','compare-row3':'黑名单','compare-row4':'优先处理','compare-row5':'释放时间/月',
-    'stories-label':'成功案例','stories-title':'真实用户，匿名分享','story-1':'「终于不用下班后还对着求职网站——时间真正还给了家人」','story-2':'「一设定完就收到 HR call，劲！」','story-3':'「一设定完就收到 HR call，劲！」',
-    'story-meta-1':'— 匿名用户 · 在职跳槽','story-meta-2':'— 陈社工 · Sprint 方案','story-meta-3':'— 黄姑娘 RN · Sprint 方案',
+    'stories-label':'成功案例','stories-title':'真实用户，匿名分享','story-1':'「终于不用下班后还对着求职网站——时间真正还给了家人」','story-2':'「一设定完就收到 HR call，劲！」','story-3':'「10+ 个 HR 来电，2 个 Offer 挑——7 月 20 日上新岗。」',
+    'story-meta-1':'— 匿名用户 · 在职跳槽','story-meta-2':'— 陈社工 · Sprint 方案','story-meta-3':'— K · MSW 学生 · 真实个案',
+    /* v2.6 fear + case + settings groups */
+    'story-unit-offer':' Offers',
+    'fear-label':'为什么是 SHINE','fear-title':'我们卖的不是软件，是「怕」的消失。','fear-intro':'怕找不到工作、怕简历石沉大海、怕同期升职而你原地踏步——SHINE 把这些恐惧，变成每天在后台自动出击。',
+    'fear-futures-head':'同一个你，两条 90 天时间线','fear-bad-tag':'没有 SHINE','fear-good-tag':'有 SHINE','fear-scroll-hint':'↓ 滚动，看差距扩大',
+    'fear-b1':'Day 1 — 收藏了 12 个职位，太累，没投','fear-b2':'Day 14 — 手动投出 6 封，全部没回音','fear-b3':'Day 30 — 开始怀疑：是不是我不够好？','fear-b4':'Day 60 — 同学晒新工作照，你点赞，心一沉','fear-b5':'Day 90 — 仍在深夜刷招聘网',
+    'fear-g1':'Day 1 — 15 分钟完成设定，之后不用再开求职网','fear-g2':'Day 2 — 首批申请已自动寄出（100% 原样求职信）','fear-g3':'Day 7 — 第一个 HR 来电','fear-g4':'Day 30 — 面试排期中，你只需挑时间','fear-g5':'Day 45 — Offer 在手，主动权在你',
+    'case-eyebrow':'真实个案 · 2026 年 7 月','case-title':'MSW 社工学生 K：从投不出手，到两个 Offer 任挑。',
+    'case-n1':'HR 来电','case-n2':'Offer 在手','case-n3':'正式上岗',
+    'case-t1':'购入 SHINE，当天完成设定','case-t2':'陆续接到 10+ 个 HR 来电','case-t3':'2 个 Offer 同时在手','case-t4':'7 月 20 日，正式上岗',
+    'case-quote':'「电话多到要调静音。原来不是我不够好，是以前根本没人看到我。」','case-meta':'— K · MSW 应届 · SHINE 真实客户','case-foot':'个别成效因市场与履历而异','case-cta':'下一个接电话的，是你',
+    'set-g1':'身份与求职信','set-g2':'狩猎范围与来源','set-g3':'Gmail 寄信与自动化',
+    'dnav-settings':'⚙ 设置','dnav-mission':'🛰 任务','dnav-logs':'🧾 记录',
     'story-unit-interview':' 个面试','story-unit-hours':' 小时','story-unit-weeks':' 周','story-unit-call':' Call','story-wa':'分享到 WhatsApp',
     'sticky-cta':'开始释放 90 小时',
     'console-running':'运行中',
@@ -654,7 +990,7 @@ const i18n = {
     'popular':'最受欢迎','per-month':' /月',
     'login-title':'客户登入','login-hint':'使用 2C-AI 提供的<strong>账号 ID</strong>与<strong>密码</strong>登入。等级决定可扫描来源数与每月寄送上限。','login-btn':'登入 SHINE',
     'login-card-title':'登入 SHINE','login-card-hint':'输入<strong>账号 ID</strong>与<strong>密码</strong>。Gmail 在设定区另行填写（仅用于寄信）。','login-card-notice':'预设登入后<strong>不会</strong>自动扫描。若已开启「登入后立即扫描」且设定完整，登入后才会自动开始。',
-    'login-user-label':'SHINE 账号 ID','login-pw-label':'密码','login-pw-hint':'账号由 2C-AI 手动开通。','login-submit':'登入并进入设定','login-back':'返回首页',
+    'login-user-label':'SHINE 账号 ID','login-pw-label':'密码','login-pw-hint':'忘记密码？联系 info@2c-ai.com。','login-submit':'登入并进入设定','login-back':'返回首页',
     'logout':'登出',
     'dash-time-month':'本月已释放（小时）','dash-time-year':'今年累计释放（小时）','dash-time-converted':'本月寄送换算','dash-per-email':'每寄 1 封 = 节省 1 小时','dash-progress':'本月时间释放进度',
     'dash-agent-title':'代理设定','dash-agent-sub':'填写一次，工具自动扫描你指定的来源、找出申请方式、去重后让你确认寄出。',
@@ -687,7 +1023,7 @@ const i18n = {
   },
   'en': {
     'loader':'SHINE · Loading','nav-how':'How It Works','nav-time':'Time Value','nav-pricing':'Pricing','nav-login':'Login','nav-cta':'Client Login',
-    'hero-eyebrow':'Give time back to family. Bring opportunity to you.',
+    'hero-eyebrow':'Scared of joblessness or standing still? Outsource that fear to SHINE.',
     'hero-title-1':'Focus on your job and life —','hero-title-2':'SHINE auto-applies for you.',
     'hero-vision':'SHINE auto-applies in the background — your Gmail, <strong>100% your cover letter</strong>, <strong>90+ hours</strong> freed every month. Opportunities flow in naturally.',
     'pillar-1':'Already employed?','pillar-2':'The ultimate job-hop weapon for working pros','pillar-3':'100% your letter · Exclusive AI delivery',
@@ -702,10 +1038,44 @@ const i18n = {
     'weapon-desc':'Focus on your job and life by day. SHINE captures quality openings across the market in the background — no overtime job hunting, opportunities arrive gracefully.','weapon-cta':'Arm SHINE Now',
     'cta-final-title':'Opportunity won\'t wait. SHINE will.','cta-final-desc':'Three steps. Start today. Your Gmail. Your letter. Fully automated.','cta-final-btn':'Log In — Claim Your Edge',
     'cta-trial':'Start Free Trial',
+    /* v2.3 registration */
+    'beta-reg-title':'Start Now','beta-reg-hint':'Fill in your details (including phone so our team can call you back). @Shine2caiAIbot pings us for approval, and <strong>your access pass appears right on this page</strong> — no email waiting.','beta-reg-btn':'Apply for Free Trial','beta-status-btn':'Check Application Status',
+    'reg-trial-chip':'Free trial · 10 real applications · no credit card',
+    'reg-card-title':'Apply for a SHINE Free Trial','reg-card-hint':'30 seconds. Once approved, <strong>this page shows your ID and password automatically</strong>.',
+    'reg-name-label':'Name','reg-gmail-label':'Gmail (also your sending address after login)','reg-prof-label':'Profession','reg-phone-label':'Phone','reg-phone-hint':'(so 2C-AI staff can call you back)',
+    'prof-sw':'Social Worker','prof-nurse':'Nurse','prof-clerk':'Clerical','prof-other':'Other',
+    'reg-submit':'Submit Application','reg-sending':'Submitting…','reg-back':'Back to Home','reg-to-login':'Already have an account? Log in →','login-to-reg':'No account yet? Apply for a free trial →',
+    'reg-pending-title':'Application Received','reg-pending-desc':'@Shine2caiAIbot has notified our team — approval usually lands within hours. <strong>This page updates itself</strong>; you can close it and return via “Check Application Status”.','reg-pending-gmail':'Applied Gmail',
+    'reg-poll-checking':'Syncing approval status…','reg-poll-waiting':'Awaiting approval — this page checks every 12 seconds','reg-poll-wake':'Waking the server (free-tier cold start), retrying automatically…',
+    'reg-approved-title':'Your SHINE Access Pass','reg-approved-desc':'Trial account activated (10 applications included). The password is shown only here — copy it now.','reg-approved-desc-lv2':'Sprint account activated (500/month). The password is shown only here — copy it now.',
+    'reg-cred-id':'Account ID','reg-cred-pw':'Password','reg-copy':'Copy','reg-copied':'Copied ✓','reg-login-now':'Log In with This Account',
+    'reg-rejected-title':'Not Approved This Time','reg-rejected-desc':'Think this is a mistake, or want to discuss plans? Contact <a href="mailto:info@2c-ai.com">info@2c-ai.com</a> and we\'ll get back to you.',
+    'reg-err-name':'Please enter your name','reg-err-gmail':'A @gmail.com address is required (SHINE sends from it on your behalf)','reg-err-prof':'Please pick a profession','reg-err-phone':'Please enter your phone number (2C-AI staff will call you back)','reg-err-phone-fmt':'Invalid phone format','reg-err-dup':'This Gmail already has an account — log in directly, or contact info@2c-ai.com','reg-err-rate':'Too many attempts — try again in an hour','reg-err-net':'Connection failed — the server may be waking up; tap again in 10 seconds','reg-err-server':'Validation failed — check your details and retry',
+    'pricing-trial-strip':'Not sure yet? Start a free trial — 10 real applications, auto-approved onboarding, no credit card.','pricing-trial-btn':'Apply for Trial',
+    /* v2.4 direct purchase */
+    'reg-plan-label':'Plan','plan-trial':'Free Trial','plan-trial-sub':'10 sends · $0','plan-lv3-sub':'Unlimited · $768/mo',
+    'reg-card-title-paid':'Buy SHINE','reg-paid-chip':'Submit, pay via @Shine2caiAIbot, activated on confirmation',
+    'reg-paid-title':'Pay & Activate','reg-err-plan':'Please pick a plan',
+    'reg-step1':'Open @Shine2caiAIbot (auto-pairs you)','reg-step2':'The bot sends payment details instantly (FPS / PayMe)','reg-step3':'Pay, then upload the screenshot in the bot','reg-step4':'Once confirmed, you\'re live — the bot DMs your credentials and this page becomes your pass',
+    'reg-open-bot':'Open @Shine2caiAIbot on Telegram','reg-paycode-label':'Pairing code','reg-bot-manual':'Button not working? Search @Shine2caiAIbot on Telegram and send the code above.',
+    'reg-poll-awaitpay':'Awaiting payment screenshot — this page advances after steps 1–3','reg-poll-review':'Screenshot received, confirming — usually quick',
+    'reg-approved-desc-lv1':'Scout account activated (60/month). The password is shown only here — copy it now.','reg-approved-desc-lv3':'Superman account activated (unlimited). The password is shown only here — copy it now.',
     'viral-proof-prefix':'Helped','viral-proof-suffix':'people find better opportunities 🔥','viral-copy':'Copy share link','viral-share':'Share','viral-sim':'Simulate one apply → full animation',
     'compare-feature':'Feature','compare-row1':'Emails/month','compare-row2':'Source URLs','compare-row3':'Blacklist','compare-row4':'Priority','compare-row5':'Hours freed/mo',
     'stories-label':'Success Stories','stories-title':'Real users, anonymous','story-1':'"No more job boards after work — time truly back for family"','story-2':'"Got an HR call right after setup — amazing!"','story-3':'"Got an HR call right after setup — amazing!"',
-    'story-meta-1':'— Anonymous · Job-hop while employed','story-meta-2':'— Chan SW · Sprint plan','story-meta-3':'— Wong RN · Sprint plan',
+    'story-meta-1':'— Anonymous · Job-hop while employed','story-meta-2':'— Chan SW · Sprint plan','story-meta-3':'— K · MSW student · Verified case',
+    /* v2.6 fear + case + settings groups */
+    'story-unit-offer':' Offers',
+    'fear-label':'Why SHINE','fear-title':'We don\'t sell software. We sell the disappearance of fear.','fear-intro':'Fear of joblessness, of CVs vanishing into silence, of peers promoted while you stand still — SHINE turns those fears into daily automated strikes, running in the background.',
+    'fear-futures-head':'Same you. Two 90-day timelines.','fear-bad-tag':'Without SHINE','fear-good-tag':'With SHINE','fear-scroll-hint':'↓ Scroll — watch the gap widen',
+    'fear-b1':'Day 1 — Saved 12 jobs, too tired to apply','fear-b2':'Day 14 — 6 manual applications, zero replies','fear-b3':'Day 30 — Starting to wonder: am I not good enough?','fear-b4':'Day 60 — A classmate posts their new-job photo. You like it. Your heart sinks.','fear-b5':'Day 90 — Still scrolling job boards past midnight',
+    'fear-g1':'Day 1 — 15-minute setup, never open a job board again','fear-g2':'Day 2 — First batch sent automatically (your letter, 100% unchanged)','fear-g3':'Day 7 — First HR call','fear-g4':'Day 30 — Interviews queued; you just pick the times','fear-g5':'Day 45 — Offer in hand. The leverage is yours.',
+    'case-eyebrow':'Verified case · Jul 2026','case-title':'MSW student K: from unanswered applications to choosing between two offers.',
+    'case-n1':'HR calls','case-n2':'Offers in hand','case-n3':'Start date',
+    'case-t1':'Bought SHINE, finished setup same day','case-t2':'10+ HR calls came in','case-t3':'2 offers in hand at once','case-t4':'Onboarded 20 July',
+    'case-quote':'\"So many calls I had to mute my phone. Turns out I was never the problem — I was just invisible before.\"','case-meta':'— K · MSW graduate · Verified SHINE client','case-foot':'Individual results vary with market and CV','case-cta':'The next phone that rings is yours',
+    'set-g1':'Identity & Cover Letter','set-g2':'Hunting Scope & Sources','set-g3':'Gmail Sending & Automation',
+    'dnav-settings':'⚙ Settings','dnav-mission':'🛰 Mission','dnav-logs':'🧾 Logs',
     'story-unit-interview':' interviews','story-unit-hours':' hrs','story-unit-weeks':' weeks','story-unit-call':' Call','story-wa':'Share on WhatsApp',
     'sticky-cta':'Save 90 Hrs/Month',
     'console-running':'RUNNING',
@@ -726,11 +1096,11 @@ const i18n = {
     'sec-price-intro':'HKD / month. Copy above is life reclaimed; numbers below are capacity limits.',
     'tier1-name':'Scout','tier1-value':'$100 isn\'t a fee — it\'s the most elegant choice against standing still.','tier1-sub':'Test waters · Low risk','tier1-q1':'emails / month','tier1-q2':'source URL','tier1-q3':'Blacklist filter','tier1-q4':'Send logs','tier1-btn':'Choose Scout','tier1-back':'60+ hrs/month freed','tier1-back-desc':'One meal\'s cost for steady auto-apply — keep dinner time for family and yourself.',
     'tier2-name':'Sprint','tier2-value':'$500 is less than two days\' salary — buys 100+ hours back.','tier2-sub':'Serious move · Time liberation','tier2-q1':'emails / month','tier2-q2':'source URLs','tier2-q3':'Full blacklist','tier2-q4':'Priority processing','tier2-btn':'Choose Sprint','tier2-back':'Ultimate career weapon','tier2-back-desc':'Elegant secret weapon for employed pros — full focus by day, SHINE expands opportunities in the background, evenings truly yours.',
-    'tier3-name':'Superman','tier3-value':'Full throttle. Every quality market opportunity, unlocked.','tier3-sub':'Unlimited ambition','tier3-q1':'emails / month','tier3-q2':'source URLs','tier3-q3':'All features','tier3-q4':'Mass applicants','tier3-btn':'Choose Superman','tier3-back':'Unlimited time released','tier3-back-desc':'For professionals who don\'t settle — maximum coverage, fastest mover advantage.',
+    'tier3-name':'Superman','tier3-value':'Full throttle. Every quality market opportunity, unlocked.','tier3-sub':'Unlimited ambition','unlimited':'Unlimited','tier3-q1':'emails / month','tier3-q2':'source URLs','tier3-q3':'All features','tier3-q4':'Mass applicants','tier3-btn':'Choose Superman','tier3-back':'Unlimited time released','tier3-back-desc':'For professionals who don\'t settle — maximum coverage, fastest mover advantage.',
     'popular':'Most Popular','per-month':' /month',
     'login-title':'Client Login','login-hint':'Use the <strong>Account ID</strong> and <strong>Password</strong> provided by 2C-AI to log in. Tier determines source count and monthly sending limit.','login-btn':'Log In to SHINE',
     'login-card-title':'Log In to SHINE','login-card-hint':'Enter <strong>Account ID</strong> and <strong>Password</strong>. Gmail is filled separately in the settings area (for sending only).','login-card-notice':'By default, logging in <strong>won\'t</strong> auto-scan. Auto-scan only triggers if \'Scan on Login\' is enabled and settings are complete.',
-    'login-user-label':'SHINE Account ID','login-pw-label':'Password','login-pw-hint':'Accounts are manually provisioned by 2C-AI.','login-submit':'Log In & Configure','login-back':'Back to Home',
+    'login-user-label':'SHINE Account ID','login-pw-label':'Password','login-pw-hint':'Forgot password? Contact info@2c-ai.com.','login-submit':'Log In & Configure','login-back':'Back to Home',
     'logout':'Log Out',
     'dash-time-month':'Released This Month (hrs)','dash-time-year':'Cumulative This Year (hrs)','dash-time-converted':'This Month Converted','dash-per-email':'1 email sent = 1 hour saved','dash-progress':'Monthly time release progress',
     'dash-agent-title':'Agent Settings','dash-agent-sub':'Fill once. Tool auto-scans your sources, finds application methods, deduplicates, then lets you confirm and send.',
@@ -792,6 +1162,194 @@ function switchLang(lang) {
   const saved = localStorage.getItem('shine_lang');
   if (saved && i18n[saved]) switchLang(saved);
 })();
+
+/* ========== v2.4 SELF-REGISTRATION + DIRECT PURCHASE ========== */
+var SHINE_REG_API = (function(){
+  if (window.SHINE_REG_API_BASE) return window.SHINE_REG_API_BASE;
+  if (window.SHINE_API_BASE) return window.SHINE_API_BASE;
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    return location.origin.replace(/\/$/, '') + '/shine-api';
+  return 'https://2c-ai.com/shine-api';
+})();
+var _regPoll = null;
+var REG_PLANS = { trial:{n:'免費試用',sub:''}, lv1:{n:'Scout',sub:'HK$100/月'}, lv2:{n:'Sprint',sub:'HK$500/月'}, lv3:{n:'Superman',sub:'HK$768/月'} };
+
+function _regT(k, fb){ try{ return (i18n[currentLang]||{})[k] || fb; }catch(e){ return fb; } }
+function _regStore(){ try{ return JSON.parse(localStorage.getItem('shine_reg_v1')||'null'); }catch(e){ return null; } }
+function _regSave(o){ try{ o ? localStorage.setItem('shine_reg_v1', JSON.stringify(o)) : localStorage.removeItem('shine_reg_v1'); }catch(e){} }
+function _regPlan(){ var el=document.querySelector('input[name="regPlan"]:checked'); return el?el.value:'trial'; }
+
+function showRegView(name){
+  ['regViewForm','regViewPending','regViewApproved','regViewRejected'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.style.display = (id===name)?'block':'none';
+  });
+}
+function onRegPlanChange(){
+  var p=_regPlan(), t=document.getElementById('regFormTitle'), q=document.getElementById('regQuotaNote');
+  if(t) t.textContent = p==='trial' ? _regT('reg-card-title','申請 SHINE 免費試用')
+                                    : _regT('reg-card-title-paid','直購 SHINE')+' '+REG_PLANS[p].n+' · '+REG_PLANS[p].sub;
+  if(q) q.textContent = p==='trial' ? _regT('reg-trial-chip','免費試用 · 10 封真實投遞 · 免信用卡')
+                                    : _regT('reg-paid-chip','提交後由@Shine2caiAIbot 收款，確認即開通');
+}
+function openRegister(plan){
+  var s=document.getElementById('site'), l=document.getElementById('shineLogin'), r=document.getElementById('shineRegister');
+  if(s)s.style.display='none'; if(l)l.style.display='none';
+  if(r){ r.style.display='flex'; r.setAttribute('aria-hidden','false'); }
+  window.scrollTo({top:0,behavior:'smooth'});
+  var st=_regStore();
+  if(st && st.token && st.status!=='rejected'){
+    if(st.shineId && (st.status==='approved' || st.status==='approved_trial' || String(st.status).indexOf('approved')===0)){ renderRegApproved(st,false); return; }
+    renderRegPending(st); startRegPolling(); pollRegStatus(); return;
+  }
+  if(plan && REG_PLANS[plan]){ var el=document.querySelector('input[name="regPlan"][value="'+plan+'"]'); if(el) el.checked=true; }
+  onRegPlanChange();
+  showRegView('regViewForm');
+}
+function closeRegister(){
+  stopRegPolling();
+  var s=document.getElementById('site'), r=document.getElementById('shineRegister');
+  if(r){ r.style.display='none'; r.setAttribute('aria-hidden','true'); }
+  if(s)s.style.display='block';
+  updateRegResumeBtn();
+}
+function resumeRegistration(){ openRegister(); }
+function updateRegResumeBtn(){
+  var st=_regStore(), b=document.getElementById('regResumeBtn');
+  if(b) b.style.display = (st && st.token && st.status!=='rejected') ? 'block' : 'none';
+}
+
+function _regErr(msg, ids){
+  var e=document.getElementById('regFormErr'); if(e){ e.textContent=msg; e.style.display=msg?'block':'none'; }
+  document.querySelectorAll('#regViewForm .field input').forEach(function(i){ i.classList.remove('is-invalid'); });
+  (ids||[]).forEach(function(id){ var i=document.getElementById(id); if(i) i.classList.add('is-invalid'); });
+}
+function submitRegistration(){
+  var name=getInputVal('regName'), gmail=getInputVal('regGmail').toLowerCase(), phone=getInputVal('regPhone').replace(/[\s-]/g,'');
+  var profEl=document.querySelector('input[name="regProf"]:checked'), prof=profEl?profEl.value:'', plan=_regPlan();
+  if(!name) return _regErr(_regT('reg-err-name','請填寫姓名'),['regName']);
+  if(!/^[a-z0-9._%+-]+@gmail\.com$/.test(gmail)) return _regErr(_regT('reg-err-gmail','需要 @gmail.com 信箱（SHINE 用它替你寄信）'),['regGmail']);
+  if(!prof) return _regErr(_regT('reg-err-prof','請選擇職系'));
+  if(!phone) return _regErr(_regT('reg-err-phone','請填寫電話（2C-AI 專員會以此回電）'),['regPhone']);
+  if(!/^\+?\d{6,15}$/.test(phone)) return _regErr(_regT('reg-err-phone-fmt','電話格式不正確'),['regPhone']);
+  _regErr('');
+  var btn=document.getElementById('regSubmitBtn');
+  if(btn){ btn.disabled=true; btn.textContent=_regT('reg-sending','送出中…'); }
+  var refCode=getInputVal('regReferral').toUpperCase();
+  fetch(SHINE_REG_API+'/api/register',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:name,gmail:gmail,profession:prof,phone:phone,plan:plan,referralCode:refCode||undefined})
+  }).then(function(r){return r.json();}).then(function(j){
+    if(btn){ btn.disabled=false; btn.textContent=_regT('reg-submit','送出申請'); }
+    if(j.ok){
+      if(j.autoApproved && j.shineId){
+        var stA={token:j.token,gmail:gmail,plan:j.plan||plan,status:j.status||'approved_trial',shineId:j.shineId,password:j.password,referralCode:j.referralCode||null};
+        _regSave(stA); renderRegApproved(stA,false);
+        if(window.SHINE_GROWTH) window.SHINE_GROWTH.track('register_auto_approved',{plan:j.plan||plan});
+        return;
+      }
+      var st={token:j.token,gmail:gmail,plan:j.plan||plan,status:(j.plan||plan)==='trial'?'pending':'awaiting_payment',payCode:j.payCode||null,botLink:j.botLink||null};
+      _regSave(st); renderRegPending(st); startRegPolling(); pollRegStatus();
+    } else if(j.code==='already_approved'){
+      _regErr(_regT('reg-err-dup','此 Gmail 已開通帳戶——請直接登入，或聯絡 info@2c-ai.com'),['regGmail']);
+    } else if(j.code==='rate'){
+      _regErr(_regT('reg-err-rate','嘗試次數過多，請一小時後再試'));
+    } else {
+      _regErr(_regT('reg-err-'+j.code, _regT('reg-err-server','資料未通過驗證，請檢查後重試')),
+              j.code==='gmail'?['regGmail']:j.code==='name'?['regName']:(j.code==='phone'||j.code==='phone_fmt')?['regPhone']:[]);
+    }
+  }).catch(function(){
+    if(btn){ btn.disabled=false; btn.textContent=_regT('reg-submit','送出申請'); }
+    _regErr(_regT('reg-err-net','連線失敗——伺服器可能正在喚醒，10 秒後再按一次即可'));
+  });
+}
+
+function renderRegPending(st){
+  var g=document.getElementById('regPendingGmail'); if(g)g.textContent=st.gmail||'';
+  var isPaid = st.plan && st.plan!=='trial';
+  var tv=document.getElementById('regPendingTrial'), pv=document.getElementById('regPendingPaid');
+  if(tv)tv.style.display=isPaid?'none':'block';
+  if(pv)pv.style.display=isPaid?'block':'none';
+  if(isPaid){
+    var t=document.getElementById('regPaidTitle');
+    if(t) t.textContent=_regT('reg-paid-title','付款開通')+' '+REG_PLANS[st.plan].n+' · '+REG_PLANS[st.plan].sub;
+    var c=document.getElementById('payCodeVal'); if(c)c.textContent=st.payCode||'';
+    var a=document.getElementById('regBotLink'), m=document.getElementById('regBotManual');
+    if(a){ if(st.botLink){ a.href=st.botLink; a.style.display='block'; } else { a.style.display='none'; } }
+    if(m) m.style.display = st.botLink ? 'block' : 'block';
+    var reviewed = st.status==='payment_review';
+    ['payStep1','payStep2','payStep3'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.toggle('is-done',reviewed); });
+    var s4=document.getElementById('payStep4'); if(s4) s4.classList.toggle('is-live',reviewed);
+  }
+  showRegView('regViewPending');
+}
+
+function startRegPolling(){
+  if(_regPoll) return;
+  _regPoll=setInterval(pollRegStatus, 12000);
+  window.addEventListener('focus', pollRegStatus);
+}
+function stopRegPolling(){
+  if(_regPoll){ clearInterval(_regPoll); _regPoll=null; }
+  window.removeEventListener('focus', pollRegStatus);
+}
+function pollRegStatus(){
+  var st=_regStore(); if(!st||!st.token) return;
+  var line=document.getElementById('regPollLine');
+  if(line) line.textContent=_regT('reg-poll-checking','審批狀態同步中…');
+  fetch(SHINE_REG_API+'/api/register/status?token='+encodeURIComponent(st.token))
+    .then(function(r){return r.json();}).then(function(j){
+      if(!j.ok){ if(line) line.textContent=''; return; }
+      st.plan=j.plan||st.plan;
+      if(/^approved_/.test(j.status)){
+        st.status='approved'; st.shineId=j.shineId; st.password=j.password;
+        st.tier=j.status.replace('approved_',''); _regSave(st);
+        stopRegPolling(); renderRegApproved(st,true); return;
+      }
+      if(j.status==='rejected'){
+        st.status='rejected'; _regSave(st);
+        stopRegPolling(); showRegView('regViewRejected'); updateRegResumeBtn(); return;
+      }
+      var changed = st.status!==j.status;
+      st.status=j.status; if(j.payCode){st.payCode=j.payCode;} if(j.botLink){st.botLink=j.botLink;}
+      _regSave(st);
+      if(changed) renderRegPending(st);
+      if(line){
+        line.textContent = j.status==='awaiting_payment' ? _regT('reg-poll-awaitpay','等待付款截圖——完成第 1–3 步後本頁自動前進')
+                        : j.status==='payment_review'   ? _regT('reg-poll-review','已收到截圖，確認中——通常好快')
+                        : _regT('reg-poll-waiting','等待審批中——本頁每 12 秒自動檢查');
+      }
+    }).catch(function(){
+      if(line) line.textContent=_regT('reg-poll-wake','正在喚醒伺服器（免費層冷啟動），自動重試中…');
+    });
+}
+function renderRegApproved(st, celebrate){
+  var idEl=document.getElementById('passId'), pwEl=document.getElementById('passPw'), d=document.getElementById('regApprovedDesc');
+  if(idEl)idEl.textContent=st.shineId||''; if(pwEl)pwEl.textContent=st.password||'';
+  var key = st.tier==='trial'?'reg-approved-desc': st.tier==='lv1'?'reg-approved-desc-lv1': st.tier==='lv3'?'reg-approved-desc-lv3':'reg-approved-desc-lv2';
+  if(d) d.innerHTML=_regT(key,'帳戶已開通。密碼只顯示於此頁，建議立即複製保存。');
+  showRegView('regViewApproved'); updateRegResumeBtn();
+  if(celebrate){
+    var orb=document.querySelector('#regViewApproved .reg-orb--ok');
+    if(orb){ orb.classList.remove('is-play'); void orb.offsetWidth; orb.classList.add('is-play'); }
+  }
+}
+function copyCred(id, btn){
+  var el=document.getElementById(id), v=el?el.textContent:'';
+  function done(){ if(btn){ btn.textContent=_regT('reg-copied','已複製 ✓'); btn.classList.add('is-copied'); setTimeout(function(){btn.textContent=_regT('reg-copy','複製');btn.classList.remove('is-copied');},1400);} }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(v).then(done).catch(done); }
+  else { var t=document.createElement('textarea'); t.value=v; document.body.appendChild(t); t.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(t); done(); }
+}
+function loginWithPass(){
+  var st=_regStore()||{};
+  presetLoginUserId(st.shineId||'');
+  var pw=document.getElementById('loginAccessPassword'); if(pw && st.password) pw.value=st.password;
+  stopRegPolling();
+  var r=document.getElementById('shineRegister'); if(r){ r.style.display='none'; r.setAttribute('aria-hidden','true'); }
+  openLogin();
+}
+document.addEventListener('change', function(e){ if(e.target && e.target.name==='regProf') _regErr(''); });
+document.addEventListener('input', function(e){ if(e.target && e.target.classList && e.target.classList.contains('is-invalid')) e.target.classList.remove('is-invalid'); });
+updateRegResumeBtn();
 
 /* ========== Header scroll effect ========== */
 (function(){
@@ -880,8 +1438,52 @@ function initDashboardOrb() {
 <div class="sticky-cta" id="stickyCta" aria-hidden="true">
   <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="sticky-cta">開始自動投遞</button>
 </div>
-<script src="shine-motion.js?v=5.3-elegant"></script>
-<script src="shine-viral.js?v=5.3-elegant"></script>
-<script src="assets/shine-app.js?v=v2.2.6-pageup-hkhs"></script>
+<script>
+/* ===== v2.6 case & fear motion（gsap 未載入時優雅降級為靜態） ===== */
+(function(){
+  function boot(){
+    if(!(window.gsap&&window.ScrollTrigger)){ setTimeout(boot,600); return; }
+    gsap.registerPlugin(ScrollTrigger);
+    // 雙未來：中軸金線隨滾動生長，兩側節拍交錯浮現
+    var fill=document.getElementById('futuresFill');
+    if(fill){
+      gsap.fromTo(fill,{scaleY:0},{scaleY:1,transformOrigin:'top',ease:'none',
+        scrollTrigger:{trigger:'.futures-grid',start:'top 75%',end:'bottom 45%',scrub:.4}});
+      gsap.utils.toArray('.future-col--bad .beat').forEach(function(b,i){
+        gsap.from(b,{x:-24,opacity:0,duration:.5,ease:'power2.out',
+          scrollTrigger:{trigger:b,start:'top 85%'}});});
+      gsap.utils.toArray('.future-col--good .beat').forEach(function(b,i){
+        gsap.from(b,{x:24,opacity:0,duration:.5,delay:.08,ease:'power2.out',
+          scrollTrigger:{trigger:b,start:'top 85%'}});});
+    }
+    // 個案：時間線描線 + 計數器
+    var cl=document.getElementById('caseLineFill');
+    if(cl){
+      gsap.fromTo(cl,{scaleX:0},{scaleX:1,transformOrigin:'left',duration:1.4,ease:'power2.inOut',
+        scrollTrigger:{trigger:'#caseTimeline',start:'top 80%'}});
+      gsap.utils.toArray('.case-step').forEach(function(st,i){
+        gsap.from(st,{y:16,opacity:0,duration:.45,delay:.18*i,ease:'power2.out',
+          scrollTrigger:{trigger:'#caseTimeline',start:'top 80%'}});});
+    }
+    gsap.utils.toArray('[data-case-count]').forEach(function(el){
+      var end=+el.getAttribute('data-case-count'), o={v:0};
+      gsap.to(o,{v:end,duration:1.2,ease:'power1.out',
+        scrollTrigger:{trigger:el,start:'top 85%'},
+        onUpdate:function(){el.textContent=Math.round(o.v);}});
+    });
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+  // 儀表快速導航平滑捲動
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('.dash-nav a'); if(!a) return;
+    var t=document.getElementById((a.getAttribute('href')||'').slice(1)); if(!t) return;
+    e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+})();
+</script>
+<script src="shine-motion.js?v=2.7-growth"></script>
+<script src="shine-growth.js?v=2.7-growth"></script>
+<script src="shine-viral.js?v=2.7-growth"></script>
+<script src="assets/shine-app.js?v=v2.7-growth"></script>
 </body>
 </html>
