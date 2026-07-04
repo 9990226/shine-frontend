@@ -365,7 +365,7 @@ async function startSafeApply() {
       deduped.slice(0, 5).forEach(j => {
         const d = document.createElement('div');
         d.style.cssText = 'border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;margin:4px 0;background:#fff;font-size:13px;';
-        d.innerHTML = `<strong>${j.title || '職缺'}</strong> @ ${j.company || '公司'}<br><span style="color:#666">email: ${j.apply_email || '無'} (信心 ${Math.round((j.confidence||0)*100)}%)</span>`;
+        d.innerHTML = `<strong>${j.title || '職缺'}</strong> @ ${j.company || '公司'}<br><span style="color:#666">email: ${j.apply_email || '無'} (好工 ${Math.round((j.confidence||0)*100)}%)</span>`;
         list.appendChild(d);
       });
     }
@@ -383,7 +383,7 @@ async function startSafeApply() {
     div.style.cssText = 'border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#fff;';
     div.innerHTML = `
       <strong>${job.title || '職缺'}</strong> @ ${job.company || '公司'} ${job.date ? '• ' + job.date : ''}<br>
-      <span style="color:#16a34a;font-weight:600">申請 email: ${job.apply_email}</span>（信心 ${Math.round((job.confidence || 0)*100)}%）<br>
+      <span style="color:#16a34a;font-weight:600">申請 email: ${job.apply_email}</span>（好工 ${Math.round((job.confidence || 0)*100)}%）<br>
       <details style="margin-top:6px"><summary style="cursor:pointer">預覽 100% 原樣信（點開）</summary>
         <div class="preview-box">${exactBody.replace(/\n/g,'<br>')}</div>
       </details>
@@ -399,7 +399,7 @@ async function startSafeApply() {
   window._lastSourceUrls = searchUrls || [];
   if (typeof updateTaskProgress === 'function') updateTaskProgress(`已處理好 ${currentBatch.length} 個職缺（去重 + 黑名單完成）。請在下方預覽確認後按「確認發送」。`);
   appendLiveLog(`已從你指定的來源自動處理好 ${currentBatch.length} 個職缺（跨網站重複的已自動排除）。`);
-  alert(`SHINE 已自動從你提供的來源連結找出 ${currentBatch.length} 個適合的職缺並定位申請方式。\n\n請檢查預覽（每封都是你原封不動的信），確認後按「確認發送」即可用你的 Gmail 以自然節奏寄出。無需你再逐一瀏覽網站或手動抄電郵。`);
+  alert(`SHINE 已自動從你提供的來源連結找出 ${currentBatch.length} 個適合的職缺並定位申請方式。\n\n請檢查預覽（每封都是你原封不動的信），確認後按「確認發送」即可用你的 Gmail 以最新 AI 擬態技術寄出。無需你再逐一瀏覽網站或手動抄電郵。`);
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
