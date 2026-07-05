@@ -45,7 +45,7 @@ function getSendBackendUrl() {
   return 'https://2c-ai.com/shine-api';
 }
 
-// Account login + tier must use VPS (has access-passwords.txt); Render scan API may lack SHINE_ACCESS_PASSWORDS.
+// Account login + tier use VPS shine/access-passwords.txt (single accounts file).
 function getAccessBackendUrl() {
   return getSendBackendUrl();
 }
@@ -607,6 +607,10 @@ function getInputVal(id, fallback = '') {
   return el && typeof el.value === 'string' ? el.value.trim() : fallback;
 }
 
+function getLoginUserIdInput() {
+  return (getInputVal('loginUserId') || getInputVal('loginGmail')).toLowerCase();
+}
+
 function isAdminAccount() {
   return accountUserId === 'admin' || !!state.isAdmin;
 }
@@ -705,7 +709,7 @@ async function loadAutomationStatus() {
     if (section) section.style.display = 'none';
     return;
   }
-  if (state.tier === 'lv1' || isAdminAccount()) {
+  if (isAdminAccount() || (state.isTrial && !state.trialUpgraded)) {
     section.style.display = 'none';
     return;
   }
@@ -726,6 +730,11 @@ async function loadAutomationStatus() {
       nextEl.style.color = state.dailyAutoEnabled ? 'var(--green)' : 'var(--muted2)';
     }
     await loadAutomationHistory();
+    updateAutorunUI(!!data.daily_auto_enabled);
+    try {
+      const ar = await automationFetch('/api/autorun');
+      if (ar && ar.on) updateAutorunUI(true);
+    } catch (_) {}
   } catch (e) {
     console.warn('[SHINE automation] status load failed', e);
     const nextEl = document.getElementById('automationNextRun');
@@ -805,6 +814,44 @@ async function runAutomationNow() {
   }
 }
 
+function updateAutorunUI(on) {
+  const btn = document.getElementById('autorunBtn');
+  const txt = document.getElementById('autorunBtnTxt');
+  const armed = document.getElementById('autorunArmed');
+  const labelOn = (typeof _regT === 'function') ? _regT('autorun-off', '停止全月自動') : '停止全月自動';
+  const labelOff = (typeof _regT === 'function') ? _regT('autorun-btn', '一鍵全月自動出擊') : '一鍵全月自動出擊';
+  if (txt) txt.textContent = on ? labelOn : labelOff;
+  if (btn) btn.classList.toggle('is-armed', !!on);
+  if (armed) armed.style.display = on ? 'block' : 'none';
+}
+
+async function armMonthlyAuto() {
+  const cb = document.getElementById('dailyAutoEnabled');
+  const btn = document.getElementById('autorunBtn');
+  if (!cb || !btn) return;
+  const turnOn = !cb.checked || !btn.classList.contains('is-armed');
+  try {
+    const form = readFormSettings();
+    await syncAutomationSettingsToServer(form);
+    if (cb.checked !== turnOn) {
+      cb.checked = turnOn;
+      await toggleDailyAuto(turnOn);
+    } else if (turnOn) {
+      await toggleDailyAuto(true);
+    }
+    await automationFetch('/api/autorun', {
+      method: 'POST',
+      body: JSON.stringify({ on: turnOn })
+    });
+    updateAutorunUI(turnOn);
+    if (turnOn) {
+      await runAutomationNow();
+    }
+  } catch (e) {
+    alert((e && e.message) || '無法啟用全月自動出擊');
+  }
+}
+
 function bindAutomationUI() {
   const cb = document.getElementById('dailyAutoEnabled');
   if (cb && !cb._shineBound) {
@@ -814,11 +861,22 @@ function bindAutomationUI() {
         const form = readFormSettings();
         await syncAutomationSettingsToServer(form);
         await toggleDailyAuto(cb.checked);
+        await automationFetch('/api/autorun', {
+          method: 'POST',
+          body: JSON.stringify({ on: cb.checked })
+        });
+        updateAutorunUI(cb.checked);
       } catch (e) {
         cb.checked = !cb.checked;
+        updateAutorunUI(cb.checked);
         alert((e && e.message) || '無法更新每日自動運行設定');
       }
     });
+  }
+  const autorunBtn = document.getElementById('autorunBtn');
+  if (autorunBtn && !autorunBtn._shineBound) {
+    autorunBtn._shineBound = true;
+    autorunBtn.addEventListener('click', () => armMonthlyAuto());
   }
   const runBtn = document.getElementById('automationRunNow');
   if (runBtn && !runBtn._shineBound) {
@@ -1664,7 +1722,7 @@ function updateTaskProgress(msg, isError) {
 }
 
 async function loginWithShine() {
-  const userId = getInputVal('loginUserId').toLowerCase();
+  const userId = getLoginUserIdInput();
   const accessPassword = getInputVal('loginAccessPassword');
   if (!userId || userId.length < 2) {
     alert('請輸入 SHINE 帳號 ID（由 2C-AI 開通時提供）。');
@@ -1833,6 +1891,7 @@ function restoreSessionFromToken() {
 
   accountUserId = savedId.toLowerCase().trim();
   setInputVal('loginUserId', accountUserId);
+  setInputVal('loginGmail', accountUserId);
   loadState();
 
   fetch(`${getAccessBackendUrl()}/api/access-status`, {
@@ -1915,6 +1974,7 @@ function init() {
   if (!restoreSessionFromToken()) {
     if (legacy) {
       setInputVal('loginUserId', legacy);
+      setInputVal('loginGmail', legacy);
       clearAccessSession();
       localStorage.removeItem('shine_active_account');
       localStorage.removeItem(SHINE_USER_ID_KEY);

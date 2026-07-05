@@ -13,13 +13,13 @@
   - 3 independent input boxes (dynamically enabled by tier).
   - Collects URLs + keywords + blacklist + universal letter (100% unchanged) + Gmail App Password (user's own mailbox).
   - Calls backend extract.
-  - **Deduplication**: Within scan (title|company) + cross-scan via persistent sentHistory (localStorage).
+  - **Deduplication**: Within scan `crossSiteDedupKey(company|title|email)` + cross-scan via localStorage `sentHistory` **and** server `sent_applications` (synced on login/scan since v2.2.4).
   - Sorts by date newest-first (DD MMM YY parsing).
   - Preview shows exact letter + extracted email/confidence.
   - On confirm: human pacing (30-180s random), exact body send via /api/send-email (user's Gmail), only success decrements quota.
   - **No form filling / auto-apply on websites**: Email-only (safety, compliance, SSOT).
 - Other: Monthly quota by tier, live console/logs for feedback, hidden backend URL / DeepSeek key (company pays), white theme (hope), benefit-focused public page, closed beta for 3-5 users.
-- One-account-one-sender, minimal data (localStorage for beta).
+- One-account-one-sender (paid accounts: Gmail locked to login ID; admin/testshine exempt since v2.2.5). Minimal data (localStorage + server DB).
 
 ## Key Bug Reports & User Requirements (Learning Cases)
 ### Mingpao Example (Critical Test Case - 2026-06-14)
@@ -67,7 +67,7 @@ User-provided URL: https://jump.mingpao.com/job/search/Jobs/2?Keyword=%E7%A4%BE%
 
 **Current Limitations (for future learning):**
 - Still server-side fetch only (no real browser "click" for heavy JS / anti-bot). cheerio + limited follows helps but not perfect for all boards.
-- Dedup is client-side (localStorage) - good for single-device beta; for multi-device would need backend persistence (e.g., user account + DB).
+- ~~Dedup client-only~~ → **fixed v2.2.4**: server `sent_applications` + sync API; still keep local LOG for download/audit.
 - LOG.txt is downloadable per device. Consider backend append to a user-specific log if auth added later.
 - If page returns 0 jobs after following, user gets helpful message + manual fallback (paste title|company|email).
 - Quota only decrements on real success. Pacing always applied.
@@ -306,3 +306,348 @@ See **`SHINE_EMAIL_BUG_PLAN.md`** in this folder (synced to `/Users/yc/shine/`).
 ### P0 Code Fix
 - Build jobs from `detailPages` using h1/title/URL slug when mailto email exists; remove hard dependency on `職位：` label.
 - Redeploy Render backend; re-test API until `recruit@tpbcss.org` appears with confidence ≥ 0.6.
+
+## Session: Lv1 Trial Account — 10 Emails, Gmail-Locked (2026-06-22)
+
+### User Requirement (Self-RAG)
+- SHINE needs **Lv1 trial** for prospects: send **first 10 emails** to demonstrate value before purchase.
+- **Gmail lock**: same Gmail cannot exceed 10 trial sends even if user gets a **new trial login ID**; unlock only after **paid** Scout (lv1) account.
+- **Developer-created login ID** (not Gmail): e.g. `trial-scout` + password; user configures their own Gmail in settings for sending.
+- Server-side enforcement (client localStorage quota alone is bypassable).
+
+### Design
+| Piece | Implementation |
+|-------|----------------|
+| Account format | `id\|password\|lv1\|label\|trial` in `access-passwords.txt` |
+| Trial account | `trial-scout\|SHINE-TRIAL10\|lv1\|Trial — 10 free emails\|trial` |
+| DB | `trial_gmail_usage` table: `gmail_email`, `sent_count`, `upgraded` |
+| Send gate | `POST /api/send-email` → `trialQuota.checkCanSend(gmail)` before SMTP |
+| Paid unlock | On login with Gmail-as-ID non-trial account → `markGmailUpgraded(gmail)` |
+| Frontend | `state.isTrial`, sync via `GET /api/trial-quota`, UI shows 10-cap |
+
+### Files Changed
+- `backend/services/trialQuota.js` (new)
+- `backend/db/index.js`, `db/schema.sql` — `trial_gmail_usage`
+- `backend/accessControl.js` — parse `trial` flag, `isTrial` on token
+- `backend/send-only-server.js` — enforce + `/api/trial-quota`
+- `assets/shine-app.js` — trial quota UI + sync
+- `access-passwords.txt` — `trial-scout` account
+- `backend/generate-access-password.js` — `--trial` flag
+- `backend/__tests__/trialQuota.test.js`
+
+### Deploy
+1. `cd shine/backend && npm test`
+2. `bash SYNC_ACCOUNTS.sh` (upload accounts + restart VPS shine-backend)
+3. Deploy updated `shine-app.js` to VPS `/var/www/2c-ai/shine/assets/`
+4. Hard refresh `https://2c-ai.com/shine/`
+
+### Test Vectors
+- Login `trial-scout` / `SHINE-TRIAL10` → plan shows Scout 試用 · 10 封
+- Fill Gmail + App Password → send up to 10 → 11th blocked with upgrade message
+- New trial ID + same Gmail → still blocked at server
+- Paid lv1 Gmail login → gmail marked upgraded → 60/month (client quota)
+
+## Session: P0 Bug Fixes (2026-06-22)
+
+### Fixed
+1. **scanBtn wired** — `bindScanButton()` in `shine-app.js` init → `startSafeApply()`
+2. **Render send closed** — `/api/send-email` + `/api/process-batch` return 410 on scan backend
+3. **fetch-proxy hardened** — `requireAccess` + hostname allowlist + block private IPs
+4. **Trial scope** — `sendQuota.js`: 10-cap only for `isTrial`; paid uses monthly quota
+5. **Monthly quota server-side** — `account_monthly_sends` table; lv1=60, lv2=500 enforced on VPS send + automation
+6. **Dedup bug** — `crossSiteDedupKey` uses `apply_email || email` (sentHistory fix)
+7. **Marketing copy** — CTA「3 封」→「10 封」aligned with product
+8. **Error text** — removed hardcoded `9990226@gmail.com`
+9. **Token tier** — `verifyToken` re-reads tier from live account; rejects revoked accounts
+10. **Extract tier URLs** — `server.js` respects `maxUrls` per tier (lv1=1, lv2=2, lv3=3)
+11. **Upgraded Gmail + trial login** — blocked with `GMAIL_UPGRADED`
+
+### Tests
+`npm test` → automation, schemas, trialQuota, sendQuota all pass.
+
+## Session: Trial CTA + Deploy + Dedup + Sender Lock (2026-06-22, continued)
+
+### User Requirements
+- Trial account: `testshine` / `2c-ai2026` (replace trial-scout)
+- CTA:「立即免費試用」only — no「10 封」in button; click presets login ID `testshine`
+- Copy:「機會不會等你。SHINE 會。」+ 三步設定 tagline
+- **Dedup**: re-scan must not re-apply jobs sent last week (developer `9990226@gmail.com` saw school SW vacancies repeat)
+- **Sender lock**: paid buyers cannot change Gmail sender to a friend's — prevent account sharing; exceptions: `admin`, `testshine` only
+
+### Deploy Learnings
+| Issue | Root cause | Fix |
+|-------|------------|-----|
+| SSH restart hangs | `bash -lc bash /tmp/script` — `-c` only ran `bash`, script path became `$0` | `vps-common.sh`: `bash -lc '$cmd'` with quotes + `ssh -T` |
+| `isTrial` missing live | Backend not restarted after SCP | `run_expect_remote_script` restart |
+| Render send still open | `server.js` 410 not pushed | `git push` shine-backend → auto deploy |
+
+### Dedup Architecture (evolved)
+**Before:** Manual scan → `localStorage` `shine_sent_history_<account>` only. Automation → DB `sent_applications`. Two paths diverged → re-scan after cache clear / new device = duplicates.
+
+**After (v2.2.4-dedup):**
+- `services/dedupKey.js` — shared `crossSiteDedupKey(company|title|email)` frontend + backend
+- `GET /api/sent-dedup-keys` + `POST /api/sent-dedup-keys/sync` (backfill local LOG on login)
+- `POST /api/send-email` records `sent_applications` + **409 ALREADY_APPLIED**
+- Frontend merges server keys + local `sentHistory` before preview
+- Live proof: `9990226@gmail.com` had **25** server dedup keys (Caritas, PLK schools, etc.)
+
+### Sender Lock Architecture (v2.2.5-sender-lock)
+**Before:** UI `readOnly` for email-login only. **Critical hole:** `mailCredentials.js` accepted any `gmailUser` in request body → DevTools/API bypass.
+
+**After:**
+- `services/senderBinding.js` — `assertSenderAllowed(accountId, user, requestedGmail)`
+- Locked: Gmail-login → sender = login ID; custom ID → locked after first bind to `users.gmail_email`
+- Unlocked: `admin`, `testshine` only
+- Enforced on: `verify-smtp`, `send-email`, `PUT /api/automation/settings`
+- Login response: `sender_locked`, `bound_sender_email`
+- Live: `9990226@gmail.com` + `friend@gmail.com` → **403 GMAIL_LOCKED**
+
+### Current Live Stack (2026-06-22)
+| Piece | Value |
+|-------|-------|
+| Frontend | `shine-app.js?v=v2.2.5-sender-lock` |
+| VPS API | `https://2c-ai.com/shine-api` |
+| Scan backend | `shine-backend-byii.onrender.com` (send 410) |
+| Trial login | `testshine` / `2c-ai2026` |
+| Deploy script | `PUSH_QUICK.sh` + fixed `lib/vps-common.sh` |
+
+### Tests (backend)
+`npm test` → automation, schemas, trialQuota, sendQuota, **dedupKey**, **senderBinding** all pass.
+
+### Grok Evolution Notes
+1. **Never trust UI-only security** — always enforce quota/dedup/sender on VPS `send-only-server.js`.
+2. **Dual persistence paths** (localStorage + DB) must sync or duplicates return.
+3. **expect SSH**: quote remote command inside `bash -lc '...'`.
+4. **Paid account = one sender** — business rule as important as quota; document in SSOT.
+5. Next: optional Gmail Sent-folder backfill for dedup keys lost before server sync.
+
+### Test Vectors (add to regression)
+- Re-scan same Mingpao URL after send → 0 new in batch (server dedup)
+- Login `9990226@gmail.com` → Gmail field readOnly; API reject other sender
+- Login `testshine` → can change Gmail; login `admin` → any Gmail
+- Hard refresh after deploy → cache bust `?v=v2.2.5-sender-lock`
+
+---
+
+## v2.6 → v2.7 Growth Build (2026-07-04)
+
+**Trigger:** User gap audit vs LoopCV / LazyApply / Sonara / Simplify / Teal (`SHINE_GAP_AUDIT_LOG.md`).  
+**Goal:** Close P0 conversion killers + P1 landing/backend gaps in one deploy.  
+**Canonical path:** `/Users/yc/Downloads/2c-ai-site/shine`  
+**Live URL:** https://2c-ai.com/shine/  
+**API base:** https://2c-ai.com/shine-api  
+**Boot version:** `v2.7-growth` (`window.SHINE_BOOT_VER` in `index.html`)
+
+### Session context (same day, prior fix)
+- Registration **phone required** (was optional): frontend + `backend/registration.js` both enforce; label「2C-AI 專員回電用」.
+
+### What v2.7 shipped (gap → fix map)
+
+| Gap (audit) | v2.7 fix | Primary files |
+|-------------|----------|---------------|
+| P0 試用審批延遲 | Trial **auto-approve** on `POST /api/register` → `decide(r,'trial')` immediately; page shows pass instantly | `backend/registration.js`, `index.html` submitRegistration |
+| P0 假 viralCounter | `GET /api/stats/public` + `shine-growth.js` polls real aggregate | `backend/routes/growth.js`, `shine-growth.js`, `shine-viral.js` |
+| P0 無續期 | Account col 6 `expires` (YYYY-MM-DD); login check `SUBSCRIPTION_EXPIRED`; bot reminder 7/1/0 days | `registration.js` decide(), `accessControl.js`, `access-passwords.txt.example` |
+| P0 無結果迴路 | Dashboard buttons → `POST /api/outcomes/report` → feeds activity ticker + helped count | `index.html` #dashOutcomes, `growthStore.js` |
+| P1 無互動 demo | `#demo` + `POST /api/demo/preview` (rate-limited, 3 jobs by keyword) | `index.html`, `routes/growth.js` |
+| P1 FAQ/SEO | `#faq` accordion; canonical, hreflang, og/twitter meta | `index.html`, `shine-growth.js` initFaq |
+| P1 漏斗 | `POST /api/events/track`, `GET /api/events/funnel` | `growthStore.js`, `routes/growth.js` |
+| P1 來源健康 | `growth.recordSourceResult()` on scan success/fail; alert event at ≥3 consecutive fails | `backend/server.js`, `growthStore.js` |
+| P1 Deliverability | SMTP bounce-like errors → `pauseAccount()` + login `ACCOUNT_PAUSED` | `send-only-server.js`, `accessControl.js` |
+| P2 推薦 | `regReferral` field; `registerReferralOwner` / `applyReferral` (+10 quota each side) | `registration.js`, `index.html`, `growthStore.js` |
+| P2 Stripe | `POST /api/stripe/webhook` stub (needs `STRIPE_WEBHOOK_SECRET` for real) | `routes/growth.js` |
+
+**Still open for v2.8+:** 30s screen recording video, annual pricing tier, Umami script embed (event API ready), full Stripe Payment Link auto-provision, dedicated static FAQ/SEO content pages.
+
+### Architecture: growth layer (new in v2.7)
+
+```
+shine-growth.js (frontend)
+  ├─ fetch /api/stats/public     → #viralCounter, #liveSentWeek
+  ├─ fetch /api/stats/activity   → #activityTicker
+  ├─ POST /api/demo/preview      → #demoResults
+  ├─ POST /api/events/track      → funnel (optional umami.track mirror)
+  └─ reportOutcome()             → POST /api/outcomes/report (needs x-shine-access)
+
+backend/services/growthStore.js
+  └─ growth-data.json (VPS: shine-backend/growth-data.json)
+       outcomes[], referrals{}, referralBonuses{}, sourceHealth{}, pausedAccounts{}, events[]
+
+backend/routes/growth.js
+  └─ mounted from send-only-server.js via mountGrowthRoutes(app, { db, requireAccess })
+```
+
+**Do NOT** mount growth on Render scan backend only — public stats need VPS SQLite `sent_applications` / `account_monthly_sends`.
+
+### Trial registration flow (v2.7 — critical for Grok)
+
+**Before:** `plan=trial` → `status=pending` → Telegram approval keyboard → user polls 12s for hours.
+
+**After:**
+1. `POST /api/register` with trial
+2. `autoApproveTrial(r)` → `decide(r,'trial')` writes `access-passwords.txt` line: `id|pw|lv1|label 試用|trial|YYYY-MM-DD`
+3. `notifyAdminAutoApproved(r)` — informational Telegram (only ❌ revoke button), not a gate
+4. Response: `{ ok, autoApproved, shineId, password, status:'approved_trial', referralCode }`
+5. Frontend `submitRegistration`: if `j.autoApproved && j.shineId` → `renderRegApproved()` **immediately** (no polling)
+
+**Copy fix:** pricing/beta hints changed from「自動審批」/「數小時」to「即時自動開通」.
+
+### Account file format (v2.7+)
+
+```
+id|password|level|備註|flags|expires
+```
+
+- `expires` = ISO date `YYYY-MM-DD`; new accounts get `+30 days` in `decide()`
+- `accessControl.parsePasswordLine` reads `parts[5]`; `verify-access` returns `SUBSCRIPTION_EXPIRED` if past
+- `growthStore.isAccountPaused(id)` → `ACCOUNT_PAUSED` (bounce protection)
+- Legacy 5-column lines still work (no expiry = never expires)
+
+### Public API contracts (for regression curl)
+
+```bash
+# Live stats (anonymous)
+curl -s https://2c-ai.com/shine-api/api/stats/public
+# → { ok, helped, sent_week, sent_month, active_tasks_24h, hr_calls_reported, offers_reported, ts }
+
+# Activity feed
+curl -s https://2c-ai.com/shine-api/api/stats/activity
+
+# Demo sandbox (no auth, rate limited)
+curl -s -X POST https://2c-ai.com/shine-api/api/demo/preview \
+  -H 'Content-Type: application/json' -d '{"keyword":"社工"}'
+
+# Outcome report (auth required)
+curl -s -X POST https://2c-ai.com/shine-api/api/outcomes/report \
+  -H 'Content-Type: application/json' -H 'x-shine-access: TOKEN' \
+  -d '{"type":"hr_call","profession":"社工"}'
+```
+
+### Frontend file map (v2.7)
+
+| File | Role |
+|------|------|
+| `index.html` | `#demo`, `#faq`, `#activityTicker`, `#dashOutcomes`, `regReferral`, SEO meta, `SHINE_BOOT_VER=v2.7-growth` |
+| `shine-growth.js` | **NEW** — live stats, ticker, demo, FAQ, `reportOutcome`, `SHINE_GROWTH.track()` |
+| `shine-viral.js` | `initCounter()` deprecated random increment; defer to shine-growth |
+| `shine.css` | `.activity-ticker`, `.faq-*`, `.demo-*`, `.outcome-*` |
+| `assets/shine-app.js` | unchanged contract; dashboard uses inline `reportOutcome()` from shine-growth |
+
+### Deploy (verified 2026-07-04)
+
+```bash
+cd /Users/yc/Downloads/2c-ai-site/shine
+bash DEPLOY_WITH_PW.sh   # needs shine/.vps.env with SHINE_VPS_PASSWORD
+```
+
+**Remote layout:**
+- Frontend: `/var/www/2c-ai/shine`
+- Backend: `/var/www/2c-ai/shine-backend` (systemd `shine-backend.service`, port 3001)
+- Nginx: `/shine` static, `/shine-api` → proxy :3001
+
+**Post-deploy verify:**
+```bash
+curl -s https://2c-ai.com/shine/ | grep v2.7-growth
+curl -s https://2c-ai.com/shine-api/api/health
+curl -s https://2c-ai.com/shine-api/api/stats/public
+```
+
+Hot-patch single file (example):
+```bash
+source lib/vps-common.sh && load_vps_env . && run_expect_scp backend/registration.js root@...:/var/www/2c-ai/shine-backend/
+# then systemctl restart shine-backend.service
+```
+
+### Grok patterns to internalize (v2.7)
+
+1. **Competitor gap audits** → check code before agreeing; v2.6 falsely advertised「自動審批」while code was manual — always grep `pending`, `notifyAdminNew`, `viralCounter`, `localStorage` random.
+2. **Social proof** must hit a **public read-only API**; never `localStorage` + `Math.random()` for conversion counters.
+3. **Trial sandbox** = instant account line in `access-passwords.txt`; Telegram becomes **notify + revoke**, not gate. Paid flow still screenshot + YC confirm.
+4. **Growth data** in `growth-data.json` avoids SQLite migration for outcomes/referrals; DB still used for send counts in `/api/stats/public`.
+5. **Phone required** on register — staff callback; do not revert to optional without explicit user ask.
+6. **Script load order:** `shine-motion.js` → `shine-growth.js` → `shine-viral.js` → `shine-app.js`.
+7. **Referral code** generated on trial auto-approve (`R` + hash); optional `referralCode` on register body.
+
+### Related docs
+
+| File | Purpose |
+|------|---------|
+| `SHINE_GAP_AUDIT_LOG.md` | Pre-v2.7 gap audit (13 items) |
+| `CHANGELOG_v2.7.md` | Release notes |
+| `CHANGELOG_v2.6.md` | Fear/case landing (prior release) |
+| `backend/REGISTRATION_SETUP.md` | Bot/env setup |
+
+### Test vectors (v2.7 regression)
+
+- Register trial with valid Gmail → pass appears **without** waiting; no `regViewPending` for trial
+- `viralCounter` matches `/api/stats/public` `helped` after hard refresh
+- Demo「社工」→ 3 jobs in `#demoResults`
+- Login → click「收到 HR 來電」→ `helped` / activity ticker updates within 60s
+- Account with past `expires` → login `SUBSCRIPTION_EXPIRED`
+- Simulate SMTP 550 on send → `ACCOUNT_PAUSED` on next login
+- Register with referral code → both gmail keys get +10 in `referralBonuses` (check growth-data.json on VPS)
+
+### Current live stack (2026-07-04, post v2.7)
+
+| Piece | Value |
+|-------|-------|
+| Frontend boot | `v2.7-growth` |
+| CSS/JS cache bust | `?v=2.7-growth` |
+| VPS API | `https://2c-ai.com/shine-api` |
+| Deploy script | `DEPLOY_WITH_PW.sh` (frontend + backend tarball) |
+| Growth persistence | `shine-backend/growth-data.json` |
+| Registration | v2.7 auto-trial; phone required |
+
+---
+
+## v3.0-autorun (2026-07-05)
+
+**User request:** One button for full-month auto-run (skip already-applied); daily Telegram summary when automation checkbox on. Reference `Downloads/shine_v3.0`, implement better in canonical `Downloads/2c-ai-site/shine`.
+
+### Bug 1 — One-button monthly autorun
+
+- UI: `#autorunBtn`「一鍵全月自動出擊」in `.autorun-hero` (automation section)
+- `armMonthlyAuto()` in `assets/shine-app.js`: sync settings → `toggleDailyAuto(true)` → `POST /api/autorun` → `runAutomationNow()`
+- Backend: `growthStore.setAutorun` + `routes/growth.js` `GET/POST /api/autorun`; `automation.js` syncs on daily-auto PUT
+- Dedup: unchanged server path (`sent_applications`, `crossSiteDedupKey` in `automationEngine.js`)
+- Scheduler: existing HK 09:00 `scheduler.js` for eligible users (`daily_auto_enabled`, lv1–lv3, credentials set)
+
+### Bug 2 — Telegram daily report (HK 21:00)
+
+- `services/dailyTelegramReport.js`: patrol at HK hour 21; `buildReportText` with thanks / jobs today / hours today+month / expiry
+- Stats from DB (`countSentApplicationsSince`, `getMonthlySentCount`) — not JSON counter hooks (better than shine_v3.0 reference)
+- Eligibility: `db.getEligibleScheduledUsers()` (automation on + paid tier + app password + resume/cover)
+- Bind: user sends account ID to `@Shine2caiAIbot` → `growth.bindTelegram`; auto-bind on `notifyUserDecision` when `r.chatId` present
+- Admin `/report` → `runDailyReportPatrol({ force: true })`
+- Loop: `startDailyReportLoop` in `registration.js` (20 min tick + 45s startup)
+
+### v2.9 copy (same session lineage)
+
+- 「選擇你的火力」→「聰明的選擇 助你未見工先羸」
+- 「它唔眨眼…」→「獨家AI 24小時幫你搵工」
+- 「駕駛艙」→「AI 智能」；「你的時間，被儀表化。」→「AI管理時間」
+
+### Files touched (v3.0)
+
+| Layer | Files |
+|-------|-------|
+| Frontend | `index.html`, `shine.css`, `assets/shine-app.js`, `shine-growth.js` |
+| Backend | `dailyTelegramReport.js`, `growthStore.js`, `routes/growth.js`, `routes/automation.js`, `db/index.js`, `accounts.js`, `registration.js`, `package.json`, `__tests__/dailyReport.test.js` |
+
+### Test & deploy
+
+```bash
+cd backend && npm test   # includes test:dailyReport
+cd .. && bash DEPLOY_WITH_PW.sh
+curl -s https://2c-ai.com/shine/ | grep v3.0-autorun
+```
+
+### Current live stack (2026-07-05, post v3.0)
+
+| Piece | Value |
+|-------|-------|
+| Frontend boot | `v3.0-autorun` |
+| CSS/JS cache bust | `?v=3.0-autorun` |
+| New APIs | `GET/POST /api/autorun` |
+| Telegram | Nightly report HK 21:00; bind via bot account ID |
+| Tests | 10 suites incl. `dailyReport.test.js` |

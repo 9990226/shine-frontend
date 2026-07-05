@@ -1,5 +1,6 @@
 .DS_Store
 *.tar.gz
+access-passwords.txt
 backend/
 .understand-anything/
 .env

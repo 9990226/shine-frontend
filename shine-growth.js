@@ -176,7 +176,7 @@
     initActivityTicker();
     initDemoSandbox();
     initFaq();
-    track('page_view', { v: '2.7' });
+    track('page_view', { v: '3.0-autorun' });
   }
 
   if (document.readyState === 'loading') {

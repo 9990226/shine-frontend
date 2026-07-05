@@ -87,7 +87,7 @@
     { progress: 0.72, status: 'PACING', statusClass: 'wait', phaseIdx: 3,
       lines: [
         { ts: '09:01:12', cls: 'ok', msg: '✓ 已發送 · 駐校社工 — 循道衛理' },
-        { ts: '09:01:13', cls: 'wait', msg: '等待 60 秒（真人節奏）…' },
+        { ts: '09:01:13', cls: 'wait', msg: '獨家 AI 智能節奏投遞中…' },
         { ts: '09:02:18', cls: 'ok', msg: '✓ 已發送 · 學校社工 ASWO' }
       ], pillar: 2, scan: false },
     { progress: 1, status: 'SAVED', statusClass: 'ok', phaseIdx: 4,
@@ -439,6 +439,11 @@
     });
   }
 
+  function presetLoginUserId(id) {
+    var el = document.getElementById('loginUserId');
+    if (el) el.value = String(id || '').trim();
+  }
+
   function openLogin() {
     if (loginBusy) return;
     loginBusy = true;
@@ -451,6 +456,8 @@
       site.style.display = 'none';
       login.style.display = 'flex';
       login.setAttribute('aria-hidden', 'false');
+      var loginField = document.getElementById('loginUserId');
+      if (loginField) loginField.focus();
       window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
       loginBusy = false;
     }
@@ -539,9 +546,16 @@
     });
   }
 
+  function openTrialLogin() {
+    presetLoginUserId('testshine');
+    openLogin();
+  }
+
   global.SHINE_MOTION = {
     get usesHeroScrub() { return heroScrubEnabled; },
     openLogin: openLogin,
+    openTrialLogin: openTrialLogin,
+    presetLoginUserId: presetLoginUserId,
     closeLogin: closeLogin,
     animateCount: animateCount,
     triggerScanLine: triggerScanLine,

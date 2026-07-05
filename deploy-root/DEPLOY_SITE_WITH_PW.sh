@@ -30,12 +30,15 @@ echo "🚀 Uploading to ${VPS_USER}@${VPS_HOST}..."
 run_expect_scp "$TARBALL" "/tmp/2c-ai-site_main_latest.tar.gz"
 
 echo "🔧 Deploying main site → ${VPS_ROOT} (shine/ preserved)..."
-run_expect_ssh "bash -s" <<REMOTE
+run_expect_remote_script /tmp/deploy_2c_main.sh <<REMOTE
 set -e
 mkdir -p ${VPS_ROOT}
 tar -xzf /tmp/2c-ai-site_main_latest.tar.gz -C ${VPS_ROOT}
-chown -R www-data:www-data ${VPS_ROOT} 2>/dev/null || chown -R root:root ${VPS_ROOT}
-chmod -R 755 ${VPS_ROOT}
+for item in ${VPS_ROOT}/*; do
+  [[ "\$item" == */shine ]] && continue
+  chown -R www-data:www-data "\$item" 2>/dev/null || chown -R root:root "\$item"
+  chmod -R 755 "\$item"
+done
 nginx -s reload 2>/dev/null || true
 echo "=== Main site verify ==="
 test -f ${VPS_ROOT}/index.html && echo "✅ index.html"

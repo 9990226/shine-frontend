@@ -18,9 +18,9 @@ load_vps_env() {
 run_expect_scp() {
   local src="$1" dest="$2"
   expect <<EOF
-set timeout 180
+set timeout 600
 set pw "$PW"
-spawn scp -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no "$src" ${VPS_USER}@${VPS_HOST}:"$dest"
+spawn scp -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no $src ${VPS_USER}@${VPS_HOST}:$dest
 expect {
   -re "(?i)password:" { send "\$pw\r"; exp_continue }
   timeout { exit 2 }
@@ -32,15 +32,29 @@ EOF
 run_expect_ssh() {
   local cmd="$1"
   expect <<EOF
-set timeout 240
+set timeout 120
 set pw "$PW"
-spawn ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no ${VPS_USER}@${VPS_HOST} $cmd
+spawn ssh -T -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no ${VPS_USER}@${VPS_HOST} bash -lc '$cmd'
 expect {
   -re "(?i)password:" { send "\$pw\r"; exp_continue }
   timeout { exit 2 }
   eof
 }
+catch wait result
+exit [lindex \$result 3]
 EOF
+}
+
+# Run a multi-line local script on the VPS (use: run_expect_remote_script <<'REMOTE' ... REMOTE)
+run_expect_remote_script() {
+  local remote_path="${1:-/tmp/vps_remote_script.sh}"
+  local script_file
+  script_file="$(mktemp)"
+  cat > "$script_file"
+  printf '\nrm -f %s\n' "$remote_path" >> "$script_file"
+  run_expect_scp "$script_file" "$remote_path"
+  run_expect_ssh "bash $remote_path"
+  rm -f "$script_file"
 }
 
 require_vps_password() {
