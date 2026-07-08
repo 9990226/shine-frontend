@@ -809,3 +809,71 @@ const ADMIN_CHAT = String(process.env.SHINE_ADMIN_CHAT_ID || process.env.ADMIN_C
 | Accounts file | `/var/www/2c-ai/shine/access-passwords.txt` |
 | Deploy | `DEPLOY_WITH_PW.sh` |
 | Quick patch | `PUSH_QUICK.sh` |
+
+---
+
+## Grok 後端設定檢查 + Deploy + Sync（2026-07-08 17:05 HKT）
+
+**觸發：** YC 請 Grok 執行「SHINE 後端設定檢查 + deploy + sync 驗證」。
+
+### 設定檢查（Deploy 前）— 全部通過
+
+| 項目 | 結果 |
+|------|------|
+| `backend/.env.vps` | ✅ 21 變數齊（bot / admin / keys / payment / paths） |
+| 必填 10 項 | ✅ `SHINE_BOT_TOKEN` … `REG_DB_PATH` 全 OK |
+| `~/.zshrc` | ✅ `SHINE_SERVER` + `SHINE_ADMIN_KEY` |
+| `.env.vps` ↔ `~/.zshrc` ADMIN_KEY | ✅ 一致 |
+| `shine/.vps.env` | ✅ 存在（deploy 密碼） |
+| `assets/alipay-hk-qr.jpg` | ✅ 116557 bytes |
+
+**Pre-deploy health：** `bot:true` · `admin:true` · `adminUser:y2kovo` · `accessFile:true`  
+**Pre-deploy sync：** `SYNC_ACCOUNTS.sh` → ✅ 已同步 Mac ⇄ 伺服器
+
+### Deploy
+
+```bash
+cd Downloads/2c-ai-site/shine && bash DEPLOY_WITH_PW.sh
+```
+
+- ✅ `.env.vps` → VPS `/var/www/2c-ai/shine-backend/.env`
+- ✅ `systemctl restart shine-backend.service`
+
+**VPS boot log：**
+```
+[reg] SHINE registration v2.7.5-admin-default mounted
+[reg] admin locked → chat 5035013768 @y2kovo
+[reg] payment links ready · PayMe + AlipayHK
+L26: ADMIN_CHAT default '5035013768'
+```
+
+### Post-deploy 驗證 — 全部通過
+
+| 檢查 | 結果 |
+|------|------|
+| `GET /api/register/health` | ✅ |
+| `GET /api/health` | ✅ `ok:true` |
+| `SYNC_ACCOUNTS.sh` | ✅ |
+| `SYNC_ACCOUNTS.sh --where` | ✅ 單一 active 檔 `/var/www/2c-ai/shine/access-passwords.txt` · 5 accounts |
+
+### YC 日常 SOP（Grok 可代跑）
+
+| 情境 | 指令 |
+|------|------|
+| 上線 / 改 secret | `bash DEPLOY_WITH_PW.sh` |
+| Mac ⇄ VPS 帳號合併 | `cd backend && bash SYNC_ACCOUNTS.sh` |
+| 健康檢查 | `curl -s https://2c-ai.com/shine-api/api/register/health` |
+| 手動開/改戶 | 編輯 `shine/access-passwords.txt` → sync |
+| 刪戶 | 行首 `#off` → sync |
+
+**結論：** 一次性手動設定已完成；YC 毋須再補 `.env` 除非 rotate token/key。
+
+### Current live stack (2026-07-08 17:05, verified)
+
+| Piece | Value |
+|-------|-------|
+| Registration | `v2.7.5-admin-default` |
+| Health | all green |
+| Accounts on VPS | 5 lines · sha active file only |
+| Mac sync | OK · backup `access-passwords.txt.bak` |
+| Git backend | `6fd1827` (v2.7.5 admin default) |

@@ -46,3 +46,8 @@ cd Downloads/2c-ai-site/shine && bash DEPLOY_WITH_PW.sh
 - `shine-backend` `1174de8` · `shine-frontend` `33d7bfd`
 
 詳見 `SHINE_GROK_LEARNING_LOG.md` § v2.7.2–v2.7.4。
+
+### v2.7.5-admin-default + Grok 驗證（2026-07-08）
+- `ADMIN_CHAT` code 預設 `5035013768`（env 漏設不再斷鏈）
+- Grok 執行：設定檢查 21 env · deploy · health · sync 全通過
+- 詳見 `SHINE_GROK_LEARNING_LOG.md` § Grok 後端設定檢查
