@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SHINE 出眾","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"全自動求職投遞 SaaS：AI 每日掃描指定來源並以你的 Gmail 原樣寄出求職信。","offers":[{"@type":"Offer","price":"100","priceCurrency":"HKD","name":"Scout"},{"@type":"Offer","price":"500","priceCurrency":"HKD","name":"Sprint"},{"@type":"Offer","price":"768","priceCurrency":"HKD","name":"Superman"}],"provider":{"@type":"Organization","name":"2C-AI Limited","url":"https://2c-ai.com"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Gmail App Password 安全嗎？","acceptedAnswer":{"@type":"Answer","text":"App Password 只授權寄信（純 outbound），SHINE 不讀取收件匣；你可隨時在 Google 設定撤銷，即時停止所有寄送。"}},{"@type":"Question","name":"會不會亂寄或改我的求職信？","acceptedAnswer":{"@type":"Answer","text":"求職信 100% 原樣寄出，寄出前有預覽確認，同一職缺不重複申請。"}},{"@type":"Question","name":"幾時開通？","acceptedAnswer":{"@type":"Answer","text":"AI 先進批核、人類加護審批，快至數分鐘；等待期間頁面自動更新你的通行證。"}},{"@type":"Question","name":"有退款保證嗎？","acceptedAnswer":{"@type":"Answer","text":"開通後 7 日內不滿意，全數退回。"}}]}</script>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<script>window.SHINE_BOOT_VER='v3.0-autorun';
+<script>window.SHINE_BOOT_VER='v2.7.2-paidfix';
 window.getInputVal=window.getInputVal||function(id,fb){var el=document.getElementById(id);return(el&&el.value!=null)?String(el.value).trim():(fb||'');};
 window.ensurePortalVisible=window.ensurePortalVisible||function(){
   var portal=document.getElementById('portal');
@@ -39,7 +39,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" async></script>
-<link rel="stylesheet" href="shine.css?v=3.0-autorun">
+<link rel="stylesheet" href="shine.css?v=2.7.2-paidfix">
 </head>
 <body>
 <canvas id="silkCanvas" aria-hidden="true"></canvas>
@@ -699,6 +699,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
           <div class="pass-row"><span class="pass-lbl" data-i18n="reg-cred-pw">密碼</span><code id="passPw"></code><button class="btn btn-ghost btn-sm pass-copy" onclick="copyCred('passPw',this)" data-i18n="reg-copy">複製</button></div>
         </div>
         <button onclick="loginWithPass()" class="btn btn-gold btn-block" style="margin-top:14px" data-i18n="reg-login-now">以此帳號登入</button>
+        <button id="regUpgradeBtn" onclick="openRegister('lv2')" class="btn btn-ghost btn-block" style="margin-top:8px;display:none" data-i18n="reg-upgrade-paid">升級付費方案（Sprint / Superman）→</button>
         <button onclick="closeRegister()" class="btn btn-ghost btn-block" style="margin-top:8px" data-i18n="reg-back">返回首頁</button>
       </div>
 
@@ -945,7 +946,8 @@ const i18n = {
     /* v2.4 direct purchase */
     'reg-plan-label':'方案','plan-trial':'免費試用','plan-trial-sub':'10 封 · $0','plan-lv3-sub':'無限 · $768/月',
     'reg-card-title-paid':'直購 SHINE','reg-paid-chip':'提交後由@Shine2caiAIbot 收款，確認即開通',
-    'reg-paid-title':'付款開通','reg-err-plan':'請選擇方案',
+    'reg-paid-title':'付款開通','reg-err-plan':'請選擇方案','reg-err-trial-used':'此 Gmail 已使用過免費試用——請選擇 Scout / Sprint / Superman 直購升級',
+    'reg-err-pending-pay':'你已有進行中的直購申請——請先用下方配對碼完成付款','reg-upgrade-paid':'升級付費方案（Sprint / Superman）→',
     'reg-step1':'開啟@Shine2caiAIbot（自動配對）','reg-step2':'Bot 即時發你付款資料（FPS / PayMe）','reg-step3':'付款後在 bot 上傳截圖','reg-step4':'確認收款即開通——bot 私訊你帳密，本頁同步變通行證',
     'reg-open-bot':'開啟 Telegram @Shine2caiAIbot','reg-paycode-label':'配對碼','reg-bot-manual':'如按鈕無反應：在 Telegram 搜尋@Shine2caiAIbot，發送上方配對碼。',
     'reg-poll-awaitpay':'等待付款截圖——完成第 1–3 步後本頁自動前進','reg-poll-review':'已收到截圖，確認中——通常好快',
@@ -1072,7 +1074,8 @@ const i18n = {
     /* v2.4 direct purchase */
     'reg-plan-label':'方案','plan-trial':'免费试用','plan-trial-sub':'10 封 · $0','plan-lv3-sub':'无限 · $768/月',
     'reg-card-title-paid':'直购 SHINE','reg-paid-chip':'提交后由小聪bot 收款，确认即开通',
-    'reg-paid-title':'付款开通','reg-err-plan':'请选择方案',
+    'reg-paid-title':'付款开通','reg-err-plan':'请选择方案','reg-err-trial-used':'此 Gmail 已使用过免费试用——请选择 Scout / Sprint / Superman 直购升级',
+    'reg-err-pending-pay':'你已有进行中的直购申请——请先用下方配对码完成付款','reg-upgrade-paid':'升级付费方案（Sprint / Superman）→',
     'reg-step1':'打开小聪bot（自动配对）','reg-step2':'Bot 即时发你付款资料（FPS / PayMe）','reg-step3':'付款后在 bot 上传截图','reg-step4':'确认收款即开通——bot 私信你账密，本页同步变通行证',
     'reg-open-bot':'打开 Telegram 小聪bot','reg-paycode-label':'配对码','reg-bot-manual':'如按钮无反应：在 Telegram 搜索小聪bot，发送上方配对码。',
     'reg-poll-awaitpay':'等待付款截图——完成第 1–3 步后本页自动前进','reg-poll-review':'已收到截图，确认中——通常很快',
@@ -1199,7 +1202,8 @@ const i18n = {
     /* v2.4 direct purchase */
     'reg-plan-label':'Plan','plan-trial':'Free Trial','plan-trial-sub':'10 sends · $0','plan-lv3-sub':'Unlimited · $768/mo',
     'reg-card-title-paid':'Buy SHINE','reg-paid-chip':'Submit, pay via @Shine2caiAIbot, activated on confirmation',
-    'reg-paid-title':'Pay & Activate','reg-err-plan':'Please pick a plan',
+    'reg-paid-title':'Pay & Activate','reg-err-plan':'Please pick a plan','reg-err-trial-used':'This Gmail already used the free trial — pick Scout / Sprint / Superman to upgrade',
+    'reg-err-pending-pay':'You already have a paid checkout in progress — use the pairing code below','reg-upgrade-paid':'Upgrade to paid (Sprint / Superman) →',
     'reg-step1':'Open @Shine2caiAIbot (auto-pairs you)','reg-step2':'The bot sends payment details instantly (FPS / PayMe)','reg-step3':'Pay, then upload the screenshot in the bot','reg-step4':'Once confirmed, you\'re live — the bot DMs your credentials and this page becomes your pass',
     'reg-open-bot':'Open @Shine2caiAIbot on Telegram','reg-paycode-label':'Pairing code','reg-bot-manual':'Button not working? Search @Shine2caiAIbot on Telegram and send the code above.',
     'reg-poll-awaitpay':'Awaiting payment screenshot — this page advances after steps 1–3','reg-poll-review':'Screenshot received, confirming — usually quick',
@@ -1360,12 +1364,13 @@ function openRegister(plan){
   if(s)s.style.display='none'; if(l)l.style.display='none';
   if(r){ r.style.display='flex'; r.setAttribute('aria-hidden','false'); }
   window.scrollTo({top:0,behavior:'smooth'});
+  var paidPlan = plan && plan !== 'trial' && REG_PLANS[plan];
   var st=_regStore();
-  if(st && st.token && st.status!=='rejected'){
+  if(st && st.token && st.status!=='rejected' && !paidPlan){
     if(st.status==='approved' && st.shineId){ renderRegApproved(st,false); return; }
-    renderRegPending(st); startRegPolling(); pollRegStatus(); return;
+    if(st.status!=='approved'){ renderRegPending(st); startRegPolling(); pollRegStatus(); return; }
   }
-  if(plan && REG_PLANS[plan]){ var el=document.querySelector('input[name="regPlan"][value="'+plan+'"]'); if(el) el.checked=true; }
+  if(paidPlan){ var el=document.querySelector('input[name="regPlan"][value="'+plan+'"]'); if(el) el.checked=true; }
   onRegPlanChange();
   showRegView('regViewForm');
 }
@@ -1402,8 +1407,20 @@ function submitRegistration(){
   }).then(function(r){return r.json();}).then(function(j){
     if(btn){ btn.disabled=false; btn.textContent=_regT('reg-submit','送出申請'); }
     if(j.ok){
-      var st={token:j.token,gmail:gmail,plan:j.plan||plan,status:(j.plan||plan)==='trial'?'pending':'awaiting_payment',payCode:j.payCode||null,botLink:j.botLink||null};
+      var effPlan=j.plan||plan;
+      if(j.autoApproved && j.shineId && effPlan==='trial'){
+        var ap={token:j.token,gmail:gmail,plan:'trial',status:'approved',shineId:j.shineId,password:j.password,tier:'trial'};
+        _regSave(ap); renderRegApproved(ap,true); return;
+      }
+      var st={token:j.token,gmail:gmail,plan:effPlan,status:effPlan==='trial'?'pending':'awaiting_payment',payCode:j.payCode||null,botLink:j.botLink||null};
       _regSave(st); renderRegPending(st); startRegPolling(); pollRegStatus();
+    } else if(j.code==='pending_payment'){
+      var pst={token:j.token,gmail:gmail,plan:j.plan||plan,status:'awaiting_payment',payCode:j.payCode||null,botLink:j.botLink||null};
+      _regSave(pst); renderRegPending(pst); startRegPolling(); pollRegStatus();
+      _regErr(_regT('reg-err-pending-pay','你已有進行中的直購申請——請先用下方配對碼完成付款'));
+    } else if(j.code==='trial_used'){
+      _regErr(_regT('reg-err-trial-used','此 Gmail 已使用過免費試用——請選擇 Scout / Sprint / Superman 直購升級'));
+      var up=document.querySelector('input[name="regPlan"][value="lv2"]'); if(up) up.checked=true; onRegPlanChange();
     } else if(j.code==='already_approved'){
       _regErr(_regT('reg-err-dup','此 Gmail 已開通帳戶——請直接登入，或聯絡 info@2c-ai.com'),['regGmail']);
     } else if(j.code==='rate'){
@@ -1457,7 +1474,7 @@ function pollRegStatus(){
       st.plan=j.plan||st.plan;
       if(/^approved_/.test(j.status)){
         st.status='approved'; st.shineId=j.shineId; st.password=j.password;
-        st.tier=j.status.replace('approved_',''); _regSave(st);
+        st.tier=j.status.replace('approved_',''); if(j.expires) st.expires=j.expires; _regSave(st);
         stopRegPolling(); renderRegApproved(st,true); return;
       }
       if(j.status==='rejected'){
@@ -1481,7 +1498,13 @@ function renderRegApproved(st, celebrate){
   var idEl=document.getElementById('passId'), pwEl=document.getElementById('passPw'), d=document.getElementById('regApprovedDesc');
   if(idEl)idEl.textContent=st.shineId||''; if(pwEl)pwEl.textContent=st.password||'';
   var key = st.tier==='trial'?'reg-approved-desc': st.tier==='lv1'?'reg-approved-desc-lv1': st.tier==='lv3'?'reg-approved-desc-lv3':'reg-approved-desc-lv2';
-  if(d) d.innerHTML=_regT(key,'帳戶已開通。密碼只顯示於此頁，建議立即複製保存。');
+  if(d){
+    var base=_regT(key,'帳戶已開通。密碼只顯示於此頁，建議立即複製保存。');
+    if(st.expires) base+='<br><span style="opacity:.85">到期日：'+st.expires+' · 多謝支持 2C-AI SHINE</span>';
+    d.innerHTML=base;
+  }
+  var upBtn=document.getElementById('regUpgradeBtn');
+  if(upBtn) upBtn.style.display = (st.tier==='trial' || st.plan==='trial') ? 'block' : 'none';
   showRegView('regViewApproved'); updateRegResumeBtn();
   if(celebrate){
     var orb=document.querySelector('#regViewApproved .reg-orb--ok');
@@ -1919,9 +1942,9 @@ document.addEventListener('DOMContentLoaded',function(){
   gz();
 })();
 </script>
-<script src="shine-motion.js?v=3.0-autorun"></script>
-<script src="shine-growth.js?v=3.0-autorun"></script>
-<script src="shine-viral.js?v=3.0-autorun"></script>
-<script src="assets/shine-app.js?v=v3.0-autorun"></script>
+<script src="shine-motion.js?v=2.7.2-paidfix"></script>
+<script src="shine-growth.js?v=2.7.2-paidfix"></script>
+<script src="shine-viral.js?v=2.7.2-paidfix"></script>
+<script src="assets/shine-app.js?v=v2.7.2-paidfix"></script>
 </body>
 </html>
