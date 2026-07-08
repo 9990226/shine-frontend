@@ -25,3 +25,24 @@
 ```bash
 cd Downloads/2c-ai-site/shine && bash DEPLOY_WITH_PW.sh
 ```
+
+---
+
+## v2.7.3–v2.7.4 補丁（2026-07-08）
+
+### v2.7.3-adminlock
+- 管理員通知、審批按鈕、到期提醒 → 僅 `@y2kovo`（`5035013768`）
+- `isAdminActor()`：chat ID + username 雙重驗證；封鎖舊 admin `1860127250`
+- `adminMessage()` / `adminPhoto()` 集中路由，防止誤發
+
+### v2.7.4-payflow
+- 配對後 bot 發送 **AlipayHK** + **PayMe** 連結（不再顯示「待補」）
+- 審批通過私訊：方案 Lv、**到期日**、**多謝支持 2C-AI SHINE**
+- 年付訂閱到期改為 **365 日**
+- VPS 補上 `SHINE_ADMIN_KEY` → Mac `SYNC_ACCOUNTS.sh` 雙向合併恢復
+- 網頁通行證顯示到期日
+
+### Git
+- `shine-backend` `1174de8` · `shine-frontend` `33d7bfd`
+
+詳見 `SHINE_GROK_LEARNING_LOG.md` § v2.7.2–v2.7.4。

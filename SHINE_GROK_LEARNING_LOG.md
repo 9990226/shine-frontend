@@ -651,3 +651,134 @@ curl -s https://2c-ai.com/shine/ | grep v3.0-autorun
 | New APIs | `GET/POST /api/autorun` |
 | Telegram | Nightly report HK 21:00; bind via bot account ID |
 | Tests | 10 suites incl. `dailyReport.test.js` |
+
+---
+
+## v2.7.2–v2.7.4 paid purchase + admin lock (2026-07-08)
+
+**User request:** Fix Lv1/Lv2/Lv3 paid flow via `@Shine2caiAIbot`; lock all admin/sensitive Telegram to **@y2kovo only** (`5035013768`); audit end-to-end UX (website → matching code → bot payment → screenshot → admin approve → Gmail ID account + sync Mac `access-passwords.txt`).
+
+### Architecture (SSOT — do not confuse)
+
+| Host | Role | Entry |
+|------|------|-------|
+| **VPS** `2c-ai.com/shine-api` :3001 | Registration, Telegram bot, Gmail send, `access-passwords.txt` write | `send-only-server.js` |
+| **Render** `shine-backend-byii.onrender.com` | Job scan / DeepSeek extract only | `server.js` |
+
+Paid signup + Telegram webhook **must** hit VPS. Register API + `registrations.json` live on VPS.
+
+### Paid buyer UX (verified against code)
+
+1. Website `openRegister('lv1'|'lv2'|'lv3')` → `POST /api/register` → `payCode` (S+7) + `botLink`
+2. Buyer opens `@Shine2caiAIbot`, sends code (or `/start CODE`)
+3. `pairChat()` → AlipayHK link + PayMe link + QR image
+4. Buyer uploads screenshot → `handlePhoto()` → `adminPhoto()` to admin only
+5. `@y2kovo` taps **✅ 確認收款** → `decide()` → `appendLine(gmail|pw|lvX|…|expires)`
+6. Bot DMs buyer pass; website polls `/api/register/status` every 12s
+
+**Trial** = instant auto-open (no matching code). Matching code is **paid-only**.
+
+### Bugs found & fixed
+
+| ID | Symptom | Fix | Version |
+|----|---------|-----|---------|
+| B1 | Render crash `isFetchRetryable` duplicate | Removed duplicate in `server.js`; use `htmlFetch.js` | `c78f5d2` shine-backend |
+| B2 | VPS bot dead (`bot:false`, webhook 404) | Deploy `registration.js` + `.env.vps` bot vars; `RUN_POLLING=1` | v2.7.2 |
+| B3 | Trial overwrote open paid `awaiting_payment` | `pending_payment` guard on register | v2.7.2 |
+| B4 | Admin notifications to wrong Telegram | `SHINE_ADMIN_CHAT_ID=5035013768`, denylist `1860127250`, `isAdminActor()` + `adminMessage()` | v2.7.3-adminlock |
+| B5 | Buyers got `<待補>` payment info | Default `SHINE_PAYME_URL` + `SHINE_ALIPAY_URL` + QR; `paymentTextHtml()` | v2.7.4-payflow |
+| B6 | Approval DM missing expiry / thank-you | `passText()` + frontend pass card show `expires` | v2.7.4 |
+| B7 | Mac ⇄ VPS sync 401 | `SHINE_ADMIN_KEY` on VPS (matches `~/.zshrc`) | v2.7.4 |
+| B8 | Yearly plan expiry always 30 days | `subDaysFor()` → 365 for `billing==='yearly'` | v2.7.4 |
+
+### Admin identity (locked)
+
+| | Value |
+|--|-------|
+| Telegram | `@y2kovo` |
+| Chat ID | `5035013768` |
+| Denylist | `1860127250` (old admin `cccckeke`) |
+| Env | `SHINE_ADMIN_CHAT_ID`, `SHINE_ADMIN_USERNAME=y2kovo`, `SHINE_BLOCKED_CHAT_IDS` |
+
+All approval cards, screenshots, passcodes, expiry reminders, `/pending` `/stats` → `adminMessage()` / `adminPhoto()` only.
+
+### Payment env (VPS `.env.vps`, gitignored)
+
+```
+SHINE_PAYME_URL=https://payme.hsbc/c1397ccac09e4ed688b7b2570f3101a7
+SHINE_ALIPAY_URL=https://render.alipay.com/p/yuyan/180020010001270667/landing/income.html?qrcode=https://qr.alipay.hk/281004010495AqEF0bspr1jjJ731ccwv5O9O
+SHINE_ALIPAY_QR_URL=https://qr.alipay.hk/281004010495AqEF0bspr1jjJ731ccwv5O9O
+```
+
+QR `sendPhoto` falls back to `shine/assets/alipay-hk-qr.jpg` if remote URL fails.
+
+### Account sync (Mac ⇄ VPS)
+
+- **Bot approve** → appends VPS `/var/www/2c-ai/shine/access-passwords.txt`
+- **Mac edit** → `shine/access-passwords.txt` → `cd shine/backend && bash SYNC_ACCOUNTS.sh`
+- **Paid line format:** `gmail|SHINE-XXXXXXXX|lv2|Name·職系||YYYY-MM-DD`
+- **Delete:** prefix line `#off` (tombstone); do not delete row outright
+- **Key:** `export SHINE_ADMIN_KEY=…` in `~/.zshrc`; same on VPS `.env`
+
+### Files touched
+
+| Layer | Files |
+|-------|-------|
+| Backend | `registration.js`, `.env.example`, `__tests__/registration.test.js` |
+| Frontend | `index.html` (expiry on pass card) |
+| Secrets | `backend/.env.vps` (not committed) |
+
+### Git (pushed 2026-07-08)
+
+| Repo | Commit | Message |
+|------|--------|---------|
+| `9990226/shine-backend` | `1174de8` | fix: v2.7.4 payflow — payment links, admin lock, expiry in pass message |
+| `9990226/shine-frontend` | `33d7bfd` | fix: show expiry date and thank-you on registration pass card |
+
+Prior backend: `9672fd9` (v2.7.2 paid purchase guards).
+
+### Deploy & verify
+
+```bash
+cd /Users/yc/Downloads/2c-ai-site/shine && bash DEPLOY_WITH_PW.sh
+curl -s https://2c-ai.com/shine-api/api/register/health
+# → admin:true, adminUser:y2kovo, botUser:Shine2caiAIbot
+cd backend && bash SYNC_ACCOUNTS.sh
+# → ✅ 已同步 Mac ⇄ 伺服器
+```
+
+**VPS boot log (2026-07-08):**
+```
+[reg] SHINE registration v2.7.4-payflow mounted
+[reg] admin locked → chat 5035013768 @y2kovo
+[reg] payment links ready · PayMe + AlipayHK
+```
+
+### Test vectors (paid regression)
+
+- Register lv2 with Gmail → receive `payCode` + bot deep-link on page
+- Send code to `@Shine2caiAIbot` → Alipay + PayMe links + QR (not `<待補>`)
+- Upload screenshot → only `@y2kovo` gets approval card; other chat IDs get「無權限」
+- Approve → buyer Telegram + website show `gmail` ID, password, lv tier, expiry, thank-you
+- `SYNC_ACCOUNTS.sh` → new line on Mac `access-passwords.txt`
+- Yearly (`lv2y`) → 365-day `expires` in account line
+- Trial user → `openRegister('lv2')` bypasses approved trial state; new pay code issued
+
+### Known limitations (not bugs)
+
+- Same Gmail cannot re-register after `approved_lv*` (`already_approved`) — renew via manual account edit
+- Trial + paid = two IDs (trial sandbox ID vs Gmail for paid)
+- `SHINE_BOT_TOKEN` was exposed in chat — recommend BotFather `/revoke` + update `.env.vps`
+- Client case `bbhyyn@gmail.com` / `SEMHP5PV`: old code may have invalidated code; re-apply Sprint on live site for fresh code
+
+### Current live stack (2026-07-08, post v2.7.4)
+
+| Piece | Value |
+|-------|-------|
+| Registration boot | `v2.7.4-payflow` |
+| Bot | `@Shine2caiAIbot`, polling `RUN_POLLING=1` |
+| Admin | `@y2kovo` / `5035013768` only |
+| VPS API | `https://2c-ai.com/shine-api` |
+| Accounts file | `/var/www/2c-ai/shine/access-passwords.txt` |
+| Deploy | `DEPLOY_WITH_PW.sh` |
+| Quick patch | `PUSH_QUICK.sh` |
