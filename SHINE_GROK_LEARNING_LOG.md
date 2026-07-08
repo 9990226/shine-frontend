@@ -892,3 +892,23 @@ L26: ADMIN_CHAT default '5035013768'
 | Accounts on VPS | 5 lines · sha active file only |
 | Mac sync | OK · backup `access-passwords.txt.bak` |
 | Git backend | `6fd1827` (v2.7.5 admin default) |
+
+## v5.3-cinema — GSAP + ScrollTrigger + Lenis + Three.js (2026-07-09)
+
+**Scope:** Motion layer + CSS + `index.html` hooks only. **No** changes to `shine-app.js`, registration, or API contracts.
+
+**Stack:**
+- **Lenis** 1.1.18 — smooth scroll, `ScrollTrigger.scrollerProxy`, pauses when portal/login/register visible
+- **GSAP 3.12.5 + ScrollTrigger** — hero pin-scrub phases, section parallax (`rotateX`/`y`), flip-card 3D, pricing spotlight, sticky CTA
+- **Three.js r128** — `#heroOrb3d` (icosahedron + torus rings + particles, mouse + scroll parallax); `#dashboard-orb` (core + job dots + starfield, on portal open)
+
+**Files:**
+- `shine-motion.js` v5.3-cinema — `initLenis`, `initHeroOrb3D`, `initDashboardOrb`, `initCinemaParallax`, `SHINE_MOTION.lenis()`
+- `shine.css` v5.3-cinema — `.hero-orb-3d`, `#dashboard-orb` 260px, section `perspective`, `html.lenis` overrides
+- `index.html` — `SHINE_HEADER_TICK` + `SHINE_SPINE_TICK` wired to Lenis scroll; spine `innerHeight` fix; dash-nav uses Lenis `scrollTo`
+
+**Cache bust:** `SHINE_BOOT_VER=v5.3-cinema`
+
+**Reduced motion:** Lenis + Three.js skipped; `.hero-orb-3d` hidden in CSS.
+
+**Deploy:** `PUSH_QUICK.sh` → hard-refresh `https://2c-ai.com/shine/`

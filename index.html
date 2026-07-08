@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SHINE 出眾","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"全自動求職投遞 SaaS：AI 每日掃描指定來源並以你的 Gmail 原樣寄出求職信。","offers":[{"@type":"Offer","price":"100","priceCurrency":"HKD","name":"Scout"},{"@type":"Offer","price":"500","priceCurrency":"HKD","name":"Sprint"},{"@type":"Offer","price":"768","priceCurrency":"HKD","name":"Superman"}],"provider":{"@type":"Organization","name":"2C-AI Limited","url":"https://2c-ai.com"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Gmail App Password 安全嗎？","acceptedAnswer":{"@type":"Answer","text":"App Password 只授權寄信（純 outbound），SHINE 不讀取收件匣；你可隨時在 Google 設定撤銷，即時停止所有寄送。"}},{"@type":"Question","name":"會不會亂寄或改我的求職信？","acceptedAnswer":{"@type":"Answer","text":"求職信 100% 原樣寄出，寄出前有預覽確認，同一職缺不重複申請。"}},{"@type":"Question","name":"幾時開通？","acceptedAnswer":{"@type":"Answer","text":"AI 先進批核、人類加護審批，快至數分鐘；等待期間頁面自動更新你的通行證。"}},{"@type":"Question","name":"有退款保證嗎？","acceptedAnswer":{"@type":"Answer","text":"開通後 7 日內不滿意，全數退回。"}}]}</script>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<script>window.SHINE_BOOT_VER='v5.2-imagine';
+<script>window.SHINE_BOOT_VER='v5.3-cinema';
 window.getInputVal=window.getInputVal||function(id,fb){var el=document.getElementById(id);return(el&&el.value!=null)?String(el.value).trim():(fb||'');};
 window.ensurePortalVisible=window.ensurePortalVisible||function(){
   var portal=document.getElementById('portal');
@@ -39,7 +39,8 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" async></script>
-<link rel="stylesheet" href="shine.css?v=5.2-imagine">
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<link rel="stylesheet" href="shine.css?v=5.3-cinema">
 </head>
 <body>
 <canvas id="silkCanvas" aria-hidden="true"></canvas>
@@ -117,6 +118,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         </div>
       </div>
       <div class="hero-stage reveal-right" id="heroStage">
+        <canvas id="heroOrb3d" class="hero-orb-3d" aria-hidden="true"></canvas>
         <div class="console glass-card hero-console">
           <div class="con-bar">
             <span class="dot" style="background:#F0795F"></span><span class="dot" style="background:#FFCB57"></span><span class="dot" style="background:#5FD08A"></span>
@@ -1543,89 +1545,21 @@ document.addEventListener('change', function(e){ if(e.target && e.target.name===
 document.addEventListener('input', function(e){ if(e.target && e.target.classList && e.target.classList.contains('is-invalid')) e.target.classList.remove('is-invalid'); });
 updateRegResumeBtn();
 
-/* ========== Header scroll effect ========== */
+/* ========== Header scroll effect (Lenis + native fallback) ========== */
 (function(){
-  const header = document.getElementById('siteHeader');
+  var header = document.getElementById('siteHeader');
   if (!header) return;
-  let ticking = false;
-  window.addEventListener('scroll', function() {
-    if (!ticking) {
-      requestAnimationFrame(function() {
-        header.classList.toggle('scrolled', window.scrollY > 40);
-        ticking = false;
-      });
-      ticking = true;
+  window.SHINE_HEADER_TICK = function(scroll) {
+    header.classList.toggle('scrolled', scroll > 40);
+  };
+  addEventListener('scroll', function() {
+    if (!window.SHINE_MOTION || !window.SHINE_MOTION.lenis()) {
+      window.SHINE_HEADER_TICK(window.scrollY);
     }
-  });
+  }, { passive: true });
 })();
 
-/* ========== Dashboard orb (Three.js — called from shine-motion.js) ========== */
-var dashboardOrbStarted = false;
-function initDashboardOrb() {
-  if (dashboardOrbStarted || typeof THREE === 'undefined') return;
-  var canvas = document.getElementById('dashboard-orb');
-  if (!canvas) return;
-  dashboardOrbStarted = true;
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-  var w = canvas.clientWidth || 320, h = canvas.clientHeight || 200;
-  renderer.setSize(w, h, false);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 100);
-  camera.position.z = 6;
-  var core = new THREE.Mesh(
-    new THREE.SphereGeometry(0.55, 32, 32),
-    new THREE.MeshBasicMaterial({ color: 0xFFCB57, transparent: true, opacity: 0.9 })
-  );
-  scene.add(core);
-  var glow = new THREE.Mesh(
-    new THREE.SphereGeometry(0.85, 24, 24),
-    new THREE.MeshBasicMaterial({ color: 0x00D4FF, transparent: true, opacity: 0.12, wireframe: true })
-  );
-  scene.add(glow);
-  var jobs = new THREE.Group();
-  var jobCount = 8;
-  for (var i = 0; i < jobCount; i++) {
-    var dot = new THREE.Mesh(
-      new THREE.SphereGeometry(0.08, 12, 12),
-      new THREE.MeshBasicMaterial({ color: i % 2 ? 0x8AA6FF : 0x5FD08A })
-    );
-    dot.userData = { angle: (i / jobCount) * Math.PI * 2, radius: 1.6 + (i % 3) * 0.2, speed: 0.35 + i * 0.04 };
-    jobs.add(dot);
-  }
-  scene.add(jobs);
-  var mx = 0, my = 0, hover = false;
-  canvas.addEventListener('mouseenter', function() { hover = true; });
-  canvas.addEventListener('mouseleave', function() { hover = false; mx = my = 0; });
-  canvas.addEventListener('mousemove', function(e) {
-    var r = canvas.getBoundingClientRect();
-    mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-    my = ((e.clientY - r.top) / r.height - 0.5) * 2;
-  });
-  function onResize() {
-    w = canvas.clientWidth || 320;
-    h = canvas.clientHeight || 200;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-  window.addEventListener('resize', onResize);
-  var clock = new THREE.Clock();
-  function anim() {
-    requestAnimationFrame(anim);
-    var t = clock.getElapsedTime();
-    core.rotation.y = t * 0.35;
-    glow.rotation.x = t * 0.2;
-    jobs.rotation.y += hover ? 0.012 + mx * 0.02 : 0.004;
-    jobs.rotation.x = my * 0.15;
-    jobs.children.forEach(function(dot) {
-      var a = dot.userData.angle + t * dot.userData.speed;
-      dot.position.set(Math.cos(a) * dot.userData.radius, Math.sin(a * 1.3) * 0.35, Math.sin(a) * dot.userData.radius);
-    });
-    renderer.render(scene, camera);
-  }
-  anim();
-}
+/* Dashboard + hero 3D orbs → shine-motion.js v5.3-cinema */
 </script>
 <div class="sticky-cta" id="stickyCta" aria-hidden="true">
   <button onclick="openRegister('lv2')" class="btn btn-gold btn-magnetic" data-i18n="sticky-sub">⚡ 訂閱</button>
@@ -1670,7 +1604,9 @@ function initDashboardOrb() {
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('.dash-nav a'); if(!a) return;
     var t=document.getElementById((a.getAttribute('href')||'').slice(1)); if(!t) return;
-    e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'});
+    e.preventDefault();
+    var lenis=window.SHINE_MOTION&&window.SHINE_MOTION.lenis&&window.SHINE_MOTION.lenis();
+    if(lenis) lenis.scrollTo(t,{offset:0}); else t.scrollIntoView({behavior:'smooth',block:'start'});
   });
 })();
 </script>
@@ -1972,9 +1908,14 @@ document.addEventListener('DOMContentLoaded',function(){
     gsap.to(o,{yPercent:-100,duration:.5,ease:'expo.in',onComplete:function(){el.textContent=val;}});
   };
   var sf=document.getElementById('spineFill'),sd=document.getElementById('spineDot');
-  if(sf){addEventListener('scroll',function(){
-    var p=scrollY/Math.max(1,document.body.scrollHeight-innerHeight);
+  function spineTick(scroll){
+    if(!sf)return;
+    var p=scroll/Math.max(1,document.body.scrollHeight-window.innerHeight);
     sf.style.transform='scaleY('+p+')'; if(sd)sd.style.top=(p*100)+'%';
+  }
+  window.SHINE_SPINE_TICK=spineTick;
+  if(sf){addEventListener('scroll',function(){
+    if(!window.SHINE_MOTION||!window.SHINE_MOTION.lenis()) spineTick(scrollY);
   },{passive:true});}
   function cine(){
     if(!(window.gsap&&window.ScrollTrigger)){setTimeout(cine,600);return;}
@@ -1995,9 +1936,9 @@ document.addEventListener('DOMContentLoaded',function(){
   cine();
 })();
 </script>
-<script src="shine-motion.js?v=5.2-imagine"></script>
-<script src="shine-growth.js?v=5.2-imagine"></script>
-<script src="shine-viral.js?v=5.2-imagine"></script>
-<script src="assets/shine-app.js?v=v5.2-imagine"></script>
+<script src="shine-motion.js?v=5.3-cinema"></script>
+<script src="shine-growth.js?v=5.3-cinema"></script>
+<script src="shine-viral.js?v=5.3-cinema"></script>
+<script src="assets/shine-app.js?v=v5.3-cinema"></script>
 </body>
 </html>
