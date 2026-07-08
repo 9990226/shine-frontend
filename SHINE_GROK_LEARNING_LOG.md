@@ -868,6 +868,21 @@ L26: ADMIN_CHAT default '5035013768'
 
 **結論：** 一次性手動設定已完成；YC 毋須再補 `.env` 除非 rotate token/key。
 
+## v5.2-imagine — Grok Imagine visual enrich (2026-07-09)
+
+**Scope:** CSS + assets only. **No** changes to `shine-app.js`, registration, APIs, `data-i18n`, form IDs.
+
+**Grok Imagine assets** (`shine/assets/`):
+- `shine-silk-atmosphere.jpg` — ambient silk layer via `#ambient-glow`
+- `shine-pass-texture.jpg` — registration pass ticket texture
+- `shine-orb-ambient.jpg` — hero glow + `#dashboard-orb` backdrop
+
+**CSS:** `shine.css` v5.2-imagine — glass elevation, portal depth, inst-board, pass-ticket shimmer, hero mesh, reduced-motion safe.
+
+**Cache bust:** `SHINE_BOOT_VER=v5.2-imagine`, `shine.css?v=5.2-imagine`
+
+**Deploy:** `PUSH_QUICK.sh` (includes new asset SCP)
+
 ### Current live stack (2026-07-08 17:05, verified)
 
 | Piece | Value |

@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SHINE 出眾","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"全自動求職投遞 SaaS：AI 每日掃描指定來源並以你的 Gmail 原樣寄出求職信。","offers":[{"@type":"Offer","price":"100","priceCurrency":"HKD","name":"Scout"},{"@type":"Offer","price":"500","priceCurrency":"HKD","name":"Sprint"},{"@type":"Offer","price":"768","priceCurrency":"HKD","name":"Superman"}],"provider":{"@type":"Organization","name":"2C-AI Limited","url":"https://2c-ai.com"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Gmail App Password 安全嗎？","acceptedAnswer":{"@type":"Answer","text":"App Password 只授權寄信（純 outbound），SHINE 不讀取收件匣；你可隨時在 Google 設定撤銷，即時停止所有寄送。"}},{"@type":"Question","name":"會不會亂寄或改我的求職信？","acceptedAnswer":{"@type":"Answer","text":"求職信 100% 原樣寄出，寄出前有預覽確認，同一職缺不重複申請。"}},{"@type":"Question","name":"幾時開通？","acceptedAnswer":{"@type":"Answer","text":"AI 先進批核、人類加護審批，快至數分鐘；等待期間頁面自動更新你的通行證。"}},{"@type":"Question","name":"有退款保證嗎？","acceptedAnswer":{"@type":"Answer","text":"開通後 7 日內不滿意，全數退回。"}}]}</script>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<script>window.SHINE_BOOT_VER='v2.7.2-paidfix';
+<script>window.SHINE_BOOT_VER='v5.2-imagine';
 window.getInputVal=window.getInputVal||function(id,fb){var el=document.getElementById(id);return(el&&el.value!=null)?String(el.value).trim():(fb||'');};
 window.ensurePortalVisible=window.ensurePortalVisible||function(){
   var portal=document.getElementById('portal');
@@ -39,11 +39,12 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" async></script>
-<link rel="stylesheet" href="shine.css?v=2.7.2-paidfix">
+<link rel="stylesheet" href="shine.css?v=5.2-imagine">
 </head>
 <body>
 <canvas id="silkCanvas" aria-hidden="true"></canvas>
 <div id="grain" aria-hidden="true"></div>
+<div id="spine" aria-hidden="true"><i id="spineFill"></i><b id="spineDot"></b></div>
 <div id="shine-cursor" aria-hidden="true"></div>
 <div id="loader"><div class="loader-ring"></div><div class="loader-txt" data-i18n="loader">SHINE 出眾 · 載入中</div></div>
 <div id="ambient-glow" aria-hidden="true"></div>
@@ -57,6 +58,7 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
       <a href="#how" data-i18n="nav-how">運作方式</a>
       <a href="#time" data-i18n="nav-time">時間價值</a>
       <a href="#pricing" data-i18n="nav-pricing">定價</a>
+      <a href="#gaze" class="nav-sub" data-i18n="nav-sub">⚡ 訂閱 Lv1-3</a>
       <a href="#beta-access" data-i18n="nav-login">登入</a>
       <div class="lang-switch">
         <button class="lang-btn active" data-lang="zh-Hant" onclick="switchLang('zh-Hant')">繁</button>
@@ -86,6 +88,12 @@ window.ensurePortalVisible=window.ensurePortalVisible||function(){
         <div class="hero-cta" id="heroCta">
           <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="hero-cta-1">開始每月釋放 90 小時</button>
           <a href="#pricing" class="btn btn-ghost" data-i18n="hero-cta-2">查看方案</a>
+        </div>
+        <div class="hero-plans" id="heroPlanChips" aria-label="直接訂閱">
+          <button onclick="openRegister('lv1')" class="hp-chip"><b>Lv1</b><span>$100<i data-i18n="per-month"> /月</i></span></button>
+          <button onclick="openRegister('lv2')" class="hp-chip hp-chip--hot"><b>Lv2</b><span>$500<i data-i18n="per-month"> /月</i></span><em>★</em></button>
+          <button onclick="openRegister('lv3')" class="hp-chip"><b>Lv3</b><span>$768<i data-i18n="per-month"> /月</i></span></button>
+          <a href="javascript:void(0)" onclick="openRegister()" class="hp-trial" data-i18n="hp-trial">或先攞 10 封免費試用 →</a>
         </div>
         <div class="activity-ticker reveal" id="activityTicker" aria-live="polite"></div>
         <div class="viral-share-bar reveal" id="viralShareBar">
@@ -956,6 +964,8 @@ const i18n = {
     'compare-feature':'功能','compare-row1':'每月寄送','compare-row2':'來源 URL','compare-row3':'黑名單','compare-row4':'優先處理','compare-row5':'釋放時間/月',
     'stories-label':'成功案例','stories-title':'真實用戶，匿名分享','story-1':'「終於不用下班後還對著求職網站——時間真正還給了家人」','story-2':'「一設定完就收到 HR call，勁！」','story-3':'「10+ 個 HR 來電，2 個 Offer 揀——7 月 20 日返新工。」',
     'story-meta-1':'— 匿名用戶 · 在職跳槽','story-meta-2':'— 陳社工 · Sprint 方案','story-meta-3':'— K · MSW 學生 · 真實個案',
+    /* v3.2 entry */
+    'nav-sub':'⚡ 訂閱 Lv1-3','sticky-sub':'⚡ 訂閱','hp-trial':'或先攞 10 封免費試用 →',
     /* v2.8 gaze + instruments */
     'gaze-cap':'獨家AI 24小時幫你搵工','gaze-label':'聰明的選擇 助你未見工先羸','gaze-title':'同一雙 AI 眼，三種出擊節奏。','pr-1':'60 封/月 · 試水溫','pr-2':'500 封/月 · 認真跳槽','pr-3':'無限發送 · 全面出擊','gaze-foot':'未肯定？','gaze-trial':'先攞 10 封免費試用 →',
     'inst-label':'AI 智能','inst-title':'AI管理時間','inst-intro':'每封自動投遞 = 釋放 60 分鐘人生。訂閱後，這塊儀表板在你的 Dashboard 實時跳動。',
@@ -1084,6 +1094,8 @@ const i18n = {
     'compare-feature':'功能','compare-row1':'每月寄送','compare-row2':'来源 URL','compare-row3':'黑名单','compare-row4':'优先处理','compare-row5':'释放时间/月',
     'stories-label':'成功案例','stories-title':'真实用户，匿名分享','story-1':'「终于不用下班后还对着求职网站——时间真正还给了家人」','story-2':'「一设定完就收到 HR call，劲！」','story-3':'「10+ 个 HR 来电，2 个 Offer 挑——7 月 20 日上新岗。」',
     'story-meta-1':'— 匿名用户 · 在职跳槽','story-meta-2':'— 陈社工 · Sprint 方案','story-meta-3':'— K · MSW 学生 · 真实个案',
+    /* v3.2 entry */
+    'nav-sub':'⚡ 订阅 Lv1-3','sticky-sub':'⚡ 订阅','hp-trial':'或先拿 10 封免费试用 →',
     /* v2.8 gaze + instruments */
     'gaze-cap':'独家AI 24小时帮你找工作','gaze-label':'聪明的选择 助你未见工先赢','gaze-title':'同一双 AI 眼，三种出击节奏。','pr-1':'60 封/月 · 试水温','pr-2':'500 封/月 · 认真跳槽','pr-3':'无限发送 · 全面出击','gaze-foot':'未确定？','gaze-trial':'先拿 10 封免费试用 →',
     'inst-label':'AI 智能','inst-title':'AI管理时间','inst-intro':'每封自动投递 = 释放 60 分钟人生。订阅后，这块仪表板在你的 Dashboard 实时跳动。',
@@ -1212,6 +1224,8 @@ const i18n = {
     'compare-feature':'Feature','compare-row1':'Emails/month','compare-row2':'Source URLs','compare-row3':'Blacklist','compare-row4':'Priority','compare-row5':'Hours freed/mo',
     'stories-label':'Success Stories','stories-title':'Real users, anonymous','story-1':'"No more job boards after work — time truly back for family"','story-2':'"Got an HR call right after setup — amazing!"','story-3':'"Got an HR call right after setup — amazing!"',
     'story-meta-1':'— Anonymous · Job-hop while employed','story-meta-2':'— Chan SW · Sprint plan','story-meta-3':'— K · MSW student · Verified case',
+    /* v3.2 entry */
+    'nav-sub':'⚡ Subscribe Lv1-3','sticky-sub':'⚡ Subscribe','hp-trial':'or grab 10 free sends first →',
     /* v2.8 gaze + instruments */
     'gaze-cap':'Exclusive AI — 24/7 job hunting for you','gaze-label':'Smart choice — win before the interview','gaze-title':'One pair of AI eyes. Three strike tempos.','pr-1':'60/mo · Test the water','pr-2':'500/mo · Serious job-hop','pr-3':'Unlimited · Full assault','gaze-foot':'Not sure?','gaze-trial':'Grab 10 free sends first →',
     'inst-label':'AI Intelligence','inst-title':'AI-Managed Time','inst-intro':'Every auto-application = 60 minutes of life released. Subscribe and this board runs live in your Dashboard.',
@@ -1614,7 +1628,8 @@ function initDashboardOrb() {
 }
 </script>
 <div class="sticky-cta" id="stickyCta" aria-hidden="true">
-  <button onclick="openLogin()" class="btn btn-gold btn-magnetic" data-i18n="sticky-cta">開始自動投遞</button>
+  <button onclick="openRegister('lv2')" class="btn btn-gold btn-magnetic" data-i18n="sticky-sub">⚡ 訂閱</button>
+  <button onclick="openLogin()" class="btn btn-ghost btn-magnetic" data-i18n="sticky-cta">登入</button>
 </div>
 <script>
 /* ===== v2.6 case & fear motion（gsap 未載入時優雅降級為靜態） ===== */
@@ -1804,11 +1819,11 @@ function reportWin(type,btn){
     var dpr=Math.min(1.75,window.devicePixelRatio||1);
     renderer.setPixelRatio(dpr);
     var scene=new THREE.Scene(),cam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
-    var uni={t:{value:0},res:{value:new THREE.Vector2(1,1)},mou:{value:new THREE.Vector2(.5,.5)},scr:{value:0}};
+    var uni={t:{value:0},res:{value:new THREE.Vector2(1,1)},mou:{value:new THREE.Vector2(.5,.5)},scr:{value:0},gz:{value:0}};window._silkUni=uni;
     var mat=new THREE.ShaderMaterial({uniforms:uni,transparent:true,
       vertexShader:'void main(){gl_Position=vec4(position,1.0);}',
       fragmentShader:[
-      'precision highp float;uniform float t;uniform vec2 res;uniform vec2 mou;uniform float scr;',
+      'precision highp float;uniform float t;uniform vec2 res;uniform vec2 mou;uniform float scr;uniform float gz;',
       'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
       'float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);',
       ' return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}',
@@ -1819,9 +1834,10 @@ function reportWin(type,btn){
       ' float r=fbm(p*1.6+q*1.4+vec2(t*.03,scr*.3));',
       ' float silk=smoothstep(.28,.92,fbm(p*2.2+r*1.8));',
       ' vec3 gold=vec3(1.,.796,.341),ultra=vec3(.541,.651,1.),cyan=vec3(0.,.831,1.);',
-      ' vec3 col=mix(ultra,gold,smoothstep(.25,.8,r));col=mix(col,cyan,smoothstep(.75,.98,q)*.55);',
+      ' vec3 col=mix(ultra,gold,smoothstep(.25,.8,r));col=mix(col,cyan,smoothstep(.75,.98,q)*.55);col=mix(col,gold,gz*.5);',
+      ' float focus=1.-smoothstep(.0,.55,distance(uv,mou));',
       ' float vig=smoothstep(1.25,.35,length(uv-.5));',
-      ' float a=silk*vig*.16+pow(silk,4.)*.10;',
+      ' float a=silk*vig*(.15+scr*.06)+pow(silk,4.)*(.10+gz*.10)+focus*silk*.05;',
       ' gl_FragColor=vec4(col,a);}'
       ].join('\n')});
     scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat));
@@ -1854,10 +1870,8 @@ window.instBuild=function(rootId, demo){
   var arc=q('garc'), L=arc.getTotalLength(); arc.style.strokeDasharray=L; arc.style.strokeDashoffset=L;
   function update(todayMin,totalH,series){
     var tn=q('today'),to=q('total'),net=q('net'),line=q('line');
-    if(window.gsap){
-      gsap.to({v:+tn.textContent||0},{v:todayMin,duration:.8,onUpdate:function(){tn.textContent=Math.round(this.targets()[0].v);}});
-      gsap.to({v:+to.textContent||0},{v:totalH,duration:1,onUpdate:function(){to.textContent=Math.round(this.targets()[0].v);}});
-    } else { tn.textContent=Math.round(todayMin); to.textContent=Math.round(totalH); }
+    if(window._flipNum){_flipNum(tn,Math.round(todayMin));_flipNum(to,Math.round(totalH));}
+    else { tn.textContent=Math.round(todayMin); to.textContent=Math.round(totalH); }
     arc.style.strokeDashoffset=L*(1-Math.min(1,totalH/120));
     net.textContent='+'+Math.round(totalH)+'h';
     var max=Math.max.apply(null,series.concat([1]));
@@ -1942,9 +1956,48 @@ document.addEventListener('DOMContentLoaded',function(){
   gz();
 })();
 </script>
-<script src="shine-motion.js?v=2.7.2-paidfix"></script>
-<script src="shine-growth.js?v=2.7.2-paidfix"></script>
-<script src="shine-viral.js?v=2.7.2-paidfix"></script>
-<script src="assets/shine-app.js?v=v2.7.2-paidfix"></script>
+
+<script>
+/* ===== v3.2 cinema+entry pass ===== */
+(function(){
+  window._flipNum=function(el,val){
+    val=String(val);
+    if(el.textContent===val)return;
+    if(!window.gsap){el.textContent=val;return;}
+    var old=el.textContent;
+    el.style.position='relative';el.style.display='inline-block';el.style.overflow='hidden';
+    el.innerHTML='<span class="fn-old">'+old+'</span><span class="fn-new">'+val+'</span>';
+    var o=el.querySelector('.fn-old'),n=el.querySelector('.fn-new');
+    gsap.fromTo(n,{yPercent:100},{yPercent:0,duration:.5,ease:'expo.out'});
+    gsap.to(o,{yPercent:-100,duration:.5,ease:'expo.in',onComplete:function(){el.textContent=val;}});
+  };
+  var sf=document.getElementById('spineFill'),sd=document.getElementById('spineDot');
+  if(sf){addEventListener('scroll',function(){
+    var p=scrollY/Math.max(1,document.body.scrollHeight-innerHeight);
+    sf.style.transform='scaleY('+p+')'; if(sd)sd.style.top=(p*100)+'%';
+  },{passive:true});}
+  function cine(){
+    if(!(window.gsap&&window.ScrollTrigger)){setTimeout(cine,600);return;}
+    if(window._silkUni){
+      gsap.to(window._silkUni.gz,{value:1,ease:'none',scrollTrigger:{trigger:'#gaze',start:'top 80%',end:'bottom 40%',scrub:.6}});
+      gsap.to(window._silkUni.gz,{value:0,ease:'none',scrollTrigger:{trigger:'#fear',start:'top 70%',end:'top 20%',scrub:.6}});
+    }
+    gsap.fromTo('.iris-hud',{filter:'blur(6px)',scale:.94},{filter:'blur(0px)',scale:1,ease:'none',
+      scrollTrigger:{trigger:'#gaze',start:'top 85%',end:'top 30%',scrub:.5}});
+    gsap.utils.toArray('.plan-row').forEach(function(row,i){
+      ScrollTrigger.create({trigger:row,start:'top 78%',once:true,
+        onEnter:function(){row.classList.add('is-scanned');
+          gsap.fromTo(row,{'--scanX':'0%'},{'--scanX':'110%',duration:.9,delay:i*.12,ease:'power2.inOut'});}});
+    });
+    var hc=document.getElementById('heroPlanChips');
+    if(hc) gsap.from(hc.children,{y:16,opacity:0,filter:'blur(6px)',stagger:.08,duration:.7,delay:.5,ease:'expo.out'});
+  }
+  cine();
+})();
+</script>
+<script src="shine-motion.js?v=5.2-imagine"></script>
+<script src="shine-growth.js?v=5.2-imagine"></script>
+<script src="shine-viral.js?v=5.2-imagine"></script>
+<script src="assets/shine-app.js?v=v5.2-imagine"></script>
 </body>
 </html>

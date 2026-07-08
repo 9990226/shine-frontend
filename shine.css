@@ -1,4 +1,4 @@
-/* SHINE (出眾) — v5.1-convert · Conversion copy + trust layer
+/* SHINE (出眾) — v5.2-imagine · Grok Imagine assets + immersive polish
    Dark glass fintech · gold/cyan accents · GSAP motion layer
    Tri-lingual: zh-Hant / zh-CN / en via data-i18n
  */
@@ -136,9 +136,10 @@ body {
   transition: background .3s, box-shadow .3s;
 }
 .site-header.scrolled {
-  background: rgba(10,13,24,.94);
-  box-shadow: 0 8px 32px rgba(0,0,0,.4);
-  border-bottom-color: rgba(255,203,87,.12);
+  background: rgba(10, 13, 24, .94);
+  backdrop-filter: blur(16px) saturate(1.1);
+  box-shadow: 0 8px 32px -16px rgba(0, 0, 0, .55);
+  border-bottom-color: rgba(255, 203, 87, .22);
 }
 .header-inner, .nav-in {
   display: flex;
@@ -2400,3 +2401,201 @@ h1 {
 .autorun-btn.is-armed { background:linear-gradient(90deg, #1E2B18, #14321F); color:var(--green); border:1px solid var(--green); box-shadow:0 0 24px -8px rgba(95,208,138,.6); }
 .autorun-notes { display:grid; gap:6px; margin-top:12px; font-size:12.5px; color:var(--muted); }
 .autorun-armed { margin-top:12px; font-weight:700; color:var(--green); font-size:14px; }
+
+/* ============ v3.2 — DIRECT-SUBSCRIBE ENTRIES + CINEMA PORT ============ */
+.nav-sub { color:#10131F !important; background:var(--gold); border-radius:999px; padding:7px 14px !important; font-weight:700; box-shadow:0 0 18px -6px rgba(255,203,87,.7); }
+.nav-sub:hover { transform:translateY(-1px); }
+
+.hero-plans { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.hp-chip { position:relative; display:flex; align-items:baseline; gap:8px; padding:10px 16px; border-radius:999px;
+  border:1px solid var(--line2); background:linear-gradient(180deg,var(--panel2),var(--panel)); color:var(--text); cursor:pointer;
+  transition:transform .18s var(--ease-out), border-color .18s var(--ease-out), box-shadow .18s var(--ease-out); }
+.hp-chip b { font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:.08em; }
+.hp-chip span { font-family:var(--display); font-weight:700; font-size:16px; color:var(--gold); }
+.hp-chip span i { font-style:normal; font-size:10.5px; color:var(--muted2); }
+.hp-chip:hover { transform:translateY(-2px); border-color:var(--gold-soft); box-shadow:0 8px 24px -12px rgba(255,203,87,.5); }
+.hp-chip--hot { border-color:rgba(255,203,87,.55); }
+.hp-chip--hot em { position:absolute; top:-7px; right:-4px; font-style:normal; font-size:11px; color:var(--gold); }
+.hp-trial { font-size:12.5px; color:var(--muted); border-bottom:1px dashed var(--line2); }
+.hp-trial:hover { color:var(--gold-soft); }
+
+.sticky-cta { display:flex; gap:8px; }
+
+#spine { position:fixed; left:14px; top:12vh; bottom:12vh; width:2px; z-index:40; pointer-events:none; background:var(--line); border-radius:2px; }
+#spineFill { position:absolute; inset:0; background:linear-gradient(180deg,var(--gold),var(--cyan)); transform-origin:top; transform:scaleY(0); border-radius:2px; }
+#spineDot { position:absolute; left:50%; width:8px; height:8px; margin-left:-4px; border-radius:50%; background:var(--gold); box-shadow:0 0 12px var(--gold); }
+@media (max-width:900px){ #spine{display:none} .nav-sub{padding:6px 10px !important} }
+
+.plan-row { --scanX:110%; position:relative; overflow:hidden; }
+.plan-row.is-scanned::after { content:''; position:absolute; top:0; bottom:0; left:var(--scanX); width:60px; pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(0,212,255,.35), transparent); }
+
+.fn-old,.fn-new { display:inline-block; }
+.fn-new { position:absolute; left:0; top:0; }
+
+/* ============ v5.2-imagine — Grok assets · epic immersive UX (visual only) ============ */
+:root {
+  --shine-silk: url('assets/shine-silk-atmosphere.jpg');
+  --shine-pass: url('assets/shine-pass-texture.jpg');
+  --shine-orb: url('assets/shine-orb-ambient.jpg');
+  --glass-epic: rgba(21, 26, 46, .78);
+  --rim-gold: rgba(255, 203, 87, .22);
+  --rim-cyan: rgba(0, 212, 255, .12);
+}
+
+body {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(255, 203, 87, .04), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(0, 212, 255, .03), transparent 45%),
+    var(--bg);
+}
+
+#ambient-glow {
+  background:
+    linear-gradient(180deg, rgba(10, 13, 24, .72) 0%, rgba(10, 13, 24, .88) 55%, var(--bg) 100%),
+    var(--shine-silk) center / cover no-repeat;
+  opacity: 1;
+  filter: saturate(1.05) contrast(1.02);
+}
+
+.hero-bg-glow {
+  width: min(720px, 90vw);
+  height: min(720px, 70vh);
+  background:
+    radial-gradient(circle at 40% 35%, rgba(255, 203, 87, .12), transparent 55%),
+    radial-gradient(circle at 70% 60%, rgba(0, 212, 255, .08), transparent 50%),
+    var(--shine-orb) center / cover no-repeat;
+  opacity: .55;
+  mix-blend-mode: screen;
+}
+
+.hero-mesh {
+  background:
+    linear-gradient(105deg, transparent 40%, rgba(255, 203, 87, .03) 50%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255, 203, 87, .06), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 85% 20%, rgba(0, 212, 255, .05), transparent 50%),
+    linear-gradient(180deg, transparent 55%, rgba(10, 13, 24, .85) 100%);
+}
+
+.glass-card,
+.card,
+.surface-card,
+.log-card {
+  background: var(--glass-epic);
+  border-color: var(--line2);
+  box-shadow: var(--highlight-top), var(--shadow-elev), inset 0 0 0 1px rgba(255, 255, 255, .02);
+}
+.glass-card:hover,
+.card:hover {
+  border-color: var(--rim-gold);
+  box-shadow: var(--highlight-top), 0 28px 56px -32px rgba(0, 0, 0, .65), 0 0 0 1px rgba(255, 203, 87, .08);
+}
+
+#portal {
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(255, 203, 87, .05), transparent 60%),
+    radial-gradient(ellipse 70% 40% at 10% 80%, rgba(95, 208, 138, .04), transparent 55%),
+    var(--bg);
+}
+.dash-top {
+  background: rgba(10, 13, 24, .82);
+  border-bottom-color: var(--rim-gold);
+  box-shadow: 0 12px 40px -24px rgba(0, 0, 0, .5);
+}
+
+#dashboard-orb {
+  position: relative;
+  border: 1px solid var(--rim-gold);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(255, 203, 87, .08), transparent 70%),
+    var(--shine-orb) center / cover no-repeat;
+  box-shadow: var(--highlight-top), 0 0 48px -16px rgba(255, 203, 87, .25);
+}
+
+.inst-board {
+  background: rgba(255, 255, 255, .02);
+  border-color: var(--rim-gold);
+  box-shadow: var(--highlight-top), inset 0 1px 0 rgba(255, 203, 87, .06);
+}
+.inst-card,
+.inst-chart {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, .1);
+  box-shadow: var(--highlight-top), 0 16px 40px -28px rgba(0, 0, 0, .5);
+}
+.inst-card::before,
+.inst-chart::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 203, 87, .04), transparent 42%, rgba(0, 212, 255, .03));
+  pointer-events: none;
+}
+.ic-n { text-shadow: 0 0 40px rgba(255, 203, 87, .12); }
+
+.pass-ticket {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(165deg, rgba(255, 203, 87, .06), transparent 38%),
+    linear-gradient(180deg, var(--panel2), var(--panel)),
+    var(--shine-pass) center / 280px repeat;
+  border-color: rgba(255, 203, 87, .38);
+  box-shadow: var(--highlight-top), 0 20px 48px -24px rgba(255, 203, 87, .28), inset 0 0 0 1px rgba(255, 203, 87, .12);
+}
+.pass-ticket::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 203, 87, .07) 50%, transparent 58%);
+  pointer-events: none;
+  opacity: .7;
+}
+
+#shineLogin .surface-card,
+#shineRegister .surface-card {
+  border-color: var(--rim-gold);
+  box-shadow: var(--highlight-top), 0 32px 64px -36px rgba(0, 0, 0, .7), 0 0 80px -40px rgba(255, 203, 87, .15);
+}
+
+.plan-row,
+.flip-front,
+.flip-back {
+  box-shadow: var(--highlight-top), 0 12px 32px -20px rgba(0, 0, 0, .45);
+}
+.plan-row--hot,
+.flip-wrap.viral-hot .flip-front {
+  border-color: rgba(255, 203, 87, .42);
+  box-shadow: var(--highlight-top), var(--gold-glow), 0 16px 40px -24px rgba(255, 203, 87, .2);
+}
+
+#loader {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255, 203, 87, .06), transparent),
+    var(--bg);
+}
+.loader-ring {
+  box-shadow: 0 0 40px rgba(255, 203, 87, .25), inset 0 0 20px rgba(255, 203, 87, .08);
+}
+
+.silk-static {
+  background:
+    var(--shine-silk) center / cover no-repeat,
+    radial-gradient(60% 50% at 20% 15%, rgba(255, 203, 87, .10), transparent),
+    radial-gradient(55% 45% at 80% 70%, rgba(138, 166, 255, .09), transparent);
+  opacity: .35;
+}
+
+@media (max-width: 900px) {
+  #ambient-glow { opacity: .85; }
+  .hero-bg-glow { opacity: .35; width: 100%; height: 50vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ambient-glow,
+  .hero-bg-glow,
+  .pass-ticket::after { filter: none; }
+}

@@ -17,6 +17,9 @@ run_expect_scp "$LOCAL_DIR/shine-motion.js" "${VPS_PATH}/shine-motion.js"
 run_expect_scp "$LOCAL_DIR/shine-viral.js" "${VPS_PATH}/shine-viral.js"
 run_expect_scp "$LOCAL_DIR/assets/shine-app.js" "${VPS_PATH}/assets/shine-app.js"
 [ -f "$LOCAL_DIR/assets/alipay-hk-qr.jpg" ] && run_expect_scp "$LOCAL_DIR/assets/alipay-hk-qr.jpg" "${VPS_PATH}/assets/alipay-hk-qr.jpg"
+for img in shine-silk-atmosphere.jpg shine-pass-texture.jpg shine-orb-ambient.jpg; do
+  [ -f "$LOCAL_DIR/assets/$img" ] && run_expect_scp "$LOCAL_DIR/assets/$img" "${VPS_PATH}/assets/$img"
+done
 run_expect_scp "$LOCAL_DIR/access-passwords.txt" "${VPS_PATH}/access-passwords.txt"
 
 echo "📤 Backend → ${VPS_BACKEND}"
