@@ -771,11 +771,38 @@ cd backend && bash SYNC_ACCOUNTS.sh
 - `SHINE_BOT_TOKEN` was exposed in chat — recommend BotFather `/revoke` + update `.env.vps`
 - Client case `bbhyyn@gmail.com` / `SEMHP5PV`: old code may have invalidated code; re-apply Sprint on live site for fresh code
 
-### Current live stack (2026-07-08, post v2.7.4)
+### v2.7.5-admin-default 驗屍體審計（2026-07-08 晚）
+
+**來源：** `Downloads/shine_v2.7.5_audit_hotfix2/AUDIT_8JULY_v2.7.5.md`
+
+**致命蟲診斷：✅ 成立（code-level）**
+- `registration.js` L26 原為 `|| ''` — env 未設時 `ADMIN_CHAT` 空字串
+- 連鎖：`adminMessage()` / `adminPhoto()` 靜默拒發；`isAdminActor()` 恆 `false`（含 @y2kovo 本人）→ 截圖→批核→開戶→私訊 整條斷裂
+
+**修復 patch：✅ 1 檔 1 行（+ 開機 log）**
+```js
+const ADMIN_CHAT = String(process.env.SHINE_ADMIN_CHAT_ID || process.env.ADMIN_CHAT_ID || '5035013768');
+```
+
+**驗屍體前狀態（deploy 前 VPS）：**
+| 檢查項 | 結果 |
+|--------|------|
+| VPS L26 有預設 `5035013768` | ❌ 仍為 `|| ''` |
+| VPS `.env` `SHINE_ADMIN_CHAT_ID` | ✅ `5035013768`（靠 env 撐住，非 code 預設） |
+| `buyer.c@gmail.com` 帳號行 | ❌ 線上 accounts / registrations 均無 — 審計 doc「全鏈實測」**無法獨立佐證** |
+| `assets/alipay-hk-qr.jpg` on VPS | ✅ 116557 bytes JPEG |
+| `RUN_POLLING=1` | ✅ 現用 polling；審計 doc 建議 webhook 與現況**二選一** |
+
+**規格 12 項 code 審計（v2.7.4 + env 齊）：11 項路徑存在；1 項靠 hotfix 兜底**
+
+**驗屍體後：** hotfix 已併入 canonical + VPS deploy；L26 實測：
+`const ADMIN_CHAT = String(... || '5035013768');`
+
+### Current live stack (2026-07-08, post v2.7.5)
 
 | Piece | Value |
 |-------|-------|
-| Registration boot | `v2.7.4-payflow` |
+| Registration boot | `v2.7.5-admin-default` |
 | Bot | `@Shine2caiAIbot`, polling `RUN_POLLING=1` |
 | Admin | `@y2kovo` / `5035013768` only |
 | VPS API | `https://2c-ai.com/shine-api` |
